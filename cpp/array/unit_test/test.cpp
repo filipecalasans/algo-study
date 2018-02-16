@@ -1,12 +1,21 @@
 
 #include <iostream>
-#include "arrays.h"
+#include "array.h"
 #include "gtest/gtest.h"
 
-int main(int argc, char *argv[]) {
-  
-  std::cout << "Hello World";
+using namespace Algos;
 
-  return 0;
+// Tests the default c'tor.
+TEST(Array, DefaultConstructor) {
+   const Array a;
+
+   EXPECT_EQ(0u, 0);
+}
+
+// Tests the default c'tor.
+TEST(Array, Contructor2) {
+   const Array a;
+
+   EXPECT_EQ(0u, 1);
 }
 

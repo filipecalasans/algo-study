@@ -4,6 +4,7 @@ set(GMOCK_DIR "../../../lib/googletest-release-1.8.0/googlemock/"
 set(GTEST_DIR "../../../lib/googletest-release-1.8.0/googletest/"
     CACHE PATH "The path to the GoogleTest test framework.")
 
+set(BUILD_TESTING ON)
 enable_testing()
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
