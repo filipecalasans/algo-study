@@ -3,7 +3,7 @@ project(array_proj C CXX)
 
 enable_testing()
 
-add_definitions(-std=c++11)
+add_definitions(-std=c++14)
 add_definitions(-Werror)
 
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" -D_GLIBCXX_DEBUG)
