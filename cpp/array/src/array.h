@@ -6,6 +6,10 @@
 #include <memory>
 #include <assert.h>
 
+/* 
+ * Algos Implementation is implicit-sharing.
+ *
+ */
 namespace Algos {
 
 template <class T>
@@ -15,8 +19,8 @@ class Array {
       explicit Array(int _size);
       explicit Array(int size, const T &t);
       
-      T& operator[](int i) { assert(i<_size); return _data[i]; }
-      T operator[](int i) const {  assert(i<_size); return _data[i]; }
+      T& operator[](int i) { assert(i<_size); return (_data.get())[i]; }
+      T operator[](int i) const {  assert(i<_size); return (_data.get())[i]; }
       
       int size() const { return _size; }
 
@@ -33,7 +37,7 @@ class Array {
 
    private:
 
-      std::unique_ptr <T[]> _data;
+      std::shared_ptr <T> _data;
       int _size;
       bool _resizeable;
 };
@@ -43,13 +47,13 @@ class Array {
 // ######################### Template Implementation  ##############################
 template <class T>
 Algos::Array<T>::Array(int size) : _size(size), _resizeable(true){
-   _data = std::make_unique<T[]>(_size);
+   _data = std::shared_ptr<T>(new T[_size], std::default_delete<T[]>());
 }
 
 template <class T>
 Algos::Array<T>::Array(int size, const T &t) : Array(size){
    for(int i=0; i<_size; i++) {
-      _data[i] = t;
+      ((T*)_data.get())[i] = t;
    }
 }
 

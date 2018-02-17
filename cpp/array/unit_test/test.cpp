@@ -13,7 +13,7 @@ TEST(Array, ContructorNotInitializedData) {
    EXPECT_EQ(array_size, a.size());
 }
 
-// Tests the default c'tor.
+// Tests the default c'tor and const []
 TEST(Array, ContructorInitializedData) {
    int array_size = 10;
    Array<int> a(array_size, 20);
@@ -21,7 +21,24 @@ TEST(Array, ContructorInitializedData) {
    EXPECT_EQ(array_size, a.size());
 
    for(int i=0; i<a.size(); i++) {
-      EXPECT_EQ(a[i], 20);
+      const int tmp = a[i]; 
+      EXPECT_EQ(tmp, 20);
+   }
+   
+}
+
+// Tests the operator [], const and not-const.
+TEST(Array, OperatorIndex) {
+   int array_size = 10;
+   Array<int> a(array_size);
+
+   for(int i=0; i<a.size(); i++) {
+      // a[i] = i;
+   }
+
+   for(int i=0; i<a.size(); i++) {
+      const int tmp = a[i]; 
+      EXPECT_EQ(tmp, i);
    }
    
 }
