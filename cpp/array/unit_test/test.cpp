@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include "array.h"
+#include "arraydata.h"
 #include "gtest/gtest.h"
 
 using namespace Algos;
@@ -33,7 +34,7 @@ TEST(Array, OperatorIndex) {
    Array<int> a(array_size);
 
    for(int i=0; i<a.size(); i++) {
-      // a[i] = i;
+      a[i] = i;
    }
 
    for(int i=0; i<a.size(); i++) {

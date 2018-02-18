@@ -22,7 +22,12 @@ add_subdirectory(${GMOCK_DIR} ${CMAKE_BINARY_DIR}/gmock)
 include_directories(SYSTEM ${GMOCK_DIR}/gtest/include ${GMOCK_DIR}/include)
 include_directories(SYSTEM ${GTEST_DIR}/gtest/include ${GTEST_DIR}/include)
 
-add_executable(test_project test.cpp)
-target_link_libraries(test_project algoCore gmock_main)
+# Test Array
+add_executable(test_array test.cpp)
+target_link_libraries(test_array algoCore gmock_main)
+add_test(test_array test_project)
 
-add_test(TestProject test_project)
+# Test ArrayData
+add_executable(test_arraydata testarraydata.cpp)
+target_link_libraries(test_arraydata algoCore gmock_main)
+add_test(test_arraydata test_arraydata)

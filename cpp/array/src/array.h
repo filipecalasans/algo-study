@@ -15,31 +15,25 @@ namespace Algos {
 template <class T>
 class Array {  
    
-   public:
+public:
+		Array() : _owner(false), _size(0), _resizeable(false) {}
       explicit Array(int _size);
       explicit Array(int size, const T &t);
       
-      T& operator[](int i) { assert(i<_size); return (_data.get())[i]; }
+      T& operator[](int i) { assert(i<_size); return (_data.get())[i]; } //deep copy here.
       T operator[](int i) const {  assert(i<_size); return (_data.get())[i]; }
       
-      int size() const { return _size; }
+		int size() const { return _size; }
 
-      int resize(int new_size) {
-         if (new_size > size) { return increase(new_size); }
-         if(new_size < size) { return decrease(new_size); }
-         return size();
-      }
-
-   protected:
-
-      int increase(int new_size);
-      int decrease(int new_size);
+		Array& operator=(const Array& other) { return (*this); }
 
    private:
 
       std::shared_ptr <T> _data;
       int _size;
-      bool _resizeable;
+		bool _resizeable;
+		bool _owner;
+
 };
 
 }
@@ -47,24 +41,16 @@ class Array {
 // ######################### Template Implementation  ##############################
 template <class T>
 Algos::Array<T>::Array(int size) : _size(size), _resizeable(true){
-   _data = std::shared_ptr<T>(new T[_size], std::default_delete<T[]>());
+	_data = std::shared_ptr<T>(new T[_size], std::default_delete<T[]>());
+	_owner = true;
 }
 
 template <class T>
 Algos::Array<T>::Array(int size, const T &t) : Array(size){
    for(int i=0; i<_size; i++) {
       ((T*)_data.get())[i] = t;
-   }
-}
-
-template <class T>
-int Algos::Array<T>::increase(int new_size){
-   return _size;
-}
-
-template <class T>
-int Algos::Array<T>::decrease(int new_size){
-   return _size;
+	}
+	_owner = true;
 }
 
 #endif
