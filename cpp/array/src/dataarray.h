@@ -40,7 +40,6 @@ public:
 
       std::unique_ptr <T[]> _data;
       int _size;
-
       bool allocate(int new_size);
 };
 
@@ -77,6 +76,8 @@ bool Algos::DataArray<T>::increase(int new_size) {
 
 template <class T>
 bool Algos::DataArray<T>::decrease(int new_size) {
+	// performance optimization. 
+	// Only deallocate if new size is less then half of the current size
    if(new_size > size()/2) { 
       _size = new_size;
       return true;
@@ -90,7 +91,7 @@ bool Algos::DataArray<T>::allocate(int new_size) {
    std::unique_ptr<T[]> new_data = std::make_unique<T[]>(new_size);
    if(!new_data) { return false; }
 
-   for(int i=0; i<new_size; i++) { new_data[i] = _data[i]; }
+   for(int i=0; (i<size())&&(i<new_size); i++) { new_data[i] = _data[i]; }
    
    _data.swap(new_data);
    _size = new_size;

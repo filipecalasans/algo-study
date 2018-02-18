@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include "arraydata.h"
+#include "dataarray.h"
 #include "gtest/gtest.h"
 
 using namespace Algos;
@@ -92,5 +92,86 @@ TEST(DataArray, OperatorEqAssignedToSmallerArray) {
    }
 }
 
+// Tests the incriesing operation.
+TEST(DataArray, IncrieseSizeX10) {
+   int array_size = 10;
+   DataArray<int> a(array_size, 10);
+
+   bool ret = a.resize(100);
+   EXPECT_EQ(ret, true);
+   EXPECT_EQ(a.size(), 100);
+   
+   //data reamins the same after increasing
+   for(int i=0; i<10; i++) {
+      EXPECT_EQ(a[i], 10);
+   }
+   //new data block is accessiable
+   for(int i=0; i<a.size(); i++) {
+      a[i] = i+100;
+      EXPECT_EQ(a[i], i+100);
+   }
+}
+
+// Tests the incriesing +2.
+TEST(DataArray, IncrieseSizePlus2) {
+   int array_size = 10;
+   DataArray<int> a(array_size, 10);
+
+   bool ret = a.resize(12);
+   EXPECT_EQ(ret, true);
+   EXPECT_EQ(a.size(), 20);
+   
+   //data reamins the same after increasing
+   for(int i=0; i<10; i++) {
+      EXPECT_EQ(a[i], 10);
+   }
+   //new data block is accessiable
+   for(int i=0; i<a.size(); i++) {
+      a[i] = i+100;
+      EXPECT_EQ(a[i], i+100);
+   }
+}
+
+// Tests decrease / 10.
+TEST(DataArray, DecreaseBy10Times) {
+   int array_size = 100;
+   DataArray<int> a(array_size, 10);
+
+   EXPECT_EQ(a.size(), array_size);
+   bool ret = a.resize(10);
+   EXPECT_EQ(ret, true);
+   EXPECT_EQ(a.size(), 10);
+   
+   //data reamins the same after increasing
+   for(int i=0; i<10; i++) {
+      EXPECT_EQ(a[i], 10);
+   }
+   //new data block is accessiable
+   for(int i=0; i<a.size(); i++) {
+      a[i] = i+100;
+      EXPECT_EQ(a[i], i+100);
+   }
+}
+
+// Tests decrease -5.
+TEST(DataArray, DecreaseByMinus5) {
+   int array_size = 100;
+   DataArray<int> a(array_size, 10);
+
+   EXPECT_EQ(a.size(), array_size);
+   bool ret = a.resize(array_size-5);
+   EXPECT_EQ(ret, true);
+   EXPECT_EQ(a.size(), array_size-5);
+   
+   //data reamins the same after increasing
+   for(int i=0; i<array_size-5; i++) {
+      EXPECT_EQ(a[i], 10);
+   }
+   //new data block is accessiable
+   for(int i=0; i<a.size(); i++) {
+      a[i] = i+100;
+      EXPECT_EQ(a[i], i+100);
+   }
+}
 
 

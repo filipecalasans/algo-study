@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include "array.h"
-#include "arraydata.h"
+#include "dataarray.h"
 #include "gtest/gtest.h"
 
 using namespace Algos;
