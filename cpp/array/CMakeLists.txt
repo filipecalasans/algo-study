@@ -3,6 +3,7 @@ project(array_proj C CXX)
 
 enable_testing()
 
+set(CMAKE_BUILD_TYPE Debug)
 add_definitions(-std=c++14)
 #add_definitions(-Werror)
 
