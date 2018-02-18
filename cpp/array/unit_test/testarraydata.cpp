@@ -53,7 +53,7 @@ TEST(DataArray, OperatorEqual) {
       a[i] = i;
    }
 
-   b = a;
+   b.copyFrom(a);
 
    for(int i=0; i<a.size(); i++) {
       const int tmp = a[i]; 
@@ -71,7 +71,7 @@ TEST(DataArray, OperatorEqAssignedToGreaterArray) {
    for(int i=0; i<a.size(); i++) {
       a[i] = i;
    }
-   b = a;
+   b.copyFrom(a);
    for(int i=0; i<a.size(); i++) {
       EXPECT_EQ(a[i], b[i]);
    }
@@ -86,7 +86,8 @@ TEST(DataArray, OperatorEqAssignedToSmallerArray) {
    for(int i=0; i<a.size(); i++) {
       a[i] = i;
    }
-   b = a; 
+   b.copyFrom(a);
+
    for(int i=0; i<b.size(); i++) {
       EXPECT_EQ(a[i], b[i]);
    }
@@ -119,7 +120,8 @@ TEST(DataArray, IncrieseSizePlus2) {
 
    bool ret = a.resize(12);
    EXPECT_EQ(ret, true);
-   EXPECT_EQ(a.size(), 20);
+   EXPECT_EQ(a.size(), 12);
+   EXPECT_EQ(a.allocatedSize(), 20);
    
    //data reamins the same after increasing
    for(int i=0; i<10; i++) {
@@ -141,7 +143,8 @@ TEST(DataArray, DecreaseBy10Times) {
    bool ret = a.resize(10);
    EXPECT_EQ(ret, true);
    EXPECT_EQ(a.size(), 10);
-   
+   EXPECT_EQ(a.allocatedSize(), 10);
+
    //data reamins the same after increasing
    for(int i=0; i<10; i++) {
       EXPECT_EQ(a[i], 10);
@@ -162,7 +165,8 @@ TEST(DataArray, DecreaseByMinus5) {
    bool ret = a.resize(array_size-5);
    EXPECT_EQ(ret, true);
    EXPECT_EQ(a.size(), array_size-5);
-   
+   EXPECT_EQ(a.allocatedSize(), array_size);
+
    //data reamins the same after increasing
    for(int i=0; i<array_size-5; i++) {
       EXPECT_EQ(a[i], 10);

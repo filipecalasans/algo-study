@@ -6,6 +6,8 @@
 #include <memory>
 #include <assert.h>
 
+// #include "dataarray.h"
+
 /* 
  * Algos Implementation is implicit-sharing.
  *
@@ -16,23 +18,21 @@ template <class T>
 class Array {  
    
 public:
-		Array() : _owner(false), _size(0), _resizeable(false) {}
+
+      Array() {}
       explicit Array(int _size);
       explicit Array(int size, const T &t);
       
-      T& operator[](int i) { assert(i<_size); return (_data.get())[i]; } //deep copy here.
-      T operator[](int i) const {  assert(i<_size); return (_data.get())[i]; }
+      // T& operator[](int i) { assert(i<_size); return (_data.get())[i]; } //deep copy here.
+      // T operator[](int i) const {  assert(i<_size); return (_data.get())[i]; }
       
-		int size() const { return _size; }
+      int size() const { return 0; }
 
-		Array& operator=(const Array& other) { return (*this); }
+      Array& operator=(const Array& other) { return (*this); }
 
    private:
 
-      std::shared_ptr <T> _data;
-      int _size;
-		bool _resizeable;
-		bool _owner;
+      // std::shared_ptr <DataArray<T> > _data;
 
 };
 
@@ -40,17 +40,15 @@ public:
 
 // ######################### Template Implementation  ##############################
 template <class T>
-Algos::Array<T>::Array(int size) : _size(size), _resizeable(true){
-	_data = std::shared_ptr<T>(new T[_size], std::default_delete<T[]>());
-	_owner = true;
+Algos::Array<T>::Array(int size) {
+      // _data = std::shared_ptr<T>(new T[_size], std::default_delete<T[]>());
 }
 
 template <class T>
 Algos::Array<T>::Array(int size, const T &t) : Array(size){
-   for(int i=0; i<_size; i++) {
-      ((T*)_data.get())[i] = t;
-	}
-	_owner = true;
+//    for(int i=0; i<_size; i++) {
+//       ((T*)_data.get())[i] = t;
+// 	}
 }
 
 #endif

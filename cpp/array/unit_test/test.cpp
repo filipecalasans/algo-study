@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 
 using namespace Algos;
-
+/*
 // Tests the default c'tor.
 TEST(Array, ContructorNotInitializedData) {
    int array_size = 10;
@@ -43,4 +43,6 @@ TEST(Array, OperatorIndex) {
    }
    
 }
+
+*/
 
