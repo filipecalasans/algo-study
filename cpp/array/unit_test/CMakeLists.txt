@@ -23,7 +23,7 @@ include_directories(SYSTEM ${GMOCK_DIR}/gtest/include ${GMOCK_DIR}/include)
 include_directories(SYSTEM ${GTEST_DIR}/gtest/include ${GTEST_DIR}/include)
 
 # Test Array
-add_executable(test_array test.cpp)
+add_executable(test_array testarray.cpp)
 target_link_libraries(test_array algoCore gmock_main)
 add_test(test_array test_project)
 

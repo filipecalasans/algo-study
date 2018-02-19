@@ -6,6 +6,7 @@ file(GLOB algo_SRC
 )
 
 cmake_minimum_required(VERSION 3.8)
+project(algo C CXX)
 
 file(GLOB algo_SRC "*.h" "*.cpp")
 
