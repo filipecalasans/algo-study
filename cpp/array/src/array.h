@@ -6,7 +6,7 @@
 #include <memory>
 #include <assert.h>
 
-// #include "dataarray.h"
+#include "dataarray.h"
 
 /* 
  * Algos Implementation is implicit-sharing.
@@ -22,17 +22,42 @@ public:
       Array() {}
       explicit Array(int _size);
       explicit Array(int size, const T &t);
-      
-      // T& operator[](int i) { assert(i<_size); return (_data.get())[i]; } //deep copy here.
-      // T operator[](int i) const {  assert(i<_size); return (_data.get())[i]; }
-      
-      int size() const { return 0; }
+		  Array(Array& a) { _data = a.data();  }
 
-      Array& operator=(const Array& other) { return (*this); }
+		  const T& operator[](int i) const { 
+			  assert(i<size()); 
+			  return (*_data.get())[i]; 
+		  } 
+		
+		  T& operator[](int i) { 
+			  assert(i<size()); 
+			  return (*_data.get())[i];
+		  } 
+      
+      int size() const { return _data->size(); }
+
+      Array& operator=(const Array& other) { 
+        _data = other.data();          
+        return *this;
+      }
+
+		  const std::shared_ptr<DataArray<T> >& data() const { return _data; }
+      
+      int dataRefCount() const { return _data.use_count(); }
+      
+      const T& first() {
+        assert(_data->size()>0);
+        return (*this)[0];
+      }
+
+      const T& last() {
+        assert(_data->size()>0);
+        return (*this)[_data->size()-1];
+      }
+
 
    private:
-
-      // std::shared_ptr <DataArray<T> > _data;
+      std::shared_ptr <DataArray<T> > _data;
 
 };
 
@@ -41,14 +66,12 @@ public:
 // ######################### Template Implementation  ##############################
 template <class T>
 Algos::Array<T>::Array(int size) {
-      // _data = std::shared_ptr<T>(new T[_size], std::default_delete<T[]>());
+	_data = std::shared_ptr<DataArray<T> >(new DataArray<T>(size));
 }
 
 template <class T>
-Algos::Array<T>::Array(int size, const T &t) : Array(size){
-//    for(int i=0; i<_size; i++) {
-//       ((T*)_data.get())[i] = t;
-// 	}
+Algos::Array<T>::Array(int size, const T &t) {
+	_data = std::shared_ptr<DataArray<T> >(new DataArray<T>(size, t));
 }
 
 #endif

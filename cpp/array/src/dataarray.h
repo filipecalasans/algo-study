@@ -12,16 +12,16 @@ template <class T>
 class DataArray {  
    
 public:
-	DataArray() :  _size(0), _allocated_size(0) {}
+	    DataArray() : _size(0), _allocated_size(0) {}
       explicit DataArray(int _size);
       explicit DataArray(int size, const T &t);
       explicit DataArray(const DataArray& data_array) : 
          DataArray(data_array.size()) { 
-            this.copyFrom(data_array); 
+            this->copyFrom(data_array); 
          }
             
-      T& operator[](int i) { assert(i<_size); return _data[i]; } //deep copy here.
-      T operator[](int i) const {  assert(i<_size); return _data[i]; }
+      T& operator[](int i) { assert(i<_size); return _data[i]; }
+      const T& operator[](int i) const {  assert(i<_size); return _data[i]; }
       
       inline int size() const { return _size; }
 
@@ -36,13 +36,13 @@ public:
       bool increase(int new_size);
       bool decrease(int new_size);
 
-		int allocatedSize() { return _allocated_size; }
+	    int allocatedSize() { return _allocated_size; }
 		
    private:
-
+      
       std::unique_ptr <T[]> _data;
-		int _size;
-		int _allocated_size;
+		  int _size;
+		  int _allocated_size;
 
       bool allocate(int allocate_intent, int new_size);
 };
