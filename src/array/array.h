@@ -35,14 +35,14 @@ public:
 		  } 
       
       int size() const { return _data->size(); }
-
+       
       Array& operator=(const Array& other) { 
         _data = other.data();          
         return *this;
       }
 
 		  const std::shared_ptr<DataArray<T> >& data() const { return _data; }
-      
+    
       int dataRefCount() const { return _data.use_count(); }
       
       const T& first() {
@@ -54,9 +54,10 @@ public:
         assert(_data->size()>0);
         return (*this)[_data->size()-1];
       }
-
-
-   private:
+    
+      bool empty() { return (_data->size() == 0); }
+     
+   protected:
       std::shared_ptr <DataArray<T> > _data;
 
 };

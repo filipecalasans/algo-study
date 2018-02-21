@@ -1,7 +1,10 @@
-set(GMOCK_DIR "../../../lib/googletest-release-1.8.0/googlemock/"
+cmake_minimum_required(VERSION 2.8)
+project(algo_test C CXX)
+
+set(GMOCK_DIR "../lib/googletest-release-1.8.0/googlemock/"
     CACHE PATH "The path to the GoogleMock test framework.")
 
-set(GTEST_DIR "../../../lib/googletest-release-1.8.0/googletest/"
+set(GTEST_DIR "../lib/googletest-release-1.8.0/googletest/"
     CACHE PATH "The path to the GoogleTest test framework.")
 
 set(BUILD_TESTING ON)
@@ -22,12 +25,5 @@ add_subdirectory(${GMOCK_DIR} ${CMAKE_BINARY_DIR}/gmock)
 include_directories(SYSTEM ${GMOCK_DIR}/gtest/include ${GMOCK_DIR}/include)
 include_directories(SYSTEM ${GTEST_DIR}/gtest/include ${GTEST_DIR}/include)
 
-# Test Array
-add_executable(test_array testarray.cpp)
-target_link_libraries(test_array algoCore gmock_main)
-add_test(test_array test_project)
-
-# Test ArrayData
-add_executable(test_arraydata testarraydata.cpp)
-target_link_libraries(test_arraydata algoCore gmock_main)
-add_test(test_arraydata test_arraydata)
+add_subdirectory(array)
+add_subdirectory(vector)

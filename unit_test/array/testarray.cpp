@@ -78,3 +78,11 @@ TEST(Array, Last) {
    EXPECT_EQ(55, a.last());
 
 }
+
+TEST(Array, Empty) {
+   Array<int> a;
+  
+   EXPECT_EQ(0, a.size());
+   EXPECT_EQ(true, a.empty());
+  
+}

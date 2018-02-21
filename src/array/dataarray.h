@@ -37,7 +37,11 @@ public:
       bool decrease(int new_size);
 
 	    int allocatedSize() { return _allocated_size; }
-		
+      bool reserve(int reserve_size) {
+        if(reserve_size < _allocated_size) { return false; }
+        allocate(reserve_size, _size);
+      }
+
    private:
       
       std::unique_ptr <T[]> _data;
@@ -45,6 +49,7 @@ public:
 		  int _allocated_size;
 
       bool allocate(int allocate_intent, int new_size);
+      
 };
 
 }
@@ -52,10 +57,10 @@ public:
 // ######################### Template Implementation  ##############################
 template <class T>
 Algos::DataArray<T>::DataArray(int size) : _size(size){
-	_data = std::make_unique<T[]>(size);
-	if(_data) {
-		_allocated_size = _size = size;
-	}
+  _data = std::make_unique<T[]>(size);
+  if(_data) {
+	  _allocated_size = _size = size;
+  }
 }
 
 template <class T>
