@@ -20,6 +20,7 @@ enable_testing()
 #add_subdirectory(${GMOCK_DIR} ${CMAKE_BINARY_DIR}/gmock)
 
 include_directories(SYSTEM ${GMOCK_DIR}/gtest/include ${GMOCK_DIR}/include)
+include_directories(SYSTEM ${GMOCK_DIR}/gtest/include ${GMOCK_DIR}/include)
 include_directories(SYSTEM ${GTEST_DIR}/gtest/include ${GTEST_DIR}/include)
 
 # Test Array

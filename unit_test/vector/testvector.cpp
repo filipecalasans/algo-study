@@ -1,8 +1,7 @@
 
 #include <iostream>
 
-#include "array.h"
-#include "vector.h"
+#include "vector/vector.h"
 #include "gtest/gtest.h"
 
 using namespace Algos;

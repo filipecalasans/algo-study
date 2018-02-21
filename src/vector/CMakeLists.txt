@@ -6,7 +6,7 @@ set(CMAKE_BUILD_TYPE Debug)
 add_definitions(-std=c++14)
 add_definitions(-Werror)
 
-include_directories("../array")
+include_directories("../")
 
 file(GLOB algo_SRC "*.h" "*.cpp")
 

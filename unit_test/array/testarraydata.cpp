@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include "dataarray.h"
+#include "array/dataarray.h"
 #include "gtest/gtest.h"
 
 using namespace Algos;

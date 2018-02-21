@@ -7,6 +7,9 @@ set(GMOCK_DIR "../lib/googletest-release-1.8.0/googlemock/"
 set(GTEST_DIR "../lib/googletest-release-1.8.0/googletest/"
     CACHE PATH "The path to the GoogleTest test framework.")
 
+set(ALGO_DIR "../src" 
+      CACHE_PATH "The path to the Algo Data Struct Library.")
+
 set(BUILD_TESTING ON)
 enable_testing()
 
@@ -24,6 +27,7 @@ add_subdirectory(${GMOCK_DIR} ${CMAKE_BINARY_DIR}/gmock)
 
 include_directories(SYSTEM ${GMOCK_DIR}/gtest/include ${GMOCK_DIR}/include)
 include_directories(SYSTEM ${GTEST_DIR}/gtest/include ${GTEST_DIR}/include)
+include_directories(SYSTEM ${ALGO_DIR})
 
 add_subdirectory(array)
 add_subdirectory(vector)
