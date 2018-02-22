@@ -36,13 +36,9 @@ public:
 
 // ######################### Template Implementation  ##############################
 template <class T>
-Algos::Vector<T>::Vector(int size) : Array<T>(){
-  this->_data->reserve(1024);
-}
+Algos::Vector<T>::Vector(int size) : Array<T>(size){ }
 
 template <class T>
-Algos::Vector<T>::Vector(int size, const T &t) {
-    
-}
+Algos::Vector<T>::Vector(int size, const T& t) : Array<T>(size, t){ }
 
 #endif

@@ -26,7 +26,7 @@ include_directories(SYSTEM ${GTEST_DIR}/gtest/include ${GTEST_DIR}/include)
 # Test Array
 add_executable(test_array testarray.cpp)
 target_link_libraries(test_array algoArray gmock_main)
-add_test(test_array test_project)
+add_test(test_array test_array)
 
 # Test ArrayData
 add_executable(test_arraydata testarraydata.cpp)

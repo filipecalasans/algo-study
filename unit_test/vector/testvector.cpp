@@ -8,16 +8,20 @@ using namespace Algos;
 
 // Tests the default c'tor.
 TEST(Vector, ContructorNotInitializedData) {
-   int array_size = 10;
+   int array_size = 300;
    Vector<int> a(array_size);
 
-   EXPECT_EQ(0, a.size());
+   EXPECT_EQ(array_size, a.size());
 }
 
 // Tests the default c'tor and const []
 TEST(Vector, ContructorInitializedData) {
-   int array_size = 10;
-   //Vector<int> a(array_size, 20);
+   int array_size = 100;
+   Vector<int> a(array_size, 20);
+
+   for(int i=0; i<a.size(); i++) {
+    EXPECT_EQ(a[i], 20);
+   }
 }
 
 //Tests the c'tor (Vector(Vector&a)
