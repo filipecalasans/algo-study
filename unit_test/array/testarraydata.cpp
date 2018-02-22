@@ -40,7 +40,6 @@ TEST(DataArray, OperatorIndex) {
       const int tmp = a[i]; 
       EXPECT_EQ(tmp, i);
    }
-   
 }
 
 // Tests the operator [], 2 equal size arrays.
@@ -95,7 +94,7 @@ TEST(DataArray, OperatorEqAssignedToSmallerArray) {
 
 // Tests the incriesing operation.
 TEST(DataArray, IncrieseSizeX10) {
-   int array_size = 10;
+   int array_size = 100;
    DataArray<int> a(array_size, 10);
 
    bool ret = a.resize(100);
@@ -121,7 +120,7 @@ TEST(DataArray, IncrieseSizePlus2) {
    bool ret = a.resize(12);
    EXPECT_EQ(ret, true);
    EXPECT_EQ(a.size(), 12);
-   EXPECT_EQ(a.allocatedSize(), 20);
+   EXPECT_EQ(a.allocatedSize(), 256);
    
    //data reamins the same after increasing
    for(int i=0; i<10; i++) {
@@ -136,14 +135,14 @@ TEST(DataArray, IncrieseSizePlus2) {
 
 // Tests decrease / 10.
 TEST(DataArray, DecreaseBy10Times) {
-   int array_size = 100;
+   int array_size = 1000;
    DataArray<int> a(array_size, 10);
 
    EXPECT_EQ(a.size(), array_size);
    bool ret = a.resize(10);
    EXPECT_EQ(ret, true);
    EXPECT_EQ(a.size(), 10);
-   EXPECT_EQ(a.allocatedSize(), 10);
+   EXPECT_EQ(a.allocatedSize(), 20); 
 
    //data reamins the same after increasing
    for(int i=0; i<10; i++) {
@@ -165,7 +164,7 @@ TEST(DataArray, DecreaseByMinus5) {
    bool ret = a.resize(array_size-5);
    EXPECT_EQ(ret, true);
    EXPECT_EQ(a.size(), array_size-5);
-   EXPECT_EQ(a.allocatedSize(), array_size);
+   EXPECT_EQ(a.allocatedSize(), a.size()*2);
 
    //data reamins the same after increasing
    for(int i=0; i<array_size-5; i++) {

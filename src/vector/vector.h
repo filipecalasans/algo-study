@@ -19,7 +19,7 @@ class Vector : public Array<T> {
    
 public:
 
-      Vector() {}
+      Vector() : Array<T>() { this->_data->reserve(1024); }
       explicit Vector(int _size);
       explicit Vector(int size, const T &t);
 		  Vector(Vector<T>& a) {  this->_data = a.data();  }

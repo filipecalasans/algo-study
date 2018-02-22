@@ -19,7 +19,9 @@ class Array {
    
 public:
 
-      Array() {}
+      Array() {
+          _data = std::shared_ptr<DataArray<T> >(new DataArray<T>());
+      }
       explicit Array(int _size);
       explicit Array(int size, const T &t);
 		  Array(Array& a) { _data = a.data();  }

@@ -84,5 +84,4 @@ TEST(Array, Empty) {
   
    EXPECT_EQ(0, a.size());
    EXPECT_EQ(true, a.empty());
-  
 }

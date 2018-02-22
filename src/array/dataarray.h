@@ -11,8 +11,13 @@ namespace Algos {
 template <class T>
 class DataArray {  
    
+      static const int DEFAULT_ALLOCATION = 256;
+
 public:
-	    DataArray() : _size(0), _allocated_size(0) {}
+	    DataArray() : _size(0), _allocated_size(DEFAULT_ALLOCATION) {
+        _data = std::make_unique<T[]>(_allocated_size);
+      }
+
       explicit DataArray(int _size);
       explicit DataArray(int size, const T &t);
       explicit DataArray(const DataArray& data_array) : 
@@ -28,6 +33,7 @@ public:
       void copyFrom(const DataArray<T>& other);
 
       bool resize(int new_size) { 
+         if(new_size == 0) { return false; }
          if(new_size>size()) {  return increase(new_size); }
          if(new_size<size()) { return decrease(new_size); }
          return true;
@@ -43,7 +49,6 @@ public:
       }
 
    private:
-      
       std::unique_ptr <T[]> _data;
 		  int _size;
 		  int _allocated_size;
@@ -56,11 +61,12 @@ public:
 
 // ######################### Template Implementation  ##############################
 template <class T>
-Algos::DataArray<T>::DataArray(int size) : _size(size){
-  _data = std::make_unique<T[]>(size);
-  if(_data) {
-	  _allocated_size = _size = size;
+Algos::DataArray<T>::DataArray(int size) : _size(size), _allocated_size(DEFAULT_ALLOCATION) {
+  if(_size > _allocated_size) {
+    _allocated_size = 2*_size;
   }
+
+  _data = std::make_unique<T[]>(_allocated_size);
 }
 
 template <class T>
@@ -80,27 +86,28 @@ void Algos::DataArray<T>::copyFrom(const DataArray<T>& other) {
 
 template <class T>
 bool Algos::DataArray<T>::increase(int new_size) {
-	if(new_size <= _allocated_size) {
+	if(new_size <= size()) { return false; }
+  if(new_size <= _allocated_size) {
 		_size = new_size;
 		return true;
 	}
 
 	int allocate_intent = new_size;
-   if(allocate_intent < 2*size()) { allocate_intent = 2*size(); }
+  if(allocate_intent < 2*size()) { allocate_intent = 2*size(); }
 	
-   return allocate(allocate_intent, new_size);
+  return allocate(allocate_intent, new_size);
 }
 
 template <class T>
 bool Algos::DataArray<T>::decrease(int new_size) {
-	// performance optimization. 
+  if(new_size >= _size) { return false; }
 	// Only deallocate if new size is less then half of the current size
    if(new_size > _allocated_size/2) { 
       _size = new_size;
       return true;
    }
 
-   return allocate(new_size, new_size);
+   return allocate(new_size*2, new_size);
 }
 
 template <class T>
