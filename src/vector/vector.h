@@ -35,7 +35,7 @@ public:
 
 // ######################### Template Implementation  ##############################
 template <class T>
-Algos::Vector<T>::Vector(int size) : Array<T>(size){ }
+Algos::Vector<T>::Vector(int reserve_size) : Array<T>(reserve_size){ (Array<T>::_data)->resize(0); }
 
 template <class T>
 Algos::Vector<T>::Vector(int size, const T& t) : Array<T>(size, t){ }
@@ -48,7 +48,16 @@ void Algos::Vector<T>::append(const T& value) {
 
 template <class T>
 void Algos::Vector<T>::insert(int index, const T& t) {
-  if(index >= Array<T>::size()) { return; }
+  if(index >= Array<T>::size()) { 
+    append(t); 
+    return; 
+  }
+
+  int old_size = Array<T>::size();
+  (Array<T>::_data)->resize(Array<T>::size()+1); 
+  for(int i=old_size-1; i>=index; i--) {
+    (*Array<T>::_data)[i+1] = (*Array<T>::_data)[i];
+  }
   (*Array<T>::_data)[index] = t;
 }
 
@@ -65,7 +74,7 @@ void Algos::Vector<T>::clear() {
 
 template <class T>
 bool Algos::Vector<T>::resize(int new_size) {
-  return (Array<T>::_data->resize(new_size));
+  return (Array<T>::_data->reserve(new_size));
 }
 
 

@@ -11,7 +11,7 @@ TEST(Vector, ContructorNotInitializedData) {
    int array_size = 300;
    Vector<int> a(array_size);
 
-   EXPECT_EQ(array_size, a.size());
+   EXPECT_EQ(0, a.size());
 }
 
 // Tests the default c'tor and const []
@@ -117,10 +117,11 @@ TEST(Vector, InsertOnAIncreasedVector) {
    a.insert(299, 400);
    a.insert(300, 500); //Cant break. 
    
+   // [100, 200, 300, 400, 500]
    EXPECT_EQ(a[0], 100);
-   EXPECT_EQ(a[10], 200);
-   EXPECT_EQ(a[250], 300);
-   EXPECT_EQ(a[299], 400);
+   EXPECT_EQ(a[1], 200);
+   EXPECT_EQ(a[2], 300);
+   EXPECT_EQ(a[3], 400);
    
    { 
       Vector<int>b(a);
@@ -128,22 +129,24 @@ TEST(Vector, InsertOnAIncreasedVector) {
       EXPECT_EQ(b.dataRefCount(), 2);
       EXPECT_EQ(a.dataRefCount(), 2);
       
-      EXPECT_EQ(a[0], 100);
-      EXPECT_EQ(a[10], 200);
-      EXPECT_EQ(a[250], 300);
-      EXPECT_EQ(a[299], 400);
+   // [100, 200, 300, 400, 500]
+      EXPECT_EQ(a[0], 100);      
+      EXPECT_EQ(a[1], 200);
+      EXPECT_EQ(a[2], 300);
+      EXPECT_EQ(a[3], 400);
 
       EXPECT_EQ(b[0], 100);
-      EXPECT_EQ(b[10], 200);
-      EXPECT_EQ(b[250], 300);
-      EXPECT_EQ(b[299], 400);
+      EXPECT_EQ(b[1], 200);
+      EXPECT_EQ(b[2], 300);
+      EXPECT_EQ(b[3], 400);
    }
 
+   // [100, 200, 300, 400, 500]
    EXPECT_EQ(a.dataRefCount(), 1);
    EXPECT_EQ(a[0], 100);
-   EXPECT_EQ(a[10], 200);
-   EXPECT_EQ(a[250], 300);
-   EXPECT_EQ(a[299], 400);
+   EXPECT_EQ(a[1], 200);
+   EXPECT_EQ(a[2], 300);
+   EXPECT_EQ(a[3], 400);
 }
 
 TEST(Vector, ResizeVectorSize) {
@@ -154,24 +157,49 @@ TEST(Vector, ResizeVectorSize) {
   
    a.insert(0, 10);
    a.insert(10, 20);
-   
+  
+   //[10, 20]
    EXPECT_EQ(a[0], 10);
-   EXPECT_EQ(a[10], 20);
+   EXPECT_EQ(a[1], 20);
+   EXPECT_EQ(a.size(), 2);
    
    EXPECT_EQ(a.resize(array_size), true);
-
-   a.insert(0, 100);
-   a.insert(10, 200);
-   a.insert(250, 300);
-   a.insert(299, 400);
-   a.insert(300, 500); //Cant break. 
+   EXPECT_EQ(a.size(), 2);
    
+   a.insert(0, 100);
+   //[100, 10, 20] 
+   EXPECT_EQ(a.size(), 3);
    EXPECT_EQ(a[0], 100);
-   EXPECT_EQ(a[10], 200);
-   EXPECT_EQ(a[250], 300);
-   EXPECT_EQ(a[299], 400);
+   EXPECT_EQ(a[1], 10);
+   EXPECT_EQ(a[2], 20);
+   
+   a.insert(10, 200);
+   //[100, 10, 20, 200]
+   EXPECT_EQ(a.size(), 4);
+   EXPECT_EQ(a[0], 100);
+   EXPECT_EQ(a[1], 10);
+   EXPECT_EQ(a[2], 20);
+   EXPECT_EQ(a[3], 200);
+   
+   
+   a.insert(2, 300);
+  //[100, 10, 300, 20, 200]
+   EXPECT_EQ(a.size(),5); 
+   EXPECT_EQ(a[0], 100);
+   EXPECT_EQ(a[1], 10);
+   EXPECT_EQ(a[2], 300);
+   EXPECT_EQ(a[3], 20);
+   EXPECT_EQ(a[4], 200);
 
-   EXPECT_EQ(a.size(), array_size);
+   a.insert(a.size(), 700);
+   //[100, 10, 300, 20, 200]
+   EXPECT_EQ(a.size(),6); 
+   EXPECT_EQ(a[0], 100);
+   EXPECT_EQ(a[1], 10);
+   EXPECT_EQ(a[2], 300);
+   EXPECT_EQ(a[3], 20);
+   EXPECT_EQ(a[4], 200);
+   EXPECT_EQ(a[5], 700);
   
 }
 

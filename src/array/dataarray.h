@@ -44,16 +44,18 @@ public:
 
 	    int allocatedSize() { return _allocated_size; }
       bool reserve(int reserve_size) {
-        if(reserve_size < _allocated_size) { return false; }
+        if(reserve_size < _allocated_size) { return true; }
         allocate(reserve_size, _size);
       }
+  
+  protected:
 
+      bool allocate(int allocate_intent, int new_size);
+   
    private:
       std::unique_ptr <T[]> _data;
 		  int _size;
 		  int _allocated_size;
-
-      bool allocate(int allocate_intent, int new_size);
       
 };
 
@@ -92,9 +94,7 @@ bool Algos::DataArray<T>::increase(int new_size) {
 		return true;
 	}
 
-	int allocate_intent = new_size;
-  if(allocate_intent < 2*size()) { allocate_intent = 2*size(); }
-	
+	int allocate_intent = 2*new_size;
   return allocate(allocate_intent, new_size);
 }
 
