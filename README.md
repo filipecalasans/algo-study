@@ -8,7 +8,7 @@ There is some sort of inspiration on the containers implemented in Qt Framework,
 
 # Containers
 
-  DataArray
-  Array
-  Vector
+  * DataArray
+  * Array
+  * Vector
 
