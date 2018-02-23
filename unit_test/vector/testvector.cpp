@@ -206,13 +206,12 @@ TEST(Vector, ResizeVectorSize) {
 TEST(Vector, ClearVector) {
    int array_size = 256;
    Vector<int> a(array_size, 0);
-    
-
    EXPECT_EQ(array_size, a.size());
+
    a.clear();
+   
    EXPECT_EQ(0, a.size());
    EXPECT_EQ(true, a.empty());
-
 }
 
 TEST(Vector, Empty) {

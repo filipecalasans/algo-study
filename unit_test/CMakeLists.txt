@@ -29,5 +29,6 @@ include_directories(SYSTEM ${GMOCK_DIR}/gtest/include ${GMOCK_DIR}/include)
 include_directories(SYSTEM ${GTEST_DIR}/gtest/include ${GTEST_DIR}/include)
 include_directories(SYSTEM ${ALGO_DIR})
 
+add_subdirectory(iterator)
 add_subdirectory(array)
 add_subdirectory(vector)
