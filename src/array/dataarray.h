@@ -33,7 +33,7 @@ public:
       void copyFrom(const DataArray<T>& other);
 
       bool resize(int new_size) { 
-         if(new_size == 0) { return false; }
+         if(new_size == 0) { _size = new_size; return true; }
          if(new_size>size()) {  return increase(new_size); }
          if(new_size<size()) { return decrease(new_size); }
          return true;

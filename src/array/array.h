@@ -58,7 +58,7 @@ public:
       }
     
       bool empty() { return (_data->size() == 0); }
-     
+      
    protected:
       std::shared_ptr <DataArray<T> > _data;
 
