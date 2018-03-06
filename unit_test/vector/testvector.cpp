@@ -221,3 +221,34 @@ TEST(Vector, Empty) {
    EXPECT_EQ(true, a.empty());
   
 }
+
+TEST(Vector, iterator) {
+   int array_size = 10;
+   int insert_size = 400;
+   Vector<int> a(array_size, 20);
+  
+   for(int i=0; i<insert_size; i++) {
+      a.append(i+array_size);
+   }
+  
+   EXPECT_EQ(a.size(), insert_size+array_size);
+
+   int j=0;
+   for(Vector<int>::const_iterator it = a.cbegin(); it!=a.cend(); it++) {
+      if(j<array_size) {
+         EXPECT_EQ(*it, 20);
+      }
+      else {
+         EXPECT_EQ(*it, j);
+      }
+      j++;
+   }
+
+   for(Vector<int>::iterator it = a.begin(); it!=a.end(); it++) {
+      *it = 155;
+   }
+
+   for(Vector<int>::const_iterator it = a.cbegin(); it!=a.cend(); it++) {
+      EXPECT_EQ(*it, 155);
+   }
+}
