@@ -16,7 +16,7 @@ namespace Algos {
 
 template <class T>
 class Array {  
-   
+  
 public:
 
       Array() {
@@ -62,8 +62,8 @@ public:
    protected:
       std::shared_ptr <DataArray<T> > _data;
 
-};
-
+    };
+    
 }
 
 // ######################### Template Implementation  ##############################

@@ -177,4 +177,38 @@ TEST(DataArray, DecreaseByMinus5) {
    }
 }
 
+//Test Iterator
+TEST(DataArray, iterator) {
+
+   int array_size = 100;
+   DataArray<int> a(array_size, 10);
+
+   for(int i=0; i<a.size(); i++) {
+      a[i] = i;
+   }
+
+   int j=0;
+   for(Algos::DataArray<int>::iterator it = a.begin(); 
+      it != a.end(); it++) {
+         EXPECT_EQ(a[j++], *it);
+      }       
+}
+   //Test Iterator
+TEST(DataArray, const_iterator) {
+
+   int array_size = 100;
+   DataArray<int> a(array_size, 10);
+
+   for(int i=0; i<a.size(); i++) {
+      a[i] = i;
+   }
+
+   int j=0;
+   for(Algos::DataArray<int>::const_iterator it = a.cbegin(); 
+      it != a.cend(); it++) {
+         EXPECT_EQ(a[j++], *it);
+      }     
+}
+   
+
 

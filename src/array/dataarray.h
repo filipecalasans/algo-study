@@ -11,7 +11,52 @@ namespace Algos {
 template <class T>
 class DataArray {  
    
-      static const int DEFAULT_ALLOCATION = 256;
+    static const int DEFAULT_ALLOCATION = 256;
+
+public:
+    
+  class iterator {
+    public:
+    
+        typedef iterator self_type;
+        typedef T value_type;
+        typedef T& reference;
+        typedef T* pointer;
+        typedef std::forward_iterator_tag iterator_category;
+        typedef int difference_type;
+
+        iterator(pointer ptr) : _ptr(ptr) {}
+        self_type operator++() { _ptr++; return *this; } //PREFIX
+        self_type operator++(int junk) { self_type i = *this; _ptr++; return i; } //POSTFIX
+        reference operator*() { return *_ptr; }
+        pointer  operator->() { return _ptr; }
+        bool operator==(const self_type& rhs) { return _ptr == rhs._ptr; }
+        bool operator!=(const self_type& rhs) { return _ptr != rhs._ptr; }
+    private:
+        pointer _ptr;
+  };
+
+  class const_iterator {
+    public:
+    
+        typedef const_iterator self_type;
+        typedef T value_type;
+        typedef T& reference;
+        typedef T* pointer;
+        typedef std::forward_iterator_tag iterator_category;
+        typedef int difference_type;
+
+        const_iterator(pointer ptr) : _ptr(ptr) {}
+        self_type operator++() { _ptr++; return *this; } //PREFIX
+        self_type operator++(int junk) { self_type i = *this; _ptr++; return i; } //POSTFIX
+        const reference operator*() { return *_ptr; }
+        const pointer  operator->() { return _ptr; }
+        bool operator==(const self_type& rhs) const { return _ptr == rhs._ptr; }
+        bool operator!=(const self_type& rhs) const { return _ptr != rhs._ptr; }
+    private:
+        pointer _ptr;
+  };
+      
 
 public:
 	    DataArray() : _size(0), _allocated_size(DEFAULT_ALLOCATION) {
@@ -47,7 +92,13 @@ public:
         if(reserve_size < _allocated_size) { return true; }
         allocate(reserve_size, _size);
       }
-  
+      
+      iterator begin() { return iterator(_data.get()); }
+      iterator end() { return iterator(&((_data.get())[size()-1])); }
+
+      const_iterator cbegin() { return const_iterator(_data.get()); }
+      const_iterator cend() { return const_iterator(&((_data.get())[size()-1])); }
+
   protected:
 
       bool allocate(int allocate_intent, int new_size);
