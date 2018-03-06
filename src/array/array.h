@@ -16,6 +16,66 @@ namespace Algos {
 
 template <class T>
 class Array {  
+
+public:
+
+  class iterator {
+    public:
+    
+        typedef iterator self_type;
+        typedef T value_type;
+        typedef T& reference;
+        typedef T* pointer;
+        typedef std::forward_iterator_tag iterator_category;
+        typedef int difference_type;
+
+        iterator(const typename DataArray<value_type>::iterator& ptr) : _ptr(ptr) {}
+        iterator(const self_type& other) : _ptr(nullptr){ *this = other; }
+
+        self_type operator++() { _ptr++; return *this; } //PREFIX
+        self_type operator++(int junk) { self_type i = *this; _ptr++; return i; } //POSTFIX
+        reference operator*() { return *_ptr; }
+        pointer  operator->() { return _ptr.operator->(); }
+        bool operator==(const self_type& rhs) { return _ptr == rhs._ptr; }
+        bool operator!=(const self_type& rhs) { return _ptr != rhs._ptr; }
+        self_type& operator=(const self_type& other) {
+          if(this != &other) {
+            _ptr = other._ptr;
+          }
+          return *this;
+        }
+    private:
+        typename DataArray<value_type>::iterator _ptr;
+  };
+
+  class const_iterator {
+    public:
+    
+        typedef const_iterator self_type;
+        typedef T value_type;
+        typedef T& reference;
+        typedef T* pointer;
+        typedef std::forward_iterator_tag iterator_category;
+        typedef int difference_type;
+
+        const_iterator(const typename DataArray<value_type>::const_iterator& ptr) : _ptr(ptr) {}
+        const_iterator(const self_type &other) : _ptr(nullptr){ *this = other; }
+
+        self_type operator++() { _ptr++; return *this; } //PREFIX
+        self_type operator++(int junk) { self_type i = *this; _ptr++; return i; } //POSTFIX
+        const reference operator*() { return *_ptr; }
+        const pointer  operator->() { return _ptr.operator->(); }
+        bool operator==(const self_type& rhs) const { return _ptr == rhs._ptr; }
+        bool operator!=(const self_type& rhs) const { return _ptr != rhs._ptr; }
+        self_type& operator=(const self_type& other) {
+          if(this != &other) {
+            _ptr = other._ptr;
+          }
+          return *this;
+        }
+      private:
+        typename DataArray<value_type>::const_iterator _ptr;
+  };
   
 public:
 
@@ -58,7 +118,27 @@ public:
       }
     
       bool empty() { return (_data->size() == 0); }
-      
+
+      iterator begin() { 
+        iterator it = _data->begin();
+        return it; 
+      }
+
+      iterator end() { 
+        iterator it = _data->end();
+        return it; 
+      }
+
+      const_iterator cbegin() { 
+        const_iterator it = _data->cbegin();
+        return it; 
+      }
+
+      const_iterator cend() { 
+        const_iterator it = _data->cend();
+        return it; 
+      }
+
    protected:
       std::shared_ptr <DataArray<T> > _data;
 

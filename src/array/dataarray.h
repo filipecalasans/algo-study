@@ -26,6 +26,7 @@ public:
         typedef int difference_type;
 
         iterator(pointer ptr) : _ptr(ptr) {}
+        // iterator(self_type& it) : _ptr(it._ptr) { }
         self_type operator++() { _ptr++; return *this; } //PREFIX
         self_type operator++(int junk) { self_type i = *this; _ptr++; return i; } //POSTFIX
         reference operator*() { return *_ptr; }
@@ -47,6 +48,7 @@ public:
         typedef int difference_type;
 
         const_iterator(pointer ptr) : _ptr(ptr) {}
+        // const_iterator(self_type& it) : _ptr(it._ptr) { }
         self_type operator++() { _ptr++; return *this; } //PREFIX
         self_type operator++(int junk) { self_type i = *this; _ptr++; return i; } //POSTFIX
         const reference operator*() { return *_ptr; }
@@ -94,10 +96,18 @@ public:
       }
       
       iterator begin() { return iterator(_data.get()); }
-      iterator end() { return iterator(&((_data.get())[size()-1])); }
-
+      iterator end() { 
+        T* ptr_end = &(_data.get()[size()?size()-1:0]);
+        ptr_end++;
+        return iterator(ptr_end); 
+      }
+      
       const_iterator cbegin() { return const_iterator(_data.get()); }
-      const_iterator cend() { return const_iterator(&((_data.get())[size()-1])); }
+      const_iterator cend() { 
+        T* ptr_end = &(_data.get()[size()?size()-1:0]);
+        ptr_end++;
+        return const_iterator(ptr_end); 
+      }
 
   protected:
 

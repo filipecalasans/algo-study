@@ -85,3 +85,27 @@ TEST(Array, Empty) {
    EXPECT_EQ(0, a.size());
    EXPECT_EQ(true, a.empty());
 }
+
+
+// Test iterator
+TEST(Array, Iterator) {
+   int array_size = 10;
+   Array<int> a(array_size);
+   
+   for(int i=0; i<a.size(); i++) { 
+      a[i]= i;
+   }
+
+   int j = 0;
+   for(Array<int>::const_iterator it=a.cbegin(); it!=a.cend(); ++it) {
+      EXPECT_EQ(a[j++], *it);      
+   }
+
+   for(Array<int>::iterator it=a.begin(); it!=a.end(); it++) {
+      *it = (*it) * 2;
+   }
+
+   for(int i=0; i<a.size(); i++) { 
+      EXPECT_EQ(a[i], i*2);
+   }
+}
