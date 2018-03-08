@@ -29,7 +29,7 @@ TEST(ListData, realloc) {
    EXPECT_EQ(*(data.d->array[99]), 10);
 
    data.realloc(200);
-   EXPECT_EQ(*(data.d->array[99]), 10);
+   EXPECT_EQ(data.d->alloc, 200);
 }
 
 TEST(ListData, append) {
@@ -52,6 +52,51 @@ TEST(ListData, append) {
    EXPECT_EQ(data.d->begin, 0);
    EXPECT_EQ(**(data.d->array+data.d->begin), x);
    EXPECT_EQ(**(data.d->array+data.d->begin+1), y);
+}
+
+TEST(ListData, prepend) {
+   ListData<int> data;
+   int x = 10;
+
+   int **nxt = data.prepend();
+   EXPECT_EQ(data.size(), 1);
+   EXPECT_EQ(data.d->alloc, 4);
+   EXPECT_EQ(data.d->begin, 3);
+   EXPECT_EQ(data.d->begin+data.size(), data.d->end);
+
+   nxt = data.prepend();
+   EXPECT_EQ(data.size(), 2);
+   EXPECT_EQ(data.d->begin, 2);
+   EXPECT_EQ(data.d->begin+data.size(), data.d->end);
+
+   nxt = data.prepend();
+   EXPECT_EQ(data.size(), 3);
+   EXPECT_EQ(data.d->begin, 1);
+   EXPECT_EQ(data.d->begin+data.size(), data.d->end);
+
+   nxt = data.prepend();
+   EXPECT_EQ(data.size(), 4);
+   EXPECT_EQ(data.d->begin, 0);
+   EXPECT_EQ(data.d->begin+data.size(), data.d->end);
+
+   nxt = data.prepend();
+   EXPECT_EQ(data.size(), 5);
+   EXPECT_EQ(data.d->alloc, 10);
+   EXPECT_EQ(data.d->begin, 5);
+   EXPECT_EQ(data.d->begin+data.size(), data.d->end);
+}
+
+TEST(ListData, prependSparse) {
+
+   ListData<int> data;
+   data.realloc(100);
+
+   int **nxt = data.prepend();
+   EXPECT_EQ(data.size(), 1);
+   EXPECT_EQ(data.d->alloc, 202);
+   EXPECT_EQ(data.d->begin, 201);
+   EXPECT_EQ(data.d->begin+data.size(), data.d->end);
+
 
 
 }

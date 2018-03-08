@@ -39,6 +39,7 @@ namespace Algos {
     }
 
     void realloc(int alloc);
+    void reallocAndMove(int new_begin, int alloc);
 
     T** erase();
     T** append();
@@ -61,8 +62,8 @@ namespace Algos {
 
 }
 
-template <typename T>
-void Algos::ListData<T>::realloc(int alloc) {
+template <typename T> 
+void Algos::ListData<T>::reallocAndMove(int new_begin, int alloc) {
   std::unique_ptr<Data, DataDeleter> x(new Data);
   x->array = new T*[alloc ? alloc : 1]; 
   x->alloc = alloc ? alloc : 1;
@@ -70,13 +71,20 @@ void Algos::ListData<T>::realloc(int alloc) {
     x->begin = x->end = 0;
   }
   else {
-    int min_alloc = d->alloc;
-    if(min_alloc < x->alloc) { min_alloc=x->alloc; }
-    ::memcpy(x->array, d->array, min_alloc * sizeof(T*)); //can be optimized
-    x->begin = d->begin;
-    x->end = d->end <= x->alloc ? d->end : x->alloc;
+    int cpy_size = d->end-d->begin;
+    if(d->begin > x->alloc) { cpy_size = 0; } //error, must never happen
+    else if(d->end > x->alloc ) { cpy_size = x->alloc-d->begin; }
+    // std::cout << "alloc " << x->alloc << " cpy_size " << cpy_size << std::endl;
+    ::memcpy(x->array+new_begin, d->array+d->begin, cpy_size * sizeof(T*));
+    x->begin = new_begin;
+    x->end = new_begin + cpy_size;
   }
   d = std::move(x);
+}
+
+template <typename T>
+void Algos::ListData<T>::realloc(int alloc) {
+  reallocAndMove(d->begin, alloc);
 }
 
 template <typename T>
@@ -88,7 +96,7 @@ template <typename T>
 T** Algos::ListData<T>::append(){
   if(d->end == d->alloc) { 
     int n = d->end - d->begin;
-    if(d->begin > d->alloc/3) {
+    if(d->begin > 2*d->alloc/3) {
       ::memcpy(d->array+n, d->array+n, n*sizeof(T*));
       d->begin = n;
       d->end = d->begin+n;
@@ -102,7 +110,19 @@ T** Algos::ListData<T>::append(){
 
 template <typename T>
 T** Algos::ListData<T>::prepend(){
-
+  if(d->begin == 0) {
+    int n = d->end - d->begin;
+    int new_begin = d->begin;
+    int new_alloc = grow(d->alloc+1);
+    if(d->end < new_alloc/3) {
+      new_begin = new_alloc - 2*n;
+    }
+    else {
+      new_begin = new_alloc-n;
+    }
+    reallocAndMove(new_begin, new_alloc);
+  }
+  return d->array + --d->begin;
 }
 
 template <typename T>
