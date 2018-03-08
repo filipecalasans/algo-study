@@ -41,11 +41,12 @@ namespace Algos {
     void realloc(int alloc);
     void reallocAndMove(int new_begin, int alloc);
 
-    T** erase();
+    T** erase(T** xi);
     T** append();
     T** prepend();
     T** insert(int i);
     void remove(int i);
+    void remove(int i, int n);
     void move(int from, int to);
     inline int size() const { return d->end - d->begin;}
     inline bool isEmpty() const { return d->end == d->begin; }
@@ -88,7 +89,31 @@ void Algos::ListData<T>::realloc(int alloc) {
 }
 
 template <typename T>
-T** Algos::ListData<T>::erase(){
+void Algos::ListData<T>::remove(int i) {
+  i += d->begin;
+  int n = (d->end - d->begin);
+  int middle_idx = d->begin + n/2;
+  if(i > middle_idx) { //move the right section to <-
+    if(int slice_size = (d->end - i -1)) 
+      ::memmove(d->array+i, d->array+i+1, slice_size * sizeof(T*));
+    d->end--;
+  }
+  else { //move the left section to ->
+    if(int slice_size = i - d->begin)
+      ::memmove(d->array+d->begin+1, d->array+d->begin, slice_size*sizeof(T*));
+    d->begin++;
+  }
+}
+
+template <typename T>
+T** Algos::ListData<T>::erase(T** xi){
+  int i = xi - (d->array + d->begin);
+  remove(i);
+  return d->array + d->begin + i; //return the element in the possition.
+}
+
+template <typename T>
+void Algos::ListData<T>::move(int from, int to) {
 
 }
 
@@ -129,6 +154,7 @@ template <typename T>
 T** Algos::ListData<T>::insert(int i){
 
 }
+
 
 
 
