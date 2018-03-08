@@ -97,6 +97,76 @@ TEST(ListData, prependSparse) {
    EXPECT_EQ(data.d->begin, 201);
    EXPECT_EQ(data.d->begin+data.size(), data.d->end);
 
-
-
 }
+
+void insertElements(ListData<int> *data, int *samples, int n) {
+   
+   data->realloc(100);
+
+   //init the data array to be inserted in the list.
+   for(int i=0; i<n; i++) {
+      samples[i] = i;
+   }
+
+   //append 100 elements
+   for(int i=0; i<n; i++) {
+      int **nxt = data->append();
+      *nxt = &samples[i];   
+   }
+
+   //verify consistency
+   EXPECT_EQ(data->size(), n);
+   for(int i=0; i<n; i++) {
+      EXPECT_EQ(**(data->d->array+data->d->begin+i), samples[i]);
+   }
+}
+
+TEST(ListData, removeFromTheFront) {
+
+   int samples[100] = {};
+   ListData<int> data;
+
+   insertElements(&data, samples, 100);
+
+      for(int i=0; i<100; i++) {
+      data.remove(0);
+      for(int j=i+1,k=0; j<100; j++,k++) {
+         EXPECT_EQ(**(data.d->array+data.d->begin+k), samples[j]);
+      }
+   }
+}
+
+TEST(ListData, removeFromTheBack) {
+
+   int samples[100] = {};
+   ListData<int> data;
+
+   insertElements(&data, samples, 100);
+
+   for(int i=0; i<100; i++) {
+      data.remove(data.size()-1);
+      for(int j=0; j<data.size(); j++) {
+         EXPECT_EQ(**(data.d->array+data.d->begin+j), samples[j]);
+      }
+   }
+}
+
+TEST(ListData, removeFromTheMiddle) {
+
+   int samples[100] = {};
+   ListData<int> data;
+
+   insertElements(&data, samples, 100);
+
+   
+   data.remove(data.size()/2);
+
+   for(int j=0, k=0; j<data.size(); j++,k++) {
+      if(j == 50) {
+         k++;  
+      }
+      EXPECT_EQ(**(data.d->array+data.d->begin+j), samples[k]);
+   }
+   
+}
+
