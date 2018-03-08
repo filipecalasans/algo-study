@@ -192,7 +192,7 @@ TEST(Vector, ResizeVectorSize) {
    EXPECT_EQ(a[4], 200);
 
    a.insert(a.size(), 700);
-   //[100, 10, 300, 20, 200]
+   //[100, 10, 300, 20, 200, 700]
    EXPECT_EQ(a.size(),6); 
    EXPECT_EQ(a[0], 100);
    EXPECT_EQ(a[1], 10);
@@ -200,7 +200,32 @@ TEST(Vector, ResizeVectorSize) {
    EXPECT_EQ(a[3], 20);
    EXPECT_EQ(a[4], 200);
    EXPECT_EQ(a[5], 700);
-  
+
+   a.remove(0);
+   //[10, 300, 20, 200, 700]
+   EXPECT_EQ(a.size(),5); 
+   EXPECT_EQ(a[0], 10);
+   EXPECT_EQ(a[1], 300);
+   EXPECT_EQ(a[2], 20);
+   EXPECT_EQ(a[3], 200);
+   EXPECT_EQ(a[4], 700);
+
+   a.remove(4);
+   //[10, 300, 20, 200]
+   EXPECT_EQ(a.size(),4); 
+   EXPECT_EQ(a[0], 10);
+   EXPECT_EQ(a[1], 300);
+   EXPECT_EQ(a[2], 20);
+   EXPECT_EQ(a[3], 200);
+
+
+   a.remove(1);
+   //[10, 20, 200]
+   EXPECT_EQ(a.size(),3); 
+   EXPECT_EQ(a[0], 10);
+   EXPECT_EQ(a[1], 20);
+   EXPECT_EQ(a[2], 200);
+
 }
 
 TEST(Vector, ClearVector) {

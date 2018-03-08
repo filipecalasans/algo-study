@@ -27,8 +27,10 @@ public:
 		  void append(const T& value);
       void insert(int index, const T& t);
       void removeLast();
+      void removeFirst();
       void clear();
       bool resize(int new_size);
+      void remove(int index);
 };
 
 }
@@ -68,6 +70,27 @@ void Algos::Vector<T>::removeLast() {
 }
 
 template <class T>
+void Algos::Vector<T>::removeFirst() {
+  remove(0);
+}
+
+template <class T>
+void Algos::Vector<T>::remove(int index) {
+  if(index < 0) { return; }
+
+  if(Array<T>::size() == 1) { 
+    (Array<T>::_data)->resize(0);
+    return;
+  }
+ 
+  for(int i=index+1; i<Array<T>::size(); i++) {
+    (*Array<T>::_data)[i-1] = (*Array<T>::_data)[i];  
+  }
+
+  (Array<T>::_data)->resize(Array<T>::size()-1); 
+}
+
+template <class T>
 void Algos::Vector<T>::clear() {
   (Array<T>::_data)->resize(0);
 }
@@ -76,9 +99,5 @@ template <class T>
 bool Algos::Vector<T>::resize(int new_size) {
   return (Array<T>::_data->reserve(new_size));
 }
-
-
-
-
 
 #endif
