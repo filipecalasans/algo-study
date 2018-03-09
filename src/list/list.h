@@ -105,6 +105,20 @@ void Algos::ListData<T>::remove(int i) {
   }
 }
 
+template <typedef T>
+void Algos::ListData<T>::remove(int i, int n) {
+  int middle = d->begin + i + n/2;
+  if(d->end - middle > middle - d->begin) { 
+    ::memmove(d->array+d->begin+n, d->array+d->begin, i*sizeof(T*));
+    d->begin += n;
+  }
+  else {
+    int offset = d->end - (d->array+d->begin+i+n)
+    ::memmove(d->array+d->begin+i, d->array+d->begin+i+n, offset*sizeof(T*));    
+    d->end -= n;
+  }
+}
+
 template <typename T>
 T** Algos::ListData<T>::erase(T** xi){
   int i = xi - (d->array + d->begin);
