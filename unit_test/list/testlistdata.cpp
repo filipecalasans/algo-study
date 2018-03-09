@@ -99,7 +99,7 @@ TEST(ListData, prependSparse) {
 
 }
 
-void insertElements(ListData<int> *data, int *samples, int n) {
+void appendElements(ListData<int> *data, int *samples, int n) {
    
    data->realloc(100);
 
@@ -126,7 +126,7 @@ TEST(ListData, removeFromTheFront) {
    int samples[100] = {};
    ListData<int> data;
 
-   insertElements(&data, samples, 100);
+   appendElements(&data, samples, 100);
 
       for(int i=0; i<100; i++) {
       data.remove(0);
@@ -141,7 +141,7 @@ TEST(ListData, removeFromTheBack) {
    int samples[100] = {};
    ListData<int> data;
 
-   insertElements(&data, samples, 100);
+   appendElements(&data, samples, 100);
 
    for(int i=0; i<100; i++) {
       data.remove(data.size()-1);
@@ -156,9 +156,8 @@ TEST(ListData, removeFromTheMiddle) {
    int samples[100] = {};
    ListData<int> data;
 
-   insertElements(&data, samples, 100);
-
-   
+   appendElements(&data, samples, 100);
+  
    data.remove(data.size()/2);
 
    for(int j=0, k=0; j<data.size(); j++,k++) {
@@ -167,6 +166,63 @@ TEST(ListData, removeFromTheMiddle) {
       }
       EXPECT_EQ(**(data.d->array+data.d->begin+j), samples[k]);
    }
-   
+}
+
+TEST(ListData, insert) {
+
+   int samples[6] = {1, 2, 3, 4, 5, 6}; 
+   ListData<int> data;
+
+   int **item = data.insert(10);
+   *item = &samples[0];
+
+   //[smaple[0]]
+   EXPECT_EQ(**(data.d->array+data.d->begin), samples[0]);
+
+   item = data.insert(10);
+   *item = &samples[1];
+
+   //[smaple[0], sample[1]]
+   EXPECT_EQ(**(data.d->array+data.d->begin), samples[0]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+1), samples[1]);
+
+   item = data.insert(0);
+   *item = &samples[2];
+
+   //[sample[2], smaple[0], sample[1]]
+   EXPECT_EQ(**(data.d->array+data.d->begin), samples[2]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+1), samples[0]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+2), samples[1]);
+
+   item = data.insert(0);
+   *item = &samples[3];
+
+   //[sample[3], sample[2], smaple[0], sample[1]]
+   EXPECT_EQ(**(data.d->array+data.d->begin), samples[3]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+1), samples[2]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+2), samples[0]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+3), samples[1]);
+
+   item = data.insert(3);
+   *item = &samples[4];
+
+   //[sample[3], sample[2] smaple[0], sample[4], sample[1]]
+   EXPECT_EQ(**(data.d->array+data.d->begin), samples[3]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+1), samples[2]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+2), samples[0]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+3), samples[4]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+4), samples[1]);
+
+   item = data.insert(1);
+   *item = &samples[5];
+
+   //[sample[3], sample[5], sample[2] smaple[0], sample[4], sample[1]]
+   EXPECT_EQ(**(data.d->array+data.d->begin), samples[3]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+1), samples[5]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+2), samples[2]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+3), samples[0]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+4), samples[4]);
+   EXPECT_EQ(**(data.d->array+data.d->begin+5), samples[1]);
+
 }
 

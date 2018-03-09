@@ -153,9 +153,38 @@ T** Algos::ListData<T>::prepend(){
 template <typename T>
 T** Algos::ListData<T>::insert(int i){
 
+  if(i<=0) { return prepend(); }
+
+  int list_size = size();
+  if(i>=list_size) { return append(); }
+
+  if(list_size >= d->alloc) {
+    realloc(grow(d->alloc+1));
+  }
+
+  bool leftToRight= true;
+
+  if(d->begin == 0) {
+    leftToRight=true;
+  }
+  else if (d->end == 0) {
+    leftToRight=false;
+  }
+  else {
+    int middle_idx = d->begin + list_size/2;
+    leftToRight = (i+d->begin > middle_idx);
+  }
+
+  if(leftToRight) {
+    ::memmove(d->array+d->begin+i+1, d->array+d->begin+i, (list_size-i)*sizeof(T*));
+    d->end++;
+  }
+  else {
+    ::memmove(d->array+d->begin-1, d->array+d->begin, (i)*sizeof(T*));
+    d->begin--;
+  }
+  return d->array+d->begin+i;
 }
-
-
 
 
 #endif
