@@ -105,6 +105,11 @@ namespace Algos {
         return (**(d->at(i)));
       }
 
+      const T& operator[](int i) const { 
+        assert(i<size());
+        return (**(d->at(i)));
+      }
+
   };
 
 }
