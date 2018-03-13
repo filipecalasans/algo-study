@@ -87,12 +87,12 @@ namespace Algos {
       inline bool isEmpty() const { return d->size() == 0; }
       
       //Copy based operations.
-      void append(const T& t);
+      void append(const T& t); //x
       void append(const List<T>& l);
-      void prepend(const T& t);
-      void insert(const T& t, int i);
+      void prepend(const T& t); //x
+      void insert(const T& t, int i); 
       void replace(const T& t, int i);
-      void removeAt(int i);
+      void removeAt(int i); //x
       int removeAll(const T &t);
       bool removeOne(const T &t);
       T takeAt(int i);
@@ -295,7 +295,7 @@ template <class T>
 void Algos::List<T>::replace(const T& t, int i) {
   assert(i<size());
   T** old = d->at(i);
-  T** elem = new T();
+  T* elem = new T();
   *elem = t;
   delete (*old);
   *old = elem;

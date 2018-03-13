@@ -129,3 +129,46 @@ TEST(List, removeMiddle) {
       }
    }
 }
+
+TEST(List, prepend) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   for(int i=1; i<3; i++) l.append(data[i]);
+
+   EXPECT_EQ(l.size(), 2);
+   EXPECT_EQ(l.isEmpty(), false);
+
+   l.prepend(data[0]);
+
+   for(int i=0; i<3; i++) {
+      DataTest t = l[i];
+      EXPECT_EQ(data[i] == t, true);
+   }
+}
+
+TEST(List, replace) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   APPEND_ELEMENTS(l, data, 3);
+
+   EXPECT_EQ(l.size(), 3);
+   EXPECT_EQ(l.isEmpty(), false);
+
+   l.replace(data[0], 1);
+   l.replace(data[0], 2);
+
+   DataTest t = data[0];
+   for(int i=0; i<3; i++) {
+      EXPECT_EQ(l[i] == t, true);
+   }
+}
