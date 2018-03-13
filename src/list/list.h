@@ -58,6 +58,39 @@ namespace Algos {
 
   template <class T>
   class List {  
+    
+  public:
+      
+      std::shared_ptr<ListData<T> > d;
+
+      List() : d(new ListData<T>()) {}
+      List(const List& other) {
+        d = other.d;
+      }
+
+      ~List();
+      List<T> &operator=(const List& other) { d = other.d; return (*this); }
+      List<T> &operator=(List&& other) { 
+        d = other.d; 
+        other.d = nullptr; //invalidate the other ListData
+        return (*this); }
+
+      bool operator==(const List& other) const { d == other.d; }
+      inline bool operator!=(const List<T> &other) const { return !(d == other.d); }
+      inline int size() const { return d->size(); }
+      inline bool isEmpty() const { return d->size() == 0; }
+      
+      void append(const T& t);
+      void append(const List<T>& l);
+      void prepend(const T& t);
+      void insert(const T& t, int i);
+      void replace(const T& t, int i);
+      void removeAt(int idx);
+      int removeAll(const T &t);
+      bool removeOne(const T &t);
+      T takeAt(int i);
+      T takeFirst();
+      T takeLast();
 
   };
 
