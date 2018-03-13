@@ -56,3 +56,76 @@ TEST(List, appendAndAt) {
       EXPECT_EQ(data[i] == t, true);
    }
 }
+
+#define APPEND_ELEMENTS(l, d, n) \
+    for(int i=0; i<n; i++) l.append(d[i]);
+
+
+TEST(List, removeFirst) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   APPEND_ELEMENTS(l, data, 3);
+
+   EXPECT_EQ(l.size(), 3);
+   EXPECT_EQ(l.isEmpty(), false);
+
+   l.removeAt(0);
+
+   for(int i=0, k=0; i<3; i++) {
+      if(i>0) {
+         EXPECT_EQ(data[i] == l[k], true);
+         k++;
+      }
+   }
+}
+
+TEST(List, removeLast) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   APPEND_ELEMENTS(l, data, 3);
+
+   EXPECT_EQ(l.size(), 3);
+   EXPECT_EQ(l.isEmpty(), false);
+
+   l.removeAt(2);
+
+   for(int i=0, k=0; i<3; i++) {
+      if(i<2) {
+         EXPECT_EQ(data[i] == l[k], true);
+         k++;
+      }
+   }
+}
+
+TEST(List, removeMiddle) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   APPEND_ELEMENTS(l, data, 3);
+
+   EXPECT_EQ(l.size(), 3);
+   EXPECT_EQ(l.isEmpty(), false);
+
+   l.removeAt(1);
+
+   for(int i=0, k=0; i<3; i++) {
+      if(i!=1) {
+         EXPECT_EQ(data[i] == l[k], true);
+         k++;
+      }
+   }
+}
