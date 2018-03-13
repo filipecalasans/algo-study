@@ -54,6 +54,11 @@ namespace Algos {
     inline T** begin() const { return d->array + d->begin; }
     inline T** end() const { return d->array + d->end; }
     inline int grow(int size) { return size * 2; }
+
+    //iterator begin();
+    //iterator end();
+    //const_iterator cbegin() const;
+    //const_interator cend() const;
   };
 
   template <class T>
@@ -69,6 +74,7 @@ namespace Algos {
       }
 
       ~List();
+
       List<T> &operator=(const List& other) { d = other.d; return (*this); }
       List<T> &operator=(List&& other) { 
         d = other.d; 
@@ -80,17 +86,24 @@ namespace Algos {
       inline int size() const { return d->size(); }
       inline bool isEmpty() const { return d->size() == 0; }
       
+      //Copy based operations.
       void append(const T& t);
       void append(const List<T>& l);
       void prepend(const T& t);
       void insert(const T& t, int i);
       void replace(const T& t, int i);
-      void removeAt(int idx);
+      void removeAt(int i);
       int removeAll(const T &t);
       bool removeOne(const T &t);
       T takeAt(int i);
       T takeFirst();
       T takeLast();
+
+      //Add move based operations.
+      T& operator[](int i) { 
+        assert(i<size());
+        return (**(d->at(i)));
+      }
 
   };
 
@@ -235,5 +248,84 @@ T** Algos::ListData<T>::insert(int i){
   return d->array+d->begin+i;
 }
 
+/* List<T> implementation */
+
+template <class T>
+Algos::List<T>::~List() {
+  while(size()) { 
+    removeAt(0);
+  }
+}
+
+template <class T>
+void Algos::List<T>::append(const T& t) {
+  T* elem = new T();
+  *elem = t;
+  T** slot = d->append();
+  *slot = elem;
+}
+
+template <class T>
+void Algos::List<T>::append(const List<T>& l) {
+
+}
+
+template <class T>
+void Algos::List<T>::prepend(const T& t) {
+  T* elem = new T();
+  *elem = t;
+  T** slot = d->prepend();
+  *slot = elem;
+}
+
+template <class T>
+void Algos::List<T>::insert(const T& t, int i) {
+  T* elem = new T();
+  *elem = t;
+  T** slot = d->insert(i);
+  *slot = elem;
+}
+
+template <class T>
+void Algos::List<T>::replace(const T& t, int i) {
+  assert(i<size());
+  T** old = d->at(i);
+  T** elem = new T();
+  *elem = t;
+  delete (*old);
+  *old = elem;
+}
+
+template <class T>
+void Algos::List<T>::removeAt(int i) {
+  assert(i<size());
+  T** old = d->at(i);
+  d->remove(i);
+}
+
+template <class T>
+int Algos::List<T>::removeAll(const T &t) {
+
+}
+
+template <class T>
+bool Algos::List<T>::removeOne(const T &t){
+
+}
+
+template <class T>
+T Algos::List<T>::takeAt(int i) {
+
+}
+
+template <class T>
+T Algos::List<T>::takeFirst() {
+
+}
+
+template <class T>
+T Algos::List<T>::takeLast() {
+
+}
 
 #endif
