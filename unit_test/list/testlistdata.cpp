@@ -226,3 +226,44 @@ TEST(ListData, insert) {
 
 }
 
+TEST(ListData, removeNEnd) {
+   int samples[100];
+   ListData<int> data;
+
+   for (int i=0; i<100; i++) { 
+      samples[i] = i;
+   }
+
+   appendElements(&data, samples, 100);
+
+   data.remove(70, 20);
+
+   //Add comparison here
+   for(int i=0, k=0; i<100; i++) {
+      if(i<70 || i>=90) {
+         EXPECT_EQ(**(data.d->array+data.d->begin+k), samples[i]);
+         k++;         
+      }
+   }
+}
+
+TEST(ListData, removeNBegin) {
+   int samples[100];
+   ListData<int> data;
+
+   for (int i=0; i<100; i++) { 
+      samples[i] = i;
+   }
+
+   appendElements(&data, samples, 100);
+
+   data.remove(0, 20);
+
+   //Add comparison here
+   for(int i=0, k=0; i<100; i++) {
+      if(i>=20) {
+         EXPECT_EQ(**(data.d->array+data.d->begin+k), samples[i]);
+         k++;         
+      }
+   }
+}

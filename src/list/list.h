@@ -52,7 +52,7 @@ namespace Algos {
     inline bool isEmpty() const { return d->end == d->begin; }
     inline T** at(int i) const { return d->array + d->begin + i; }
     inline T** begin() const { return d->array + d->begin; }
-    inline T**end() const { return d->array + d->end; }
+    inline T** end() const { return d->array + d->end; }
     inline int grow(int size) { return size * 2; }
   };
 
@@ -94,18 +94,20 @@ void Algos::ListData<T>::remove(int i) {
   int n = (d->end - d->begin);
   int middle_idx = d->begin + n/2;
   if(i > middle_idx) { //move the right section to <-
-    if(int slice_size = (d->end - i -1)) 
+    if(int slice_size = (d->end - i -1)) {
       ::memmove(d->array+i, d->array+i+1, slice_size * sizeof(T*));
+    }
     d->end--;
   }
   else { //move the left section to ->
-    if(int slice_size = i - d->begin)
+    if(int slice_size = i - d->begin) {
       ::memmove(d->array+d->begin+1, d->array+d->begin, slice_size*sizeof(T*));
+    }
     d->begin++;
   }
 }
 
-template <typedef T>
+template <typename T>
 void Algos::ListData<T>::remove(int i, int n) {
   int middle = d->begin + i + n/2;
   if(d->end - middle > middle - d->begin) { 
@@ -113,7 +115,7 @@ void Algos::ListData<T>::remove(int i, int n) {
     d->begin += n;
   }
   else {
-    int offset = d->end - (d->array+d->begin+i+n)
+    int offset = d->end - (d->begin+i+n);
     ::memmove(d->array+d->begin+i, d->array+d->begin+i+n, offset*sizeof(T*));    
     d->end -= n;
   }
@@ -186,7 +188,7 @@ T** Algos::ListData<T>::insert(int i){
   }
   else {
     int middle_idx = d->begin + list_size/2;
-    leftToRight = (i+d->begin > middle_idx);
+    leftToRight = (i+d->begin < middle_idx);
   }
 
   if(leftToRight) {
