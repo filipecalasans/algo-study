@@ -91,7 +91,7 @@ namespace Algos {
       void append(const List<T>& l);
       void prepend(const T& t); //x
       void insert(const T& t, int i); 
-      void replace(const T& t, int i);
+      void replace(const T& t, int i);//x
       void removeAt(int i); //x
       int removeAll(const T &t);
       bool removeOne(const T &t);
@@ -293,7 +293,7 @@ void Algos::List<T>::insert(const T& t, int i) {
 
 template <class T>
 void Algos::List<T>::replace(const T& t, int i) {
-  assert(i<size());
+  assert(i<size() && i>=0);
   T** old = d->at(i);
   T* elem = new T();
   *elem = t;
@@ -303,14 +303,13 @@ void Algos::List<T>::replace(const T& t, int i) {
 
 template <class T>
 void Algos::List<T>::removeAt(int i) {
-  assert(i<size());
-  T** old = d->at(i);
+  assert(i<size() && i>=0);
   d->remove(i);
 }
 
 template <class T>
 int Algos::List<T>::removeAll(const T &t) {
-
+  
 }
 
 template <class T>
@@ -320,17 +319,22 @@ bool Algos::List<T>::removeOne(const T &t){
 
 template <class T>
 T Algos::List<T>::takeAt(int i) {
-
+  assert(i<size() && i>= 0);
+  T** old = d->at(i);
+  T* t = new T();
+  *t = **old;
+  removeAt(i);
+  return (*t);
 }
 
 template <class T>
 T Algos::List<T>::takeFirst() {
-
+  return takeAt(0);
 }
 
 template <class T>
 T Algos::List<T>::takeLast() {
-
+  return takeAt(size()-1);
 }
 
 #endif

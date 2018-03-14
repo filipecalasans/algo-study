@@ -172,3 +172,131 @@ TEST(List, replace) {
       EXPECT_EQ(l[i] == t, true);
    }
 }
+
+TEST(List, insertMiddle) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   l.append(data[0]);
+   l.append(data[2]);
+
+   EXPECT_EQ(l.size(), 2);
+   EXPECT_EQ(l.isEmpty(), false);
+
+   l.insert(data[1], 1);
+
+   for(int i=0; i<3; i++) {
+      DataTest t = l[i];
+      EXPECT_EQ(data[i] == t, true);
+   }
+}
+
+
+TEST(List, insertEnd) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   l.append(data[0]);
+   l.append(data[1]);
+
+   EXPECT_EQ(l.size(), 2);
+   EXPECT_EQ(l.isEmpty(), false);
+
+   l.insert(data[2], 2);
+
+   for(int i=0; i<3; i++) {
+      DataTest t = l[i];
+      EXPECT_EQ(data[i] == t, true);
+   }
+}
+
+
+TEST(List, insertBegin) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   l.append(data[1]);
+   l.append(data[2]);
+
+   EXPECT_EQ(l.size(), 2);
+   EXPECT_EQ(l.isEmpty(), false);
+
+   l.insert(data[0], 0);
+
+   for(int i=0; i<3; i++) {
+      DataTest t = l[i];
+      EXPECT_EQ(data[i] == t, true);
+   }
+}
+
+TEST(List, takeAt) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   for(int i=0; i<3; i++) l.append(data[i]);
+
+   EXPECT_EQ(l.size(), 3);
+   EXPECT_EQ(l.isEmpty(), false);
+
+   DataTest a = l.takeAt(1);
+
+   EXPECT_EQ(a == data[1], true);
+   EXPECT_EQ(l[0] == data[0], true);
+   EXPECT_EQ(l[1] == data[2], true);
+}
+
+TEST(List, takeFirst) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   for(int i=0; i<3; i++) l.append(data[i]);
+
+   EXPECT_EQ(l.size(), 3);
+   EXPECT_EQ(l.isEmpty(), false);
+
+   DataTest a = l.takeFirst();
+
+   EXPECT_EQ(a == data[0], true);
+   EXPECT_EQ(l[0] == data[1], true);
+   EXPECT_EQ(l[1] == data[2], true);
+}
+
+TEST(List, takeLast) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   for(int i=0; i<3; i++) l.append(data[i]);
+
+   EXPECT_EQ(l.size(), 3);
+   EXPECT_EQ(l.isEmpty(), false);
+
+   DataTest a = l.takeLast();
+
+   EXPECT_EQ(a == data[2], true);
+   EXPECT_EQ(l[0] == data[0], true);
+   EXPECT_EQ(l[1] == data[1], true);
+}
