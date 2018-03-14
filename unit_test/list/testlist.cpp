@@ -312,10 +312,14 @@ TEST(List, removeOne) {
    l.append(data[1]);
 
    for(int i=0; i<10; i++) l.append(data[0]);
+   
+   l.append(data[1]);
+
+   for(int i=0; i<10; i++) l.append(data[2]);
 
    l.append(data[1]);
 
-   EXPECT_EQ(l.size(), 12);
+   EXPECT_EQ(l.size(), 23);
    EXPECT_EQ(l.isEmpty(), false);
 
    l.removeOne(data[1]);
@@ -324,6 +328,11 @@ TEST(List, removeOne) {
       EXPECT_EQ(l[i] == data[0], true);
    }
 
+   for(int i=11; i<21; i++) { 
+      EXPECT_EQ(l[i] == data[2], true);
+   }
+
+   EXPECT_EQ(l[10] == data[1], true);
    EXPECT_EQ(l[l.size()-1] == data[1], true);
 }
 
@@ -341,12 +350,21 @@ TEST(List, removeAll) {
 
    l.append(data[1]);
 
-   EXPECT_EQ(l.size(), 12);
+   for(int i=0; i<10; i++) l.append(data[2]);
+
+   l.append(data[1]);
+
+   EXPECT_EQ(l.size(), 23);
    EXPECT_EQ(l.isEmpty(), false);
 
    l.removeAll(data[1]);
 
    for(int i=0; i<l.size(); i++) { 
-      EXPECT_EQ(l[i] == data[0], true);
+      if(i<l.size()/2){
+         EXPECT_EQ(l[i] == data[0], true);
+      }
+      else {
+         EXPECT_EQ(l[i] == data[2], true);
+      }
    }
 }
