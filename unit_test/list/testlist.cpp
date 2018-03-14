@@ -300,3 +300,53 @@ TEST(List, takeLast) {
    EXPECT_EQ(l[0] == data[0], true);
    EXPECT_EQ(l[1] == data[1], true);
 }
+
+TEST(List, removeOne) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   l.append(data[1]);
+
+   for(int i=0; i<10; i++) l.append(data[0]);
+
+   l.append(data[1]);
+
+   EXPECT_EQ(l.size(), 12);
+   EXPECT_EQ(l.isEmpty(), false);
+
+   l.removeOne(data[1]);
+
+   for(int i=0; i<10; i++) { 
+      EXPECT_EQ(l[i] == data[0], true);
+   }
+
+   EXPECT_EQ(l[l.size()-1] == data[1], true);
+}
+
+TEST(List, removeAll) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   l.append(data[1]);
+
+   for(int i=0; i<10; i++) l.append(data[0]);
+
+   l.append(data[1]);
+
+   EXPECT_EQ(l.size(), 12);
+   EXPECT_EQ(l.isEmpty(), false);
+
+   l.removeAll(data[1]);
+
+   for(int i=0; i<l.size(); i++) { 
+      EXPECT_EQ(l[i] == data[0], true);
+   }
+}

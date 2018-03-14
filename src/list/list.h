@@ -309,12 +309,31 @@ void Algos::List<T>::removeAt(int i) {
 
 template <class T>
 int Algos::List<T>::removeAll(const T &t) {
-  
+  int i=0;
+  int count=0;
+  while(i<size()) {
+    T** elem = d->at(i);
+    if(**elem == t) {
+      removeAt(i);
+      count++;
+    }
+    else {
+      i++;
+    }
+  }
+  return count;
 }
 
 template <class T>
 bool Algos::List<T>::removeOne(const T &t){
-
+  for(int i=0; i<size(); i++) {
+    T** elem = d->at(i);
+    if(**elem == t) {
+      removeAt(i);
+      return true;
+    }
+  }
+  return false;
 }
 
 template <class T>
