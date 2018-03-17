@@ -54,11 +54,6 @@ namespace Algos {
     inline T** begin() const { return d->array + d->begin; }
     inline T** end() const { return d->array + d->end; }
     inline int grow(int size) { return size * 2; }
-
-    //iterator begin();
-    //iterator end();
-    //const_iterator cbegin() const;
-    //const_interator cend() const;
   };
 
   template <class T>
@@ -75,11 +70,16 @@ namespace Algos {
 
       ~List();
 
-      List<T> &operator=(const List& other) { d = other.d; return (*this); }
+      List<T> &operator=(const List& other) { 
+        d = other.d; 
+        return (*this); 
+      }
+
       List<T> &operator=(List&& other) { 
         d = other.d; 
         other.d = nullptr; //invalidate the other ListData
-        return (*this); }
+        return (*this); 
+      }
 
       bool operator==(const List& other) const { d == other.d; }
       inline bool operator!=(const List<T> &other) const { return !(d == other.d); }
@@ -87,12 +87,12 @@ namespace Algos {
       inline bool isEmpty() const { return d->size() == 0; }
       
       //Copy based operations.
-      void append(const T& t); //x
+      void append(const T& t); 
       void append(const List<T>& l);
-      void prepend(const T& t); //x
+      void prepend(const T& t); 
       void insert(const T& t, int i); 
-      void replace(const T& t, int i);//x
-      void removeAt(int i); //x
+      void replace(const T& t, int i);
+      void removeAt(int i); 
       int removeAll(const T &t);
       bool removeOne(const T &t);
       T takeAt(int i);
@@ -109,6 +109,57 @@ namespace Algos {
         assert(i<size());
         return (**(d->at(i)));
       }
+
+
+      class iterator {
+        public:
+        
+            typedef iterator self_type;
+            typedef T value_type;
+            typedef T& reference;
+            typedef T** pointer;
+            typedef std::forward_iterator_tag iterator_category;
+            typedef int difference_type;
+
+            iterator(pointer ptr) : _ptr(ptr) {}
+            // iterator(self_type& it) : _ptr(it._ptr) { }
+            self_type operator++() { _ptr++; return *this; } //PREFIX
+            self_type operator++(int junk) { self_type i = *this; _ptr++; return i; } //POSTFIX
+            reference operator*() { return *_ptr; }
+            pointer  operator->() { return _ptr; }
+            bool operator==(const self_type& rhs) { return _ptr == rhs._ptr; }
+            bool operator!=(const self_type& rhs) { return _ptr != rhs._ptr; }
+        private:
+            pointer _ptr;
+      };
+
+      class const_iterator {
+        public:
+        
+            typedef const_iterator self_type;
+            typedef T value_type;
+            typedef T& reference;
+            typedef T** pointer;
+            typedef std::forward_iterator_tag iterator_category;
+            typedef int difference_type;
+
+            const_iterator(pointer ptr) : _ptr(ptr) {}
+            // const_iterator(self_type& it) : _ptr(it._ptr) { }
+            self_type operator++() { _ptr++; return *this; } //PREFIX
+            self_type operator++(int junk) { self_type i = *this; _ptr++; return i; } //POSTFIX
+            const reference operator*() { return *_ptr; }
+            const pointer  operator->() { return _ptr; }
+            bool operator==(const self_type& rhs) const { return _ptr == rhs._ptr; }
+            bool operator!=(const self_type& rhs) const { return _ptr != rhs._ptr; }
+        private:
+            pointer _ptr;
+      };
+      
+
+      //iterator begin();
+      //iterator end();
+      //const_iterator cbegin() const;
+      //const_interator cend() const;
 
   };
 
