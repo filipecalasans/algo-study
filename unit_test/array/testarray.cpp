@@ -108,4 +108,5 @@ TEST(Array, Iterator) {
    for(int i=0; i<a.size(); i++) { 
       EXPECT_EQ(a[i], i*2);
    }
+
 }
