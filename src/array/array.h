@@ -6,6 +6,7 @@
 #include <memory>
 #include <assert.h>
 
+#include "global/assert.h"
 #include "dataarray.h"
 
 /* 
@@ -87,7 +88,7 @@ public:
 		  Array(Array& a) { _data = a.data();  }
 
 		  const T& operator[](int i) const { 
-			  assert(i<size()); 
+			  ALGO_ASSERT(i<size(), "Index out of bounds"); 
 			  return (*_data.get())[i]; 
 		  } 
 		

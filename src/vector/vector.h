@@ -6,6 +6,7 @@
 #include <memory>
 #include <assert.h>
 
+#include "global/assert.h"
 #include "array/array.h"
 
 /* 

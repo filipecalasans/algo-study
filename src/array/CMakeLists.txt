@@ -10,3 +10,4 @@ add_definitions(-Werror)
 file(GLOB algo_SRC "*.h" "*.cpp")
 
 add_library(algoArray ${algo_SRC})
+target_link_libraries(algoArray algoGlobal)

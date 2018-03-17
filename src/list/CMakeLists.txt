@@ -11,4 +11,5 @@ include_directories("../")
 file(GLOB algo_SRC "*.h" "*.cpp")
 
 add_library(algoList ${algo_SRC})
+target_link_libraries(algoList algoGlobal)
 
