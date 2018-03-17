@@ -368,3 +368,23 @@ TEST(List, removeAll) {
       }
    }
 }
+
+TEST(List, apendList) {
+   List<DataTest> l, l2;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   for(int i=0; i<3; i++) { 
+      l.append(data[i]);
+      l2.append(data[i]);
+   }
+
+   l.append(l2);
+
+   for(int i=0; i<l.size(); i++) { 
+      EXPECT_EQ(l[i] == data[i%3], true);
+   }
+}

@@ -272,7 +272,9 @@ void Algos::List<T>::append(const T& t) {
 
 template <class T>
 void Algos::List<T>::append(const List<T>& l) {
-
+  for(int i=0; i<l.size(); i++) {
+    append(l[i]);
+  }
 }
 
 template <class T>
