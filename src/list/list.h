@@ -117,16 +117,16 @@ namespace Algos {
             typedef iterator self_type;
             typedef T value_type;
             typedef T& reference;
+            typedef T* pointer_to_obj;
             typedef T** pointer;
             typedef std::forward_iterator_tag iterator_category;
             typedef int difference_type;
 
             iterator(pointer ptr) : _ptr(ptr) {}
-            // iterator(self_type& it) : _ptr(it._ptr) { }
             self_type operator++() { _ptr++; return *this; } //PREFIX
             self_type operator++(int junk) { self_type i = *this; _ptr++; return i; } //POSTFIX
-            reference operator*() { return *_ptr; }
-            pointer  operator->() { return _ptr; }
+            reference operator*() { return **_ptr; }
+            pointer_to_obj  operator->() const { return *_ptr; }
             bool operator==(const self_type& rhs) { return _ptr == rhs._ptr; }
             bool operator!=(const self_type& rhs) { return _ptr != rhs._ptr; }
         private:
@@ -139,16 +139,16 @@ namespace Algos {
             typedef const_iterator self_type;
             typedef T value_type;
             typedef T& reference;
+            typedef T* pointer_to_obj;
             typedef T** pointer;
             typedef std::forward_iterator_tag iterator_category;
             typedef int difference_type;
 
             const_iterator(pointer ptr) : _ptr(ptr) {}
-            // const_iterator(self_type& it) : _ptr(it._ptr) { }
             self_type operator++() { _ptr++; return *this; } //PREFIX
             self_type operator++(int junk) { self_type i = *this; _ptr++; return i; } //POSTFIX
-            const reference operator*() { return *_ptr; }
-            const pointer  operator->() { return _ptr; }
+            const reference operator*() const { return **_ptr; }
+            const pointer_to_obj  operator->() const { return *_ptr; }
             bool operator==(const self_type& rhs) const { return _ptr == rhs._ptr; }
             bool operator!=(const self_type& rhs) const { return _ptr != rhs._ptr; }
         private:
@@ -156,8 +156,12 @@ namespace Algos {
       };
       
 
-      //iterator begin();
-      //iterator end();
+      iterator begin() { return iterator(d->size() ? d->begin() : nullptr); }
+      iterator end() { return iterator(d->size() ? d->end() : nullptr); }
+
+      const_iterator begin() const { return const_iterator(d->size() ? d->begin() : nullptr); }
+      const_iterator end() const { return const_iterator(d->size() ? d->end() : nullptr); }
+
       //const_iterator cbegin() const;
       //const_interator cend() const;
 

@@ -19,7 +19,7 @@ struct DataTest {
       return (*this);
    }
 
-   bool operator==(const DataTest& other) {
+   bool operator==(const DataTest& other) const {
       return (
          integer == other.integer &&
          boolean == other.boolean &&
@@ -386,5 +386,35 @@ TEST(List, apendList) {
 
    for(int i=0; i<l.size(); i++) { 
       EXPECT_EQ(l[i] == data[i%3], true);
+   }
+}
+
+TEST(List, iterator) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   APPEND_ELEMENTS(l, data, 3);
+
+   int i = 0;
+   for(auto& elem : l) {
+      EXPECT_EQ(elem == data[i++], true);
+   }
+
+   i=0;
+   for(const auto& elem : l) {
+      EXPECT_EQ(elem == data[i++], true);
+   }
+
+   for(auto& elem : l) {
+      elem.integer++;
+   }
+
+   i=0;
+   for(const auto& elem : l) {
+      EXPECT_EQ(elem.integer, (data[i++].integer+1));
    }
 }

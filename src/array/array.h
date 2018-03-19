@@ -35,10 +35,10 @@ public:
 
         self_type operator++() { _ptr++; return *this; } //PREFIX
         self_type operator++(int junk) { self_type i = *this; _ptr++; return i; } //POSTFIX
-        reference operator*() { return *_ptr; }
-        pointer  operator->() { return _ptr.operator->(); }
-        bool operator==(const self_type& rhs) { return _ptr == rhs._ptr; }
-        bool operator!=(const self_type& rhs) { return _ptr != rhs._ptr; }
+        reference operator*() const { return *_ptr; }
+        pointer  operator->() const { return _ptr.operator->(); }
+        bool operator==(const self_type& rhs) const { return _ptr == rhs._ptr; }
+        bool operator!=(const self_type& rhs) const { return _ptr != rhs._ptr; }
         self_type& operator=(const self_type& other) {
           if(this != &other) {
             _ptr = other._ptr;
@@ -64,8 +64,8 @@ public:
 
         self_type operator++() { _ptr++; return *this; } //PREFIX
         self_type operator++(int junk) { self_type i = *this; _ptr++; return i; } //POSTFIX
-        const reference operator*() { return *_ptr; }
-        const pointer  operator->() { return _ptr.operator->(); }
+        const reference operator*() const { return *_ptr; }
+        const pointer  operator->() const { return _ptr.operator->(); }
         bool operator==(const self_type& rhs) const { return _ptr == rhs._ptr; }
         bool operator!=(const self_type& rhs) const { return _ptr != rhs._ptr; }
         self_type& operator=(const self_type& other) {
