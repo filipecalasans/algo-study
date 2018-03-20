@@ -4,7 +4,6 @@
 #include <iostream>
 #include <cstdint>
 #include <memory>
-#include <assert.h>
 
 #include "global/assert.h"
 #include "dataarray.h"
@@ -109,12 +108,12 @@ public:
       int dataRefCount() const { return _data.use_count(); }
       
       const T& first() {
-        assert(_data->size()>0);
+        ALGO_ASSERT(_data->size()>0, "Index out of range: array empty."); 
         return (*this)[0];
       }
 
       const T& last() {
-        assert(_data->size()>0);
+        ALGO_ASSERT(_data->size()>0, "Index out of range: array empty."); 
         return (*this)[_data->size()-1];
       }
     

@@ -7,13 +7,15 @@
 #include <iostream>
 #include <cstdint>
 #include <memory>
-#include <assert.h>
+
+
+#include "global/assert.h"
 
 /* 
  * Algos Implementation is implicit-sharing.
  *
  */
-namespace Algos {
+namespace Algos { //TODO: implement using smart pointers.
 
   template <typename T>
   struct ListData{
@@ -101,12 +103,12 @@ namespace Algos {
 
       //Add move based operations.
       T& operator[](int i) { 
-        assert(i<size());
+        ALGO_ASSERT(i<size(), "Index out of range");
         return (**(d->at(i)));
       }
 
       const T& operator[](int i) const { 
-        assert(i<size());
+        ALGO_ASSERT(i<size(), "Index out of range");
         return (**(d->at(i)));
       }
 
@@ -159,11 +161,8 @@ namespace Algos {
       iterator begin() { return iterator(d->size() ? d->begin() : nullptr); }
       iterator end() { return iterator(d->size() ? d->end() : nullptr); }
 
-      const_iterator begin() const { return const_iterator(d->size() ? d->begin() : nullptr); }
-      const_iterator end() const { return const_iterator(d->size() ? d->end() : nullptr); }
-
-      //const_iterator cbegin() const;
-      //const_interator cend() const;
+      const_iterator cbegin() const { return const_iterator(d->size() ? d->begin() : nullptr); }
+      const_iterator cend() const { return const_iterator(d->size() ? d->end() : nullptr); }
 
   };
 
@@ -350,7 +349,7 @@ void Algos::List<T>::insert(const T& t, int i) {
 
 template <class T>
 void Algos::List<T>::replace(const T& t, int i) {
-  assert(i<size() && i>=0);
+  ALGO_ASSERT(i<size(), "Index out of range");
   T** old = d->at(i);
   T* elem = new T();
   *elem = t;
@@ -360,7 +359,7 @@ void Algos::List<T>::replace(const T& t, int i) {
 
 template <class T>
 void Algos::List<T>::removeAt(int i) {
-  assert(i<size() && i>=0);
+  ALGO_ASSERT(i<size(), "Index out of range");
   d->remove(i);
 }
 
@@ -395,7 +394,7 @@ bool Algos::List<T>::removeOne(const T &t){
 
 template <class T>
 T Algos::List<T>::takeAt(int i) {
-  assert(i<size() && i>= 0);
+  ALGO_ASSERT(i<size(), "Index out of range");
   T** old = d->at(i);
   T* t = new T();
   *t = **old;

@@ -4,7 +4,8 @@
 #include <iostream>
 #include <cstdint>
 #include <memory>
-#include <assert.h>
+
+#include "global/assert.h"
 
 namespace Algos {
 
@@ -72,8 +73,15 @@ public:
             this->copyFrom(data_array); 
          }
             
-      T& operator[](int i) { assert(i<_size); return _data[i]; }
-      const T& operator[](int i) const {  assert(i<_size); return _data[i]; }
+      T& operator[](int i) { 
+        ALGO_ASSERT(i<_size, "Index out of range.");  
+        return _data[i]; 
+      }
+      
+      const T& operator[](int i) const {  
+        ALGO_ASSERT(i<_size, "Index out of range."); 
+        return _data[i]; 
+      }
       
       inline int size() const { return _size; }
 
