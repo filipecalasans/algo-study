@@ -16,39 +16,61 @@
  */
 namespace Algos {
 
-  template <typename T>
-  struct LinkedListData{
-		struct Node {
-      	std::unique_ptr<Node> next;
-      	Node *prev = nullptr;
-      	T data;
-    	};
-
-   	std::unique_ptr<Node> root;
-    	Node *last = nullptr;
-	 	int size = 0;
-
+template <typename T>
+struct LinkedListData{
+	struct Node {
+		std::unique_ptr<Node> next;
+		Node *prev = nullptr;
+		T data;
 	};
 
-  template <class T>
-  class LinkedList {
+	std::unique_ptr<Node> root;
+	Node *last = nullptr;
+	int size = 0;
 
-	std::shared_ptr<LinkedListData<T>> d;
-	//iterate backwards defer nodes. Avoid stack overflow due to recursion explosion.
-	void cleanup(LinkedListData<T> *data);  
-	
-public:
-	
-		LinkedList() {
-			d = std::shared_ptr<LinkedListData<T>> (new LinkedListData<T>(), cleanup);
+	LinkedListData() : root(nullptr) {}
+
+	//deferr pointers manually to avoid stackoverflow due to 
+	//recursion explosion
+	static void cleanup(LinkedListData<T> *data) { 
+		LinkedListData<T>::Node *n = data->last;
+		if(n==nullptr) { return; }
+		while(n) {
+			n = n->prev;
+			n->next.release();
+			ALGO_ASSERT(n->next.get() == nullptr, "Node reference not deferred");
+		}
+	} 
+};
+
+template <class T>
+class LinkedList {
+
+	std::shared_ptr<LinkedListData<T> > d;
+
+	public:
+		
+		LinkedList() : d(new LinkedListData<T>(), LinkedListData<T>::cleanup){}
+		inline int size() { return d->size; }
+		inline bool isEmpty() { return d->size == 0; }
+		inline bool operator==(const LinkedList<T>& other) { return (other.d == d); }
+		inline LinkedList<T>& operator=(const LinkedList<T>& other) {
+			if(other.d != d){ d = other.d; }
+			return (*this);
 		}
 
-		inline int size() { return d->size; }
-		bool operator==(const LinkedList<T>& other) { return (other.d == d); }
+		void append(const T &);
+   	void prepend(const T &);
+   	T takeFirst();
+   	T takeLast();
+   	int removeAll(const T &t);
+   	bool removeOne(const T &t);
+   	bool contains(const T &t) const;
+   	int count(const T &t) const;
+
 
 	class iterator {
 		public:
-		
 			typedef iterator self_type;
 			typedef T value_type;
 			typedef T& reference;
@@ -58,9 +80,9 @@ public:
 
 			iterator(pointer ptr) : _ptr(ptr) {}
 			self_type operator++() { _ptr=_ptr->next; return *this; } //PREFIX
-			self_type operator++(int junk) { self_type i = *this; _ptr=_ptr->next; return i; } //POSTFIX
+			self_type operator++(int junk) { self_type i = *this;  ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next; return i; } //POSTFIX
 			self_type operator--() { _ptr=_ptr->prev; return *this; } //PREFIX
-			self_type operator--(int junk) { self_type i = *this; _ptr=_ptr->prev; return i; } //POSTFIX
+			self_type operator--(int junk) { self_type i = *this; ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return i; } //POSTFIX
 			
 			reference operator*() const { return _ptr->data; }
 			pointer  operator->() const { return _ptr; }
@@ -82,9 +104,9 @@ public:
 
 			const_iterator(pointer ptr) : _ptr(ptr) {}
 			self_type operator++() { _ptr=_ptr->next; return *this; } //PREFIX
-			self_type operator++(int junk) { self_type i = *this; _ptr=_ptr->next; return i; } //POSTFIX
+			self_type operator++(int junk) { self_type i = *this; ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next; return i; } //POSTFIX
 			self_type operator--() { _ptr=_ptr->prev; return *this; } //PREFIX
-			self_type operator--(int junk) { self_type i = *this; _ptr=_ptr->prev; return i; } //POSTFIX
+			self_type operator--(int junk) { self_type i = *this; ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return i; } //POSTFIX
 			
 			reference operator*() const { return *_ptr; }
 			pointer  operator->() const { return _ptr; }
@@ -93,8 +115,8 @@ public:
 		private:
 			pointer _ptr;
 	};
-  
-    };
+
+};
 
 }
 
