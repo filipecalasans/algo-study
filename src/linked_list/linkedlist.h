@@ -33,12 +33,12 @@ struct LinkedListData{
 	//deferr pointers manually to avoid stackoverflow due to 
 	//recursion explosion
 	static void cleanup(LinkedListData<T> *data) { 
-		LinkedListData<T>::Node *n = data->last;
+		Node *n = data->last;
 		if(n==nullptr) { return; }
 		while(n) {
-			n = n->prev;
 			n->next.release();
 			ALGO_ASSERT(n->next.get() == nullptr, "Node reference not deferred");
+			n = n->prev;
 		}
 	} 
 };
@@ -46,6 +46,7 @@ struct LinkedListData{
 template <class T>
 class LinkedList {
 
+	typedef typename LinkedListData<T>::Node node_type;
 	std::shared_ptr<LinkedListData<T> > d;
 
 	public:
@@ -59,8 +60,8 @@ class LinkedList {
 			return (*this);
 		}
 
-		void append(const T &);
-   	void prepend(const T &);
+		void append(const T &t);
+   	void prepend(const T &t);
    	T takeFirst();
    	T takeLast();
    	int removeAll(const T &t);
@@ -79,7 +80,7 @@ class LinkedList {
 			typedef int difference_type;
 
 			iterator(pointer ptr) : _ptr(ptr) {}
-			self_type operator++() { _ptr=_ptr->next; return *this; } //PREFIX
+			self_type operator++() { _ptr=_ptr->next.get(); return *this; } //PREFIX
 			self_type operator++(int junk) { self_type i = *this;  ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next; return i; } //POSTFIX
 			self_type operator--() { _ptr=_ptr->prev; return *this; } //PREFIX
 			self_type operator--(int junk) { self_type i = *this; ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return i; } //POSTFIX
@@ -103,7 +104,7 @@ class LinkedList {
 			typedef int difference_type;
 
 			const_iterator(pointer ptr) : _ptr(ptr) {}
-			self_type operator++() { _ptr=_ptr->next; return *this; } //PREFIX
+			self_type operator++() { _ptr=_ptr->next.get(); return *this; } //PREFIX
 			self_type operator++(int junk) { self_type i = *this; ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next; return i; } //POSTFIX
 			self_type operator--() { _ptr=_ptr->prev; return *this; } //PREFIX
 			self_type operator--(int junk) { self_type i = *this; ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return i; } //POSTFIX
@@ -114,9 +115,87 @@ class LinkedList {
 			bool operator!=(const self_type& rhs) const { return _ptr != rhs._ptr; }
 		private:
 			pointer _ptr;
-	};
+		};
+		
+		iterator begin(){ return iterator(d->root.get()); }
+		iterator end(){ return iterator(d->last); }
 
 };
+
+template <class T>
+void LinkedList<T>::append(const T& t) {
+	if(size() == 0) {
+		d->root = std::make_unique<node_type>();
+		d->root->prev = nullptr;
+		d->root->next = nullptr;
+		d->root->data = t;
+		d->last = d->root.get();
+		d->size++;
+		return;
+	}
+
+	ALGO_ASSERT(d->last->next.get() == nullptr, "This is not the last element.");
+
+	d->last->next = std::make_unique<node_type>(); //ownership definition
+	d->last->next->prev = d->last;
+	d->last = d->last->next.get();//update the last element reference
+	d->last->next = nullptr;
+	d->last->data = t;
+	d->size++;
+}
+
+template <class T>
+void LinkedList<T>::prepend(const T& t) {
+	if(size()==0) {
+		d->root = std::make_unique<node_type>();
+		d->root->prev = nullptr;
+		d->root->next = nullptr;
+		d->root->data = t;
+		d->last = d->root.get();
+		d->size++;
+		return;
+	}
+
+	ALGO_ASSERT(d->root->prev == nullptr, "This isn't the first element.");
+	
+	std::unique_ptr<node_type> new_root = std::make_unique<node_type>();
+	d->root->prev = new_root.get();;
+	new_root->next = std::move(d->root);
+	d->root = std::move(new_root);
+	d->root->prev = nullptr;
+	d->root->data = t;
+	d->size++;
+}
+
+template <class T>
+T LinkedList<T>::takeFirst() {
+
+}
+
+template <class T>
+T LinkedList<T>::takeLast() {
+
+}
+
+template <class T>
+int LinkedList<T>::removeAll(const T &t) {
+
+}
+
+template <class T>
+bool LinkedList<T>::removeOne(const T &t) {
+
+}
+
+template <class T>
+bool LinkedList<T>::contains(const T &t) const {
+
+}
+
+template <class T>
+int LinkedList<T>::count(const T &t) const{
+
+}
 
 }
 
