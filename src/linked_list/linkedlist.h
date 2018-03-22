@@ -67,16 +67,6 @@ class LinkedList {
 			return (*this);
 		}
 
-		void append(const T &t);
-   	void prepend(const T &t);
-   	T takeFirst();
-   	T takeLast();
-   	int removeAll(const T &t);
-   	bool removeOne(const T &t);
-   	bool contains(const T &t) const;
-   	int count(const T &t) const;
-
-
 	class iterator {
 		public:
 			typedef iterator self_type;
@@ -140,15 +130,56 @@ class LinkedList {
 		const_iterator cend() const { return const_iterator(d->last); }
 		const_iterator crend() const { return const_iterator(d->last->prev); }
 
+		iterator insert(iterator before, const T &t) {
+			std::unique_ptr<node_type> new_elem = std::make_unique<node_type>();
+			new_elem->data = t;
+			new_elem->prev = before->prev;
+			before->prev = new_elem.get();
+			new_elem->next = std::move(new_elem->prev->next); //transferring ownership
+			new_elem->prev->next = std::move(new_elem); //transferring ownership
+			d->size++;
+			return --before;	
+		}
+
+		iterator erase(iterator pos) {
+			ALGO_ASSERT(pos != rbegin(), "Can't remove the begin virtual node.");
+			ALGO_ASSERT(pos != end(), "Can't remove the end virtual node.");
+			
+			pos->next->prev = pos->prev;
+			iterator it = iterator(pos->prev->next);
+			//after the following line nobody owns the node pointed by pos.
+			//Therefore, the node will be deallocated. (don't use pos after this line !!!)
+			pos->prev->next = std::move(pos->next);
+			d->size--;
+			return it;
+		}
+
+		iterator erase(iterator first, iterator last) {
+			ALGO_ASSERT(first != rbegin(), "Can't remove the begin virtual node.");
+			ALGO_ASSERT(first != end(), "Can't remove the end virtual node.");
+			ALGO_ASSERT(last != rbegin(), "Can't remove the begin virtual node.");
+			while(first != last)
+				erase(first++);
+			return last; 
+		}
+
 		T& last();
 		const T& last() const;
-		
 		T& first();
 		const T& first() const ;
+		 
+		void append(const T &t);
+   	void prepend(const T &t);
+   	T takeFirst();
+   	T takeLast();
+   	int removeAll(const T &t);
+   	bool removeOne(const T &t);
+   	bool contains(const T &t) const;
+		int count(const T &t) const;
 		
-
-
-
+		inline void removeFirst() { ALGO_ASSERT(size(), "Empty List."); erase(begin()); }
+    	inline void removeLast() { ALGO_ASSERT(size(), "Empty List."); erase(--end()); }
+		
 };
 
 template <class T>
@@ -176,42 +207,78 @@ void LinkedList<T>::prepend(const T& t) {
 template <class T>
 T LinkedList<T>::takeFirst() {
 	ALGO_ASSERT(size()>0, "Empty list (No first element)");
-	T t = d->root->data;
-	remove(begin());
+	iterator it = begin();
+	T t = *it;
+	erase(it);
 	return t;
 }
 
 template <class T>
 T LinkedList<T>::takeLast() {
 	ALGO_ASSERT(size()>0, "Empty list (No last element)");
-	T t = d->last->data;
-	remove(end());
+	iterator it = --cend();
+	T t = *it;
+	erase(it);
 	return t;
 }
 
 template <class T>
 int LinkedList<T>::removeAll(const T &t) {
-	for(iterator it=begin(); it!=end(); ++it) {
+	int count=0;
+	for(iterator it=begin(); it!=end(); ) {
 		if(*it == t) { 
-			remove(it); 
+			it = erase(it); 
+			count++;
+		}
+		else {
+			++it;
 		}
 	}
+	return count;
 }
 
 template <class T>
 bool LinkedList<T>::removeOne(const T &t) {
-	
+	for(iterator it=begin(); it!=end(); ++it) {
+		if(*it == t) { 
+			erase(it); 
+			return true;
+		}
+	}
+	return false;
 }
 
 template <class T>
 bool LinkedList<T>::contains(const T &t) const {
-	
+	for(iterator it=begin(); it!=end(); ++it) {
+		if(*it == t) { 
+			return true;
+		}
+	}
+	return false;
 }
 
 template <class T>
 int LinkedList<T>::count(const T &t) const{
-	
+	int count=0;
+	for(iterator it=begin(); it!=end(); ++it) {
+		if(*it == t) 
+			count++;
+	}
+	return count;
 }
+
+template <class T>
+T& LinkedList<T>::last() { return *(--end()); }
+
+template <class T>
+const T& LinkedList<T>::last() const { return *(--end()); }
+
+template <class T>
+T& LinkedList<T>::first() { return *(begin()); }
+
+template <class T>
+const T& LinkedList<T>::first() const { return *(begin()); }	
 
 }
 
