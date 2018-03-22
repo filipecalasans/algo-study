@@ -77,16 +77,22 @@ class LinkedList {
 			typedef int difference_type;
 
 			iterator(pointer ptr) : _ptr(ptr) {}
-			self_type operator++() { _ptr=_ptr->next.get(); return *this; } //PREFIX
-			self_type operator++(int junk) { self_type i = *this;  
+			inline self_type operator++() { _ptr=_ptr->next.get(); return *this; } //PREFIX
+			inline self_type operator++(int junk) { self_type i = *this;  
 				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next.get(); return i; } //POSTFIX
-			self_type operator--() { _ptr=_ptr->prev; return *this; } //PREFIX
-			self_type operator--(int junk) { self_type i = *this;  
+			inline self_type operator--() { _ptr=_ptr->prev; return *this; } //PREFIX
+			inline self_type operator--(int junk) { self_type i = *this;  
 				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return i; } //POSTFIX
-			reference operator*() const { return _ptr->data; }
-			pointer  operator->() const { return _ptr; }
-			bool operator==(const self_type& rhs) const { return _ptr == rhs._ptr; }
-			bool operator!=(const self_type& rhs) const { return _ptr != rhs._ptr; }
+			inline reference operator*() const { return _ptr->data; }
+			inline pointer  operator->() const { return _ptr; }
+			inline bool operator==(const self_type& rhs) const { return _ptr == rhs._ptr; }
+			inline bool operator!=(const self_type& rhs) const { return _ptr != rhs._ptr; }
+
+			inline self_type operator+(int j) const
+        	{ pointer n = _ptr; if (j > 0) while (j--) n = n->next.get(); else while (j++) n = n->prev; return n; }
+        	inline self_type operator-(int j) const { return operator+(-j); }
+        	inline self_type &operator+=(int j) { return *this = *this + j; }
+        	inline self_type &operator-=(int j) { return *this = *this - j; }
 		private:
 			pointer _ptr;
 	};
@@ -97,21 +103,28 @@ class LinkedList {
 			typedef const_iterator self_type;
 			typedef T value_type;
 			typedef const T& reference;
-			typedef const typename LinkedListData<T>::Node* pointer;
+			typedef typename LinkedListData<T>::Node* pointer;
+			typedef const typename LinkedListData<T>::Node* const_pointer;
 			typedef std::bidirectional_iterator_tag iterator_category;
 			typedef int difference_type;
 
 			const_iterator(pointer ptr) : _ptr(ptr) {}
 			self_type operator++() { _ptr=_ptr->next.get(); return *this; } //PREFIX
-			self_type operator++(int junk) { self_type i = *this; 
+			self_type operator++(int) { self_type i = *this; 
 				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next.get(); return i; } //POSTFIX
 			self_type operator--() { _ptr=_ptr->prev; return *this; } //PREFIX
-			self_type operator--(int junk) { self_type i = *this;  
+			self_type operator--(int) { self_type i = *this;  
 				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return i; } //POSTFIX
 			reference operator*() const { return _ptr->data; }
-			pointer  operator->() const { return _ptr; }
+			const_pointer  operator->() const { return _ptr; }
 			bool operator==(const self_type& rhs) const { return _ptr == rhs._ptr; }
 			bool operator!=(const self_type& rhs) const { return _ptr != rhs._ptr; }
+			inline self_type operator+(int j) const
+        	{ pointer n = _ptr; if (j > 0) while (j--) n = n->next.get(); else while (j++) n = n->prev; return n; }
+        	inline self_type operator-(int j) const { return operator+(-j); }
+        	inline self_type &operator+=(int j) { return *this = *this + j; }
+        	inline self_type &operator-=(int j) { return *this = *this - j; }
+			
 		private:
 			pointer _ptr;
 		};
@@ -158,16 +171,16 @@ class LinkedList {
 			ALGO_ASSERT(first != rbegin(), "Can't remove the begin virtual node.");
 			ALGO_ASSERT(first != end(), "Can't remove the end virtual node.");
 			ALGO_ASSERT(last != rbegin(), "Can't remove the begin virtual node.");
-			while(first != last)
+			while(first != last) 
 				erase(first++);
 			return last; 
 		}
 
-		T& last();
-		const T& last() const;
-		T& first();
-		const T& first() const ;
-		 
+		inline T& last() { return *(--end()); }
+		inline const T& last() const { return *(--cend()); }
+		inline T& first()  { return *(begin()); }
+		inline const T& first() const { return *(cbegin()); }	
+
 		void append(const T &t);
    	void prepend(const T &t);
    	T takeFirst();
@@ -267,18 +280,6 @@ int LinkedList<T>::count(const T &t) const{
 	}
 	return count;
 }
-
-template <class T>
-T& LinkedList<T>::last() { return *(--end()); }
-
-template <class T>
-const T& LinkedList<T>::last() const { return *(--cend()); }
-
-template <class T>
-T& LinkedList<T>::first() { return *(begin()); }
-
-template <class T>
-const T& LinkedList<T>::first() const { return *(cbegin()); }	
 
 }
 

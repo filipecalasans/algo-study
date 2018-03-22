@@ -246,5 +246,46 @@ TEST(LinkedList, erase) {
 		};
 		VERIFY_ON_FORWARD_REVERSE_ORDER(l,data2,3);
 	}
+}
+
+TEST(LinkedList, eraseMultiple) {
+   LinkedList<DataTest> l;
+   DataTest data[7] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+		{2, true, "bca"},
+		{3, true, "bca"},
+		{4, true, "bca"},
+		{5, true, "bca"},
+		{6, true, "bca"},
+	};
+	
+	for(int i=0; i<7; i++) {
+		l.append(data[i]);
+	}
+
+	VERIFY_ON_FORWARD_REVERSE_ORDER(l,data,7);
+	EXPECT_EQ(l.size(), 7);
+	EXPECT_EQ(l.isEmpty(), false);
+
+	LinkedList<DataTest>::iterator it = (++l.begin());
+
+	l.erase(it, it+1);
+
+	EXPECT_EQ(l.size(), 6);
+	EXPECT_EQ(l.isEmpty(), false);
+
+	// {
+	// 	DataTest data2[6] = {
+	// 		{0, true, "abc"},
+	// 		{2, true, "bca"},
+	// 		{3, true, "bca"},
+	// 		{4, true, "bca"},
+	// 		{5, true, "bca"},
+	// 		{6, true, "bca"},
+	// 	};
+	// 	VERIFY_ON_FORWARD_REVERSE_ORDER(l,data2,6);
+	// }
+
 
 }
