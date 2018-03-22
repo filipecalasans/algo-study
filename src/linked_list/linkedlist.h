@@ -79,7 +79,7 @@ class LinkedList {
 			iterator(pointer ptr) : _ptr(ptr) {}
 			self_type operator++() { _ptr=_ptr->next.get(); return *this; } //PREFIX
 			self_type operator++(int junk) { self_type i = *this;  
-				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next; return i; } //POSTFIX
+				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next.get(); return i; } //POSTFIX
 			self_type operator--() { _ptr=_ptr->prev; return *this; } //PREFIX
 			self_type operator--(int junk) { self_type i = *this;  
 				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return i; } //POSTFIX
@@ -104,7 +104,7 @@ class LinkedList {
 			const_iterator(pointer ptr) : _ptr(ptr) {}
 			self_type operator++() { _ptr=_ptr->next.get(); return *this; } //PREFIX
 			self_type operator++(int junk) { self_type i = *this; 
-				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next; return i; } //POSTFIX
+				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next.get(); return i; } //POSTFIX
 			self_type operator--() { _ptr=_ptr->prev; return *this; } //PREFIX
 			self_type operator--(int junk) { self_type i = *this;  
 				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return i; } //POSTFIX
@@ -146,7 +146,7 @@ class LinkedList {
 			ALGO_ASSERT(pos != end(), "Can't remove the end virtual node.");
 			
 			pos->next->prev = pos->prev;
-			iterator it = iterator(pos->prev->next);
+			iterator it = iterator(pos->next.get());
 			//after the following line nobody owns the node pointed by pos.
 			//Therefore, the node will be deallocated. (don't use pos after this line !!!)
 			pos->prev->next = std::move(pos->next);
@@ -272,13 +272,13 @@ template <class T>
 T& LinkedList<T>::last() { return *(--end()); }
 
 template <class T>
-const T& LinkedList<T>::last() const { return *(--end()); }
+const T& LinkedList<T>::last() const { return *(--cend()); }
 
 template <class T>
 T& LinkedList<T>::first() { return *(begin()); }
 
 template <class T>
-const T& LinkedList<T>::first() const { return *(begin()); }	
+const T& LinkedList<T>::first() const { return *(cbegin()); }	
 
 }
 

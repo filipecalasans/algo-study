@@ -137,7 +137,7 @@ TEST(LinkedList, insert) {
 	EXPECT_EQ(l.size(), 3);
 	EXPECT_EQ(l.isEmpty(), false);
 	
-	 DataTest data2[3] = { //data in the order inserted.
+	DataTest data2[3] = { //data in the order inserted.
       {1, false, "cba"},
 	   {0, true, "abc"},
 		{2, true, "bca"},
@@ -160,6 +160,91 @@ TEST(LinkedList, operatorEqual) {
 
 	l2 = l1;
 
+	EXPECT_EQ(l1 == l2, true);
+
 	VERIFY_ON_FORWARD_REVERSE_ORDER(l1,data,3);
 	VERIFY_ON_FORWARD_REVERSE_ORDER(l2,data,3);
+}
+
+
+TEST(LinkedList, first_last) {
+   LinkedList<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+	};
+	
+	for(int i=0; i<3; i++) {
+		l.append(data[i]);
+	}
+
+	EXPECT_EQ(l.first() == data[0], true);
+	EXPECT_EQ(l.last() == data[2], true);
+
+	const LinkedList<DataTest> l2 = l;
+
+	EXPECT_EQ(l2.first() == data[0], true);
+	EXPECT_EQ(l2.last() == data[2], true);
+
+}
+
+TEST(LinkedList, erase) {
+   LinkedList<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+	};
+	
+	l.append(data[0]);
+	for(int i=0; i<3; i++) {
+		l.append(data[i]);
+	}
+	l.append(data[0]);
+
+	{
+		DataTest data2[5] = {
+			{0, true, "abc"},
+			{0, true, "abc"},
+			{1, false, "cba"},
+			{2, true, "bca"},
+			{0, true, "abc"},
+		};
+		VERIFY_ON_FORWARD_REVERSE_ORDER(l,data2,5);
+	}
+
+	LinkedList<DataTest>::iterator it = l.begin();
+	it = l.erase(it);
+	
+	EXPECT_EQ(l.size(), 4);
+	EXPECT_EQ(*it == data[0], true);
+	EXPECT_EQ(*it == l.first(), true);
+	EXPECT_EQ(it == l.begin(), true);
+	
+	{
+		DataTest data2[4] = {
+			{0, true, "abc"},
+			{1, false, "cba"},
+			{2, true, "bca"},
+			{0, true, "abc"},
+		};
+		VERIFY_ON_FORWARD_REVERSE_ORDER(l,data2,4);
+	}
+
+	it = ++it;
+	it = ++it;
+	it = l.erase(it);
+	EXPECT_EQ(l.size(), 3);
+	EXPECT_EQ(*it == data[0], true);
+
+	{
+		DataTest data2[3] = {
+			{0, true, "abc"},
+			{1, false, "cba"},
+			{0, true, "abc"},
+		};
+		VERIFY_ON_FORWARD_REVERSE_ORDER(l,data2,3);
+	}
+
 }
