@@ -77,12 +77,10 @@ class LinkedList {
 			typedef int difference_type;
 
 			iterator(pointer ptr) : _ptr(ptr) {}
-			inline self_type operator++() { _ptr=_ptr->next.get(); return *this; } //PREFIX
-			inline self_type operator++(int junk) { self_type i = *this;  
-				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next.get(); return i; } //POSTFIX
-			inline self_type operator--() { _ptr=_ptr->prev; return *this; } //PREFIX
-			inline self_type operator--(int junk) { self_type i = *this;  
-				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return i; } //POSTFIX
+			inline self_type operator++() { ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next.get(); return *this; } //PREFIX
+			inline self_type operator++(int junk) { self_type i = *this; ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next.get(); return i; } //POSTFIX
+			inline self_type operator--() { ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return *this; } //PREFIX
+			inline self_type operator--(int junk) { self_type i = *this; ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return i; } //POSTFIX
 			inline reference operator*() const { return _ptr->data; }
 			inline pointer  operator->() const { return _ptr; }
 			inline bool operator==(const self_type& rhs) const { return _ptr == rhs._ptr; }
@@ -109,12 +107,10 @@ class LinkedList {
 			typedef int difference_type;
 
 			const_iterator(pointer ptr) : _ptr(ptr) {}
-			self_type operator++() { _ptr=_ptr->next.get(); return *this; } //PREFIX
-			self_type operator++(int) { self_type i = *this; 
-				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next.get(); return i; } //POSTFIX
-			self_type operator--() { _ptr=_ptr->prev; return *this; } //PREFIX
-			self_type operator--(int) { self_type i = *this;  
-				ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return i; } //POSTFIX
+			self_type operator++() { ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next.get(); return *this; } //PREFIX
+			self_type operator++(int) { self_type i = *this; ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->next.get(); return i; } //POSTFIX
+			self_type operator--() { ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return *this; } //PREFIX
+			self_type operator--(int) { self_type i = *this;  ALGO_ASSERT(_ptr, "Iterator isn't valid."); _ptr=_ptr->prev; return i; } //POSTFIX
 			reference operator*() const { return _ptr->data; }
 			const_pointer  operator->() const { return _ptr; }
 			bool operator==(const self_type& rhs) const { return _ptr == rhs._ptr; }
