@@ -275,17 +275,30 @@ TEST(LinkedList, eraseMultiple) {
 	EXPECT_EQ(l.size(), 6);
 	EXPECT_EQ(l.isEmpty(), false);
 
-	// {
-	// 	DataTest data2[6] = {
-	// 		{0, true, "abc"},
-	// 		{2, true, "bca"},
-	// 		{3, true, "bca"},
-	// 		{4, true, "bca"},
-	// 		{5, true, "bca"},
-	// 		{6, true, "bca"},
-	// 	};
-	// 	VERIFY_ON_FORWARD_REVERSE_ORDER(l,data2,6);
-	// }
+	{
+		DataTest data2[6] = {
+			{0, true, "abc"},
+			{2, true, "bca"},
+			{3, true, "bca"},
+			{4, true, "bca"},
+			{5, true, "bca"},
+			{6, true, "bca"},
+		};
+		VERIFY_ON_FORWARD_REVERSE_ORDER(l,data2,6);
+	}
 
+	it = l.begin();
+
+	l.erase(it+3, it+5);
+
+	{
+		DataTest data2[4] = {
+			{0, true, "abc"},
+			{2, true, "bca"},
+			{3, true, "bca"},
+			{6, true, "bca"},
+		};
+		VERIFY_ON_FORWARD_REVERSE_ORDER(l,data2,4);
+	}
 
 }
