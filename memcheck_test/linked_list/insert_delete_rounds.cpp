@@ -2,13 +2,13 @@
 #include <string>
 #include <unistd.h>
 
-#define DEBUG_TXT
+// #define DEBUG_TXT
 
 #include "global/assert.h"
 
 #include "linked_list/linkedlist.h"
 
-#define TEST_SIZE 5000
+#define TEST_SIZE 10000
 
 struct DataTest {
    int integer;
@@ -66,7 +66,7 @@ int main(int argv, char* argc[]) {
 		l1 = l2;
 	}
 
-	sleep(2);
+	//sleep(2);
 
 	appendElements(l1, d);
 
