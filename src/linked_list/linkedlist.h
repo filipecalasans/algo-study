@@ -238,7 +238,7 @@ T LinkedList<T>::takeFirst() {
 template <class T>
 T LinkedList<T>::takeLast() {
 	ALGO_ASSERT(size()>0, "Empty list (No last element)");
-	iterator it = --cend();
+	iterator it = --end();
 	T t = *it;
 	erase(it);
 	return t;
