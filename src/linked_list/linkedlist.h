@@ -40,13 +40,26 @@ struct LinkedListData{
 	//deferr pointers manually to avoid stackoverflow due to 
 	//recursion explosion
 	static void cleanup(LinkedListData<T> *data) { 
+		#ifdef DEBUG_TXT 
+			int nodeCount=0;
+		#endif
 		Node *n = data->last;
 		if(n==nullptr) { return; }
 		while(n) {
+			#ifdef DEBUG_TXT 
+				if(n->next.get())
+					std::cout << "Release {n->next()} [" << ++nodeCount  << 
+					"]: "<< n->next.get() << std::endl;
+			#endif
 			n->next.release();
 			ALGO_ASSERT(n->next.get() == nullptr, "Node reference not deferred");
 			n = n->prev;
 		}
+		data->size = 0;
+		#ifdef DEBUG_TXT
+			std::cout << "Release {Root} [" << ++nodeCount  << "]: "<< data->root.get() << std::endl;
+		#endif
+		data->root.release();
 	} 
 };
 

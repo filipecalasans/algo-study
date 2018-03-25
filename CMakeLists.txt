@@ -14,3 +14,4 @@ include_directories(SYSTEM ${ALGO_DIR})
 
 add_subdirectory(src)
 add_subdirectory(unit_test)
+add_subdirectory(memcheck_test)
