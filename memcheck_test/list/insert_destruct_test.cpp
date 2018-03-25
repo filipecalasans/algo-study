@@ -2,11 +2,11 @@
 #include <string>
 #include <unistd.h>
 
-// #define DEBUG_TXT
+#define DEBUG_TXT
 
 #include "global/assert.h"
 
-#include "linked_list/linkedlist.h"
+#include "list/list.h"
 
 #define TEST_SIZE 5000
 struct DataTest {
@@ -42,7 +42,7 @@ struct Data {
 	}
 };
 
-void appendElements(Algos::LinkedList<DataTest> &l, const Data& d){
+void appendElements(Algos::List<DataTest> &l, const Data& d){
 	for(int i=0; i<d.n; i++) {
 		l.append(d.data[i]);
 	}
@@ -54,27 +54,13 @@ int main(int argv, char* argc[]) {
 	Data::initDataSample(d);
 
 	{	
-		Algos::LinkedList<DataTest> l1;
+		Algos::List<DataTest> l1;
 		{
-			Algos::LinkedList<DataTest> l2;
+			Algos::List<DataTest> l2;
 			l1 = l2;
 		}
-
-		sleep(2);
-
 		appendElements(l1, d);
-		
 	}
-
-
-
-
-
-
-
-
-
-
 
    return 0;
 }

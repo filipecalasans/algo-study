@@ -37,13 +37,17 @@ struct LinkedListData{
 		last->next = nullptr;
 	}
 
+	~LinkedListData() {
+		cleanup();
+	}
+
 	//deferr pointers manually to avoid stackoverflow due to 
 	//recursion explosion
-	static void cleanup(LinkedListData<T> *data) { 
+	void cleanup() { 
 		#ifdef DEBUG_TXT 
 			int nodeCount=0;
 		#endif
-		Node *n = data->last;
+		Node *n = this->last;
 		if(n==nullptr) { return; }
 		while(n) {
 			#ifdef DEBUG_TXT 
@@ -51,15 +55,15 @@ struct LinkedListData{
 					std::cout << "Release {n->next()} [" << ++nodeCount  << 
 					"]: "<< n->next.get() << std::endl;
 			#endif
-			n->next.release();
+			n->next.reset();
 			ALGO_ASSERT(n->next.get() == nullptr, "Node reference not deferred");
 			n = n->prev;
 		}
-		data->size = 0;
+		size = 0;
 		#ifdef DEBUG_TXT
 			std::cout << "Release {Root} [" << ++nodeCount  << "]: "<< data->root.get() << std::endl;
 		#endif
-		data->root.release();
+		root.reset();
 	} 
 };
 
@@ -71,7 +75,7 @@ class LinkedList {
 
 	public:
 		
-		LinkedList() : d(new LinkedListData<T>(), LinkedListData<T>::cleanup){}
+		LinkedList() : d(std::make_shared<LinkedListData<T>>()){}
 		inline int size() { return d->size; }
 		inline bool isEmpty() { return d->size == 0; }
 		inline bool operator==(const LinkedList<T>& other) { return (other.d == d); }

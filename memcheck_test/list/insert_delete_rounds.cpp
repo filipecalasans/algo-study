@@ -8,7 +8,8 @@
 
 #include "linked_list/linkedlist.h"
 
-#define TEST_SIZE 5000
+#define TEST_SIZE 10000
+
 struct DataTest {
    int integer;
    bool boolean;
@@ -48,33 +49,39 @@ void appendElements(Algos::LinkedList<DataTest> &l, const Data& d){
 	}
 }
 
+void prependElements(Algos::LinkedList<DataTest> &l, const Data& d) {
+	for(int i=d.n-1; i>=0; i--) {
+		l.prepend(d.data[i]);
+	}
+}
+
 int main(int argv, char* argc[]) {
 
    Data d;	
 	Data::initDataSample(d);
-
-	{	
-		Algos::LinkedList<DataTest> l1;
-		{
-			Algos::LinkedList<DataTest> l2;
-			l1 = l2;
-		}
-
-		sleep(2);
-
-		appendElements(l1, d);
-		
+	
+	Algos::LinkedList<DataTest> l1;
+	{
+		Algos::LinkedList<DataTest> l2;
+		l1 = l2;
 	}
 
+	//sleep(2);
 
+	appendElements(l1, d);
 
+	int removeSize = l1.size()/2;
 
+	for(int i=0; i<removeSize; i++)
+		l1.takeFirst();
+		
+	
+	prependElements(l1, d);
 
-
-
-
-
-
+	removeSize = l1.size()/2;
+	for(int i=0; i<removeSize; i++)
+		l1.takeLast();
+		
 
    return 0;
 }
