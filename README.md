@@ -11,5 +11,6 @@ The containers implemented in this library use implicit-sharing similar to Pytho
   * Array
   * Vector
   * List
+  * Linked List
   
 
