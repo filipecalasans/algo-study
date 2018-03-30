@@ -193,12 +193,8 @@ void Algos::ListData<T>::reallocAndMove(int new_begin, int alloc) {
 
   ALGO_ASSERT(alloc > 0, "Allocation size can't be lessor or equal to 0.");
   
-  std::unique_ptr<Data> x = std::make_unique<Data>();
-  
-  std::cout << "Allocation size: " << alloc << " New begin=" << new_begin << std::endl;
-  
-  x->reallocArray(alloc);
-  
+  std::unique_ptr<Data> x = std::make_unique<Data>();  
+  x->reallocArray(alloc);  
 
   if(!alloc) { 
     x->begin = x->end = 0;
@@ -207,7 +203,6 @@ void Algos::ListData<T>::reallocAndMove(int new_begin, int alloc) {
     int cpy_size = d->end-d->begin;
     if(d->begin > x->alloc) { cpy_size = 0; } //error, must never happen
     else if(d->end > x->alloc ) { cpy_size = x->alloc-d->begin; }
-    // std::cout << "alloc " << x->alloc << " cpy_size " << cpy_size << std::endl;
     ::memcpy(x->array+new_begin, d->array+d->begin, cpy_size * sizeof(T*));
     x->begin = new_begin;
     x->end = new_begin + cpy_size;
