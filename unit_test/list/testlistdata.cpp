@@ -34,24 +34,26 @@ TEST(ListData, realloc) {
 
 TEST(ListData, append) {
    ListData<int> data;
-   int x = 10;
+   //i.e: Data ownership is grated to the ListData !!! 
+   // This variable will be deleted upon ListData deletion
+   int *x = new int(10); 
    // std::cout << data.d->begin << " " << data.d->end << std::endl;
 
    int **nxt = data.append();
-   *nxt = &x;
+   *nxt = x;
    EXPECT_EQ(**(data.d->array+data.d->begin), 10);
    EXPECT_EQ(data.d->alloc, 1);
    // std::cout << data.d->begin << " " << data.d->end << std::endl;
 
    int **nxt2 = data.append();
-   int y = 11;
-   *nxt2 = &y;
+   int *y = new int(11);
+   *nxt2 = y;
    // std::cout << data.d->begin << " " << data.d->end << std::endl;
 
    EXPECT_EQ(data.d->alloc, 4);
    EXPECT_EQ(data.d->begin, 0);
-   EXPECT_EQ(**(data.d->array+data.d->begin), x);
-   EXPECT_EQ(**(data.d->array+data.d->begin+1), y);
+   EXPECT_EQ(**(data.d->array+data.d->begin), *x);
+   EXPECT_EQ(**(data.d->array+data.d->begin+1), *y);
 }
 
 TEST(ListData, prepend) {
@@ -125,7 +127,7 @@ TEST(ListData, removeFromTheFront) {
 
    int samples[100] = {};
    ListData<int> data;
-
+   
    appendElements(&data, samples, 100);
 
       for(int i=0; i<100; i++) {
@@ -134,13 +136,14 @@ TEST(ListData, removeFromTheFront) {
          EXPECT_EQ(**(data.d->array+data.d->begin+k), samples[j]);
       }
    }
+   data.d->allow_obj_cleanup = false;
 }
 
 TEST(ListData, removeFromTheBack) {
 
    int samples[100] = {};
    ListData<int> data;
-
+   
    appendElements(&data, samples, 100);
 
    for(int i=0; i<100; i++) {
@@ -149,13 +152,14 @@ TEST(ListData, removeFromTheBack) {
          EXPECT_EQ(**(data.d->array+data.d->begin+j), samples[j]);
       }
    }
+   data.d->allow_obj_cleanup = false; // don't pass ownership
 }
 
 TEST(ListData, removeFromTheMiddle) {
 
    int samples[100] = {};
    ListData<int> data;
-
+   
    appendElements(&data, samples, 100);
   
    data.remove(data.size()/2);
@@ -166,6 +170,8 @@ TEST(ListData, removeFromTheMiddle) {
       }
       EXPECT_EQ(**(data.d->array+data.d->begin+j), samples[k]);
    }
+
+   data.d->allow_obj_cleanup = false;// don't pass ownership
 }
 
 TEST(ListData, insert) {
@@ -224,6 +230,8 @@ TEST(ListData, insert) {
    EXPECT_EQ(**(data.d->array+data.d->begin+4), samples[4]);
    EXPECT_EQ(**(data.d->array+data.d->begin+5), samples[1]);
 
+   data.d->allow_obj_cleanup = false;
+   
 }
 
 TEST(ListData, removeNEnd) {
@@ -245,6 +253,8 @@ TEST(ListData, removeNEnd) {
          k++;         
       }
    }
+
+   data.d->allow_obj_cleanup = false;
 }
 
 TEST(ListData, removeNBegin) {
@@ -266,4 +276,6 @@ TEST(ListData, removeNBegin) {
          k++;         
       }
    }
+
+   data.d->allow_obj_cleanup = false;
 }

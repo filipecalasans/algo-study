@@ -8,7 +8,8 @@
 
 #include "list/list.h"
 
-#define TEST_SIZE 5000
+#define TEST_SIZE 5
+
 struct DataTest {
    int integer;
    bool boolean;

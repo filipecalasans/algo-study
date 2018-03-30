@@ -21,24 +21,44 @@ namespace Algos { //TODO: implement using smart pointers.
   struct ListData{
     struct Data {
       int alloc, begin, end;
-      T** array;
-    };
-
-    struct DataDeleter { 
-      void operator()(Data* d) { 
-        /* std::cout << "Data Deleter" << std::endl;*/ 
-        delete[] d->array; 
+      T** array = nullptr;
+      bool allow_obj_cleanup = true;
+      
+      Data() {
+        array = new T*[1];
+        array[0] = nullptr;
+        alloc = 1;
+        begin = 0;
+        end = 0;
       }
+
+      ~Data(){ 
+        
+        if(alloc<=0) { return; }
+        if(array == nullptr) { return; }
+        if(allow_obj_cleanup) {
+          for(int i=begin; i<end; i++) {
+            if(array[i]!=nullptr)
+              delete array[i];
+          }
+        }
+        delete[] array;
+      }
+
+      void reallocArray(int alloc) {
+        delete[] array; //it's still empty.
+        array = new T*[alloc ? alloc : 1]; 
+        this->alloc = alloc ? alloc : 1;
+        for(int i=0; i<this->alloc; i++) {
+          array[i] = nullptr;
+        }
+      }
+
     };
 
-    std::unique_ptr<Data, DataDeleter> d;
+    std::unique_ptr<Data> d;
 
-    ListData() : d(new Data) {
-      d->array = new T*[1];
-      d->alloc = 1;
-      d->begin = 0;
-      d->end = 0;
-    }
+    ListData() : d(std::make_unique<Data>()) {}
 
     void realloc(int alloc);
     void reallocAndMove(int new_begin, int alloc);
@@ -63,9 +83,9 @@ namespace Algos { //TODO: implement using smart pointers.
     
   public:
       
-      std::shared_ptr<ListData<T> > d;
+      std::shared_ptr<ListData<T>> d;
 
-      List() : d(new ListData<T>()) {}
+      List() : d(std::make_shared<ListData<T>>()) {}
       List(const List& other) {
         d = other.d;
       }
@@ -170,9 +190,16 @@ namespace Algos { //TODO: implement using smart pointers.
 
 template <typename T> 
 void Algos::ListData<T>::reallocAndMove(int new_begin, int alloc) {
-  std::unique_ptr<Data, DataDeleter> x(new Data);
-  x->array = new T*[alloc ? alloc : 1]; 
-  x->alloc = alloc ? alloc : 1;
+
+  ALGO_ASSERT(alloc > 0, "Allocation size can't be lessor or equal to 0.");
+  
+  std::unique_ptr<Data> x = std::make_unique<Data>();
+  
+  std::cout << "Allocation size: " << alloc << " New begin=" << new_begin << std::endl;
+  
+  x->reallocArray(alloc);
+  
+
   if(!alloc) { 
     x->begin = x->end = 0;
   }
@@ -185,7 +212,9 @@ void Algos::ListData<T>::reallocAndMove(int new_begin, int alloc) {
     x->begin = new_begin;
     x->end = new_begin + cpy_size;
   }
+  d->allow_obj_cleanup = false;
   d = std::move(x);
+  d->allow_obj_cleanup = true;
 }
 
 template <typename T>
@@ -210,6 +239,7 @@ void Algos::ListData<T>::remove(int i) {
     }
     d->begin++;
   }
+  
 }
 
 template <typename T>
@@ -311,9 +341,9 @@ T** Algos::ListData<T>::insert(int i){
 
 template <class T>
 Algos::List<T>::~List() {
-  while(size()) { 
+  /*while(size()) { 
     removeAt(0);
-  }
+  }*/
 }
 
 template <class T>
@@ -360,6 +390,9 @@ void Algos::List<T>::replace(const T& t, int i) {
 template <class T>
 void Algos::List<T>::removeAt(int i) {
   ALGO_ASSERT(i<size(), "Index out of range");
+  T** old = d->at(i);
+  delete (*old);
+  *old = nullptr;
   d->remove(i);
 }
 
