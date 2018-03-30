@@ -429,10 +429,9 @@ template <class T>
 T Algos::List<T>::takeAt(int i) {
   ALGO_ASSERT(i<size(), "Index out of range");
   T** old = d->at(i);
-  T* t = new T();
-  *t = **old;
+  T t = **old;
   removeAt(i);
-  return (*t);
+  return t;
 }
 
 template <class T>
