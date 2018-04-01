@@ -103,7 +103,7 @@ namespace Algos { //TODO: implement using smart pointers.
         return (*this); 
       }
 
-      bool operator==(const List& other) const { d == other.d; }
+      bool operator==(const List<T>& other) const { d == other.d; }
       inline bool operator!=(const List<T> &other) const { return !(d == other.d); }
       inline int size() const { return d->size(); }
       inline bool isEmpty() const { return d->size() == 0; }

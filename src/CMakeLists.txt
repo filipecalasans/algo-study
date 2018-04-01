@@ -10,4 +10,5 @@ add_subdirectory(array)
 add_subdirectory(vector)
 add_subdirectory(list)
 add_subdirectory(linked_list)
+add_subdirectory(queue)
 
