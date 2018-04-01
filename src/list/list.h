@@ -62,7 +62,8 @@ namespace Algos { //TODO: implement using smart pointers.
 
     void realloc(int alloc);
     void reallocAndMove(int new_begin, int alloc);
-
+    void swap(int i, int j);
+    
     T** erase(T** xi);
     T** append();
     T** prepend();
@@ -92,12 +93,12 @@ namespace Algos { //TODO: implement using smart pointers.
 
       ~List();
 
-      List<T> &operator=(const List& other) { 
+      List<T> &operator=(const List<T>& other) { 
         d = other.d; 
         return (*this); 
       }
 
-      List<T> &operator=(List&& other) { 
+      List<T> &operator=(List<T>&& other) { 
         d = other.d; 
         other.d = nullptr; //invalidate the other ListData
         return (*this); 
@@ -108,6 +109,7 @@ namespace Algos { //TODO: implement using smart pointers.
       inline int size() const { return d->size(); }
       inline bool isEmpty() const { return d->size() == 0; }
       inline void reserve(int size) { d->realloc(size); }
+      inline void swap(int i, int j) { d->swap(i,j); }
 
       //Copy based operations.
       void append(const T& t); 
@@ -216,6 +218,16 @@ void Algos::ListData<T>::reallocAndMove(int new_begin, int alloc) {
 template <typename T>
 void Algos::ListData<T>::realloc(int alloc) {
   reallocAndMove(d->begin, alloc);
+}
+
+template <typename T>
+void Algos::ListData<T>::swap(int i, int j) {
+  ALGO_ASSERT(d->begin+i < d->end, "Swap index i out of range");
+  ALGO_ASSERT(d->begin+j < d->end, "Swap index j out of range");
+
+  T** tmp = d->at(i);
+  d->at(i) = d->at(j);
+  d->at(j) = tmp;
 }
 
 template <typename T>
