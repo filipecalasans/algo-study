@@ -12,5 +12,6 @@ The containers implemented in this library use implicit-sharing similar to Pytho
   * Vector
   * List
   * Linked List
-  
+  * Queue
+  * Stack
 
