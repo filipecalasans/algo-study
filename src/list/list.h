@@ -107,7 +107,8 @@ namespace Algos { //TODO: implement using smart pointers.
       inline bool operator!=(const List<T> &other) const { return !(d == other.d); }
       inline int size() const { return d->size(); }
       inline bool isEmpty() const { return d->size() == 0; }
-      
+      inline void reserve(int size) { d->realloc(size); }
+
       //Copy based operations.
       void append(const T& t); 
       void append(const List<T>& l);
