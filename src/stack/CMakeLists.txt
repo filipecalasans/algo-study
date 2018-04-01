@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(queue_proj C CXX)
+project(stack_proj C CXX)
 enable_testing()
 
 set(CMAKE_BUILD_TYPE Debug)
