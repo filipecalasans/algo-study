@@ -53,7 +53,7 @@ TEST(Queue, constructor) {
    EXPECT_EQ(l.isEmpty(), true);
 }
 
-TEST(Queue, enqueu) {
+TEST(Queue, enqueue) {
   
   Queue<DataTest> l;
   DataTest d[TEST_SIZE];
@@ -75,7 +75,7 @@ TEST(Queue, enqueu) {
 }
 
 
-TEST(Queue, dequeu_head) {
+TEST(Queue, dequeue_head) {
   
   Queue<DataTest> l;
   DataTest d[TEST_SIZE];
