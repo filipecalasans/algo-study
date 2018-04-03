@@ -66,7 +66,7 @@ TEST(Heap, insert) {
 
   int count = 0;
   for(const auto &i : l) {
-    EXPECT_EQ(i == d[count++], true);
+    EXPECT_EQ(i.second == d[count++], true);
   }
 
 }
@@ -103,10 +103,10 @@ TEST(Heap, swap) {
   
   int idx=0;
   for(const auto& i : l1)
-      EXPECT_EQ(i == d2[idx++], true);
+      EXPECT_EQ(i.second == d2[idx++], true);
 
   idx=0;
   for(const auto& i : l2)
-      EXPECT_EQ(i == d1[idx++], true);
+      EXPECT_EQ(i.second == d1[idx++], true);
 
 }

@@ -418,3 +418,31 @@ TEST(List, iterator) {
       EXPECT_EQ(elem.integer, (data[i++].integer+1));
    }
 }
+
+TEST(List, swap) {
+  
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+  
+
+   APPEND_ELEMENTS(l, data, 3);
+    
+   l.swap(0,2);
+   {
+      DataTest data2[3] = {
+        {2, true, "bca"},
+        {1, false, "cba"},
+        {0, true, "abc"},
+      };
+    
+      int i = 0;
+      for(auto& elem : l) {
+        EXPECT_EQ(elem == data2[i++], true);
+      }
+   }
+
+}

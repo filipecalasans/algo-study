@@ -225,9 +225,11 @@ void Algos::ListData<T>::swap(int i, int j) {
   ALGO_ASSERT(d->begin+i < d->end, "Swap index i out of range");
   ALGO_ASSERT(d->begin+j < d->end, "Swap index j out of range");
 
-  T** tmp = d->at(i);
-  d->at(i) = d->at(j);
-  d->at(j) = tmp;
+  T** j_pos = at(j);
+  T** i_pos = at(i);
+  T* tmp = *i_pos;
+  *i_pos = *j_pos;
+  *j_pos = tmp;
 }
 
 template <typename T>
