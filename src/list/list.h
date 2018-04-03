@@ -123,6 +123,7 @@ namespace Algos { //TODO: implement using smart pointers.
       T takeAt(int i);
       T takeFirst();
       T takeLast();
+      void clear() { while(size()) removeAt(0); }
 
       //Add move based operations.
       T& operator[](int i) { 
