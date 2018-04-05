@@ -13,11 +13,11 @@ struct DataTest {
    bool boolean;
    std::string txt;
   
-   DataTest() {}
+   //DataTest() {}
 
-   DataTest(const DataTest& other) {
-    *this = other;
-   }
+   //DataTest(const DataTest& other) {
+   // *this = other;
+   //}
 
    DataTest& operator=(const DataTest& other) {
       integer = other.integer;
@@ -56,29 +56,56 @@ TEST(Heap, constructor) {
 TEST(Heap, insert) {
   
   Heap<int,DataTest> l;
-  DataTest d[TEST_SIZE];
+  DataTest d[8] = {
+    {10, true, "abc"},
+    {6, true, "abc"},
+    {0, true, "abc"},
+    {2, true, "abc"},
+    {10, true, "abc"},
+    {3, true, "abc"},
+    {7, true, "abc"},
+    {9, true, "abc"},
+  };
   
-  initDataTest(d, TEST_SIZE);
+  int heap[8] = {0,2,3,9,10,6,7,10};
   
-    
-  EXPECT_EQ(TEST_SIZE, l.size());
-  EXPECT_EQ(l.isEmpty(), false);
-
-  int count = 0;
-  for(const auto &i : l) {
-    EXPECT_EQ(i.second == d[count++], true);
+  for(int i=0; i<8; i++) {
+    l.insert(d[i].integer, d[i]);
   }
-
+  
+  int idx = 0;
+  for(const auto& elem : l) {
+    EXPECT_EQ(elem.second.integer, heap[idx++]);
+  }
 }
 
 
 TEST(Heap, pull_peak) {
   
   Heap<int,DataTest> l;
-  DataTest d[TEST_SIZE];
+  DataTest d[8] = {
+    {10, true, "abc"},
+    {6, true, "abc"},
+    {0, true, "abc"},
+    {2, true, "abc"},
+    {10, true, "abc"},
+    {3, true, "abc"},
+    {7, true, "abc"},
+    {9, true, "abc"},
+  };
   
-  initDataTest(d, TEST_SIZE);
+  int heap[8] = {0,2,3,9,10,6,7,10};
   
+  for(int i=0; i<8; i++) {
+    l.insert(d[i].integer, d[i]);
+  }
+  
+  int lastPeak = -1;
+  while(l.size()) {
+    int top = l.peak().integer;
+    EXPECT_LE(lastPeak, top);
+    lastPeak = top;
+  }
 
 }
 
@@ -88,25 +115,10 @@ TEST(Heap, swap) {
   
   Heap<int,DataTest> l1, l2; 
   DataTest d1[TEST_SIZE];
-  DataTest d2[TEST_SIZE];
+  DataTest d2[TEST_SIZE/2];
   
   initDataTest(d1, TEST_SIZE);
   initDataTest(d2, TEST_SIZE/2);
   
-
-  EXPECT_EQ(TEST_SIZE, l1.size());
-  EXPECT_EQ(TEST_SIZE, l2.size());
-  EXPECT_EQ(l1.isEmpty(), false);
-  EXPECT_EQ(l2.isEmpty(), false);
-  
-  l1.swap(l2);
-  
-  int idx=0;
-  for(const auto& i : l1)
-      EXPECT_EQ(i.second == d2[idx++], true);
-
-  idx=0;
-  for(const auto& i : l2)
-      EXPECT_EQ(i.second == d1[idx++], true);
 
 }

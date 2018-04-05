@@ -56,7 +56,7 @@ class Heap : protected List<Pair<K,T>> {
     inline bool operator!=(const Heap<K,T> &other) const { return (this->d != other.d) || 
       (heap_order!=other.heap_order); }
     inline int size() const { return List<Pair<K,T>>::size(); }
-    inline bool isEmpty() const { return List<Pair<K,T>>::size(); }
+    inline bool isEmpty() const { return List<Pair<K,T>>::isEmpty(); }
     inline void reserve(int size) { List<Pair<K,T>>::reserve(size); }
 
 
@@ -83,9 +83,10 @@ class Heap : protected List<Pair<K,T>> {
 protected:
 
     void heapup(int i);
+    void heapdown();
     int search(const K& k); 
     inline const K& getKey(int i) { return List<Pair<K,T>>::operator[](i).first; }
-
+    inline bool validIdx(int i) { return i<size(); }
 };
 
 template <class K, class T>
@@ -111,15 +112,19 @@ bool Heap<K,T>::contains(const K& k) {
 
 template <class K, class T>
 const T& Heap<K,T>::top() const {
-  ALGOS_ASSERT(size() > 0, "Heap is empty");
+  ALGO_ASSERT(size() > 0, "Heap is empty");
   return (*this)[0];
 }
 
 template <class K, class T>
 T Heap<K,T>::peak() {
-  ALGOS_ASSERT(size() > 0, "Heap is Empty"); 
-  //remove root and heap-up
-  return (*this)[0];
+  ALGO_ASSERT(size() > 0, "Heap is Empty"); 
+  if(size() >= 2) {
+    List<Pair<K,T>>::swap(0,size()-1);
+  }
+  T t = List<Pair<K,T>>::takeLast().second;
+  heapdown();
+  return t;
 }
 
 template <class K, class T>
@@ -133,9 +138,41 @@ void Heap<K,T>::heapup(int i) {
     if(parent_value > i_value) {
       List<Pair<K,T>>::swap(i-1,parent-1);
     }
-    i = parent;
+    i=parent;
   }
+}
 
+template <class K, class T>
+void Heap<K,T>::heapdown(){
+  int parent=1; //start from the root.
+  int leftIdx = parent*2;
+  int rightIdx = parent*2 + 1;
+  
+  while(parent-1<size()) {
+    bool vLeftIdx = leftIdx-1 < size();
+    bool vRightIdx = rightIdx-1 < size();
+    
+    if(vLeftIdx || vRightIdx) {
+      int idx=0;
+      if(vLeftIdx && vRightIdx) {
+        idx = List<Pair<K,T>::operator[](leftIdx-1).first < 
+        List<Pair<K,T>::operator[](rightIdx-1).first ? leftIdx : rightIdx;
+      }
+      else {
+        idx = vLeftIdx ? leftIdx : rightIdx;
+      }
+      if((*this)[idx-1].first >= (*this)[parent-1].first) { 
+        List<Pair<K,T>>::swap(idx-1, parent-1); 
+        parent = idx;
+      }
+      else { 
+        return; //heap property achieved 
+      }
+    }
+    else { 
+      return; //no child
+    }
+  }
 }
 
 }
