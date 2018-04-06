@@ -53,7 +53,7 @@ TEST(Heap, constructor) {
    EXPECT_EQ(l.isEmpty(), true);
 }
 
-TEST(Heap, insert) {
+TEST(Heap, insert_contains) {
   
   Heap<int,DataTest> l;
   DataTest d[8] = {
@@ -69,9 +69,20 @@ TEST(Heap, insert) {
   
   int heap[8] = {0,2,3,9,10,6,7,10};
   
+  EXPECT_EQ(l.contains(10), false);
+  EXPECT_EQ(l.contains(7), false);
+  EXPECT_EQ(l.contains(100), false);
+  EXPECT_EQ(l.contains(-1), false);
+
+
   for(int i=0; i<8; i++) {
     l.insert(d[i].integer, d[i]);
   }
+  
+  EXPECT_EQ(l.contains(10), true);
+  EXPECT_EQ(l.contains(7), true);
+  EXPECT_EQ(l.contains(100), false);
+  EXPECT_EQ(l.contains(-1), false);
   
   int idx = 0;
   for(const auto& elem : l) {
@@ -123,5 +134,22 @@ TEST(Heap, swap) {
   initDataTest(d1, TEST_SIZE);
   initDataTest(d2, TEST_SIZE/2);
   
+  for(int i=0; i<TEST_SIZE; i++) {
+    l1.insert(d1[i].integer, d1[i]);
+  }
+  
+  for(int i=0; i<TEST_SIZE/2; i++) {
+    l2.insert(d2[i].integer, d2[i]);
+  }
+
+  l1.swap(l2);
+  
+  for(int i=0; i<TEST_SIZE/2; i++) {
+    EXPECT_EQ(d2[i], l1[i]);
+  }
+  
+  for(int i=0; i<TEST_SIZE; i++) {
+    EXPECT_EQ(d1[i], l2[i]);
+  }
 
 }
