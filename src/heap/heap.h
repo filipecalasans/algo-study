@@ -145,7 +145,6 @@ void Heap<K,T>::heapup(int i) {
 template <class K, class T>
 void Heap<K,T>::heapdown(){
   int parent=1; //start from the root.
-  
   while(parent-1<size()) {
     int leftIdx = parent*2;
     int rightIdx = parent*2 + 1;

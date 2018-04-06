@@ -100,6 +100,9 @@ TEST(Heap, pull_peak) {
     l.insert(d[i].integer, d[i]);
   }
   
+  for(int i=0; i<8; i++) {
+    EXPECT_EQ(l[i].integer, heap[i]);
+  }
   int lastPeak = -1;
   while(l.size()) {
     int top = l.peak().integer;
