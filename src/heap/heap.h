@@ -145,23 +145,26 @@ void Heap<K,T>::heapup(int i) {
 template <class K, class T>
 void Heap<K,T>::heapdown(){
   int parent=1; //start from the root.
-  int leftIdx = parent*2;
-  int rightIdx = parent*2 + 1;
   
   while(parent-1<size()) {
+    int leftIdx = parent*2;
+    int rightIdx = parent*2 + 1;
     bool vLeftIdx = leftIdx-1 < size();
     bool vRightIdx = rightIdx-1 < size();
     
     if(vLeftIdx || vRightIdx) {
       int idx=0;
       if(vLeftIdx && vRightIdx) {
-        idx = List<Pair<K,T>::operator[](leftIdx-1).first < 
-        List<Pair<K,T>::operator[](rightIdx-1).first ? leftIdx : rightIdx;
+        idx = List<Pair<K,T>>::operator[](leftIdx-1).first < 
+        List<Pair<K,T>>::operator[](rightIdx-1).first ? leftIdx : rightIdx;
       }
       else {
         idx = vLeftIdx ? leftIdx : rightIdx;
       }
-      if((*this)[idx-1].first >= (*this)[parent-1].first) { 
+
+      K currentKey = List<Pair<K,T>>::operator[](idx-1).first;
+      K parentKey = List<Pair<K,T>>::operator[](parent-1).first; 
+      if(currentKey < parentKey) { 
         List<Pair<K,T>>::swap(idx-1, parent-1); 
         parent = idx;
       }
