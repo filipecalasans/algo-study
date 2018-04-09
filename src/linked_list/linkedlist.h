@@ -26,7 +26,7 @@ struct LinkedListData{
 
 	std::unique_ptr<Node> root;
 	Node *last = nullptr;
-	int size = 0;
+	size_t size = 0;
 
 	LinkedListData() {
 		root = std::make_unique<Node>();
@@ -76,7 +76,7 @@ class LinkedList {
 	public:
 		
 		LinkedList() : d(std::make_shared<LinkedListData<T>>()){}
-		inline int size() { return d->size; }
+		inline size_t size() { return d->size; }
 		inline bool isEmpty() { return d->size == 0; }
 		inline bool operator==(const LinkedList<T>& other) { return (other.d == d); }
 		inline LinkedList<T>& operator=(const LinkedList<T>& other) {

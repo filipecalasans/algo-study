@@ -71,12 +71,12 @@ namespace Algos { //TODO: implement using smart pointers.
     void remove(int i);
     void remove(int i, int n);
     void move(int from, int to);
-    inline int size() const { return d->end - d->begin;}
+    inline size_t size() const { return d->end - d->begin;}
     inline bool isEmpty() const { return d->end == d->begin; }
     inline T** at(int i) const { return d->array + d->begin + i; }
     inline T** begin() const { return d->array + d->begin; }
     inline T** end() const { return d->array + d->end; }
-    inline int grow(int size) { return size * 2; }
+    inline int grow(size_t size) { return size * 2; }
   };
 
   template <class T>
@@ -106,9 +106,9 @@ namespace Algos { //TODO: implement using smart pointers.
 
       bool operator==(const List<T>& other) const { d == other.d; }
       inline bool operator!=(const List<T> &other) const { return !(d == other.d); }
-      inline int size() const { return d->size(); }
+      inline size_t size() const { return d->size(); }
       inline bool isEmpty() const { return d->size() == 0; }
-      inline void reserve(int size) { d->realloc(size); }
+      inline void reserve(size_t size) { d->realloc(size); }
       inline void swap(int i, int j) { d->swap(i,j); }
 
       //Copy based operations.

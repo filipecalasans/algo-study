@@ -21,8 +21,8 @@ class Vector : public Array<T> {
 public:
 
       Vector() : Array<T>() { }
-      explicit Vector(int _size);
-      explicit Vector(int size, const T &t);
+      explicit Vector(size_t size);
+      explicit Vector(size_t size, const T &t);
 		  Vector(Vector<T>& a) { this->_data = a.data(); }
 
 		  void append(const T& value);
@@ -38,10 +38,10 @@ public:
 
 // ######################### Template Implementation  ##############################
 template <class T>
-Algos::Vector<T>::Vector(int reserve_size) : Array<T>(reserve_size){ (Array<T>::_data)->resize(0); }
+Algos::Vector<T>::Vector(size_t reserve_size) : Array<T>(reserve_size){ (Array<T>::_data)->resize(0); }
 
 template <class T>
-Algos::Vector<T>::Vector(int size, const T& t) : Array<T>(size, t){ }
+Algos::Vector<T>::Vector(size_t size, const T& t) : Array<T>(size, t){ }
 
 template <class T>
 void Algos::Vector<T>::append(const T& value) {

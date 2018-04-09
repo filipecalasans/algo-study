@@ -55,7 +55,7 @@ class Heap : protected List<Pair<K,T>> {
       (heap_order==other.heap_order); }
     inline bool operator!=(const Heap<K,T> &other) const { return (this->d != other.d) || 
       (heap_order!=other.heap_order); }
-    inline int size() const { return List<Pair<K,T>>::size(); }
+    inline size_t size() const { return List<Pair<K,T>>::size(); }
     inline bool isEmpty() const { return List<Pair<K,T>>::isEmpty(); }
     inline void reserve(int size) { List<Pair<K,T>>::reserve(size); }
 

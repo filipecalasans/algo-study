@@ -96,7 +96,7 @@ public:
 			  return (*_data.get())[i];
 		  } 
       
-      int size() const { return _data->size(); }
+      size_t size() const { return _data->size(); }
        
       Array& operator=(const Array& other) { 
         _data = other.data();          
