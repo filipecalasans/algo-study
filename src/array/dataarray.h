@@ -66,8 +66,8 @@ public:
         _data = std::make_unique<T[]>(_allocated_size);
       }
 
-      explicit DataArray(int _size);
-      explicit DataArray(int size, const T &t);
+      explicit DataArray(size_t _size);
+      explicit DataArray(size_t size, const T &t);
       explicit DataArray(const DataArray& data_array) : 
          DataArray(data_array.size()) { 
             this->copyFrom(data_array); 
@@ -83,7 +83,7 @@ public:
         return _data[i]; 
       }
       
-      inline int size() const { return _size; }
+      inline size_t size() const { return _size; }
 
       void copyFrom(const DataArray<T>& other);
 
@@ -94,11 +94,11 @@ public:
          return true;
       }
 
-      bool increase(int new_size);
-      bool decrease(int new_size);
+      bool increase(size_t new_size);
+      bool decrease(size_t new_size);
 
-	    int allocatedSize() { return _allocated_size; }
-      bool reserve(int reserve_size) {
+	    size_t allocatedSize() { return _allocated_size; }
+      bool reserve(size_t reserve_size) {
         if(reserve_size < _allocated_size) { return true; }
         allocate(reserve_size, _size);
       }
@@ -119,12 +119,12 @@ public:
 
   protected:
 
-      bool allocate(int allocate_intent, int new_size);
+      bool allocate(size_t allocate_intent, size_t new_size);
    
    private:
       std::unique_ptr <T[]> _data;
-		  int _size;
-		  int _allocated_size;
+		  size_t _size;
+		  size_t _allocated_size;
       
 };
 
@@ -132,7 +132,7 @@ public:
 
 // ######################### Template Implementation  ##############################
 template <class T>
-Algos::DataArray<T>::DataArray(int size) : _size(size), _allocated_size(DEFAULT_ALLOCATION) {
+Algos::DataArray<T>::DataArray(size_t size) : _size(size), _allocated_size(DEFAULT_ALLOCATION) {
   if(_size > _allocated_size) {
     _allocated_size = 2*_size;
   }
@@ -141,8 +141,8 @@ Algos::DataArray<T>::DataArray(int size) : _size(size), _allocated_size(DEFAULT_
 }
 
 template <class T>
-Algos::DataArray<T>::DataArray(int size, const T &t) : DataArray(size){
-   for(int i=0; i<_size; i++) {
+Algos::DataArray<T>::DataArray(size_t size, const T &t) : DataArray(size){
+   for(size_t i=0; i<_size; i++) {
       _data[i] = t;
 	}
 }
@@ -156,19 +156,19 @@ void Algos::DataArray<T>::copyFrom(const DataArray<T>& other) {
 }
 
 template <class T>
-bool Algos::DataArray<T>::increase(int new_size) {
+bool Algos::DataArray<T>::increase(size_t new_size) {
 	if(new_size <= size()) { return false; }
   if(new_size <= _allocated_size) {
 		_size = new_size;
 		return true;
 	}
 
-	int allocate_intent = 2*new_size;
+	size_t allocate_intent = 2*new_size;
   return allocate(allocate_intent, new_size);
 }
 
 template <class T>
-bool Algos::DataArray<T>::decrease(int new_size) {
+bool Algos::DataArray<T>::decrease(size_t new_size) {
   if(new_size >= _size) { return false; }
 	// Only deallocate if new size is less then half of the current size
    if(new_size > _allocated_size/2) { 
@@ -180,7 +180,7 @@ bool Algos::DataArray<T>::decrease(int new_size) {
 }
 
 template <class T>
-bool Algos::DataArray<T>::allocate(int allocate_intent, int new_size) {
+bool Algos::DataArray<T>::allocate(size_t allocate_intent, size_t new_size) {
    std::unique_ptr<T[]> new_data = std::make_unique<T[]>(allocate_intent);
    if(!new_data) { return false; }
 
