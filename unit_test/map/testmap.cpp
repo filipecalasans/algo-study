@@ -1,6 +1,6 @@
 
 #include <iostream>
-
+#include <string>
 #include "map/rbtree.h"
 #include "map/map.h"
 #include "gtest/gtest.h"
@@ -33,6 +33,10 @@ struct DataTest {
          boolean == other.boolean &&
          txt == other.txt
       );
+   }
+
+   std::string toString() const {
+      return std::to_string(integer);
    }
 };
 
@@ -79,4 +83,30 @@ TEST(RBTree, insert) {
   
    EXPECT_EQ(l.size(), 2);
 
+}
+
+TEST(RBTree, insert_print) {
+   RBTree<int,DataTest> l;
+   const int size = 9;
+    
+   EXPECT_EQ(l.size(), 0);
+
+   DataTest data[size] = {
+        { 10, true, "abc" },
+        { 0, true, "abc" },
+        { 9, true, "abc" },
+        { 3, true, "abc" },
+        { 1, true, "abc" },
+        { 23, true, "abc" },
+        { 27, true, "abc" },
+        { 13, true, "abc" },
+        { 6, false,"cca" },
+      };
+    
+    for(int i=0; i<size; i++) {
+      l.insertData(data[i].integer, data[i]);
+    }
+
+   EXPECT_EQ(l.size(), 9);
+   l.assert_inorder();
 }

@@ -11,6 +11,7 @@
 
 #include "global/assert.h"
 #include "list/list.h"
+#include "stack/stack.h"
 
 /* 
  * Algos Implementation is implicit-sharing.
@@ -132,7 +133,7 @@ RBTree<K,T>::insertNode(const K& k, const T& t) {
   
   if(root.get() == nullptr) {
     root = std::make_unique<Node>();
-    root->key - k;
+    root->key = k;
     root->value = t;
     ++_size;
     return root.get();
@@ -140,7 +141,7 @@ RBTree<K,T>::insertNode(const K& k, const T& t) {
   
   Node *n = root.get();
   while(n!=nullptr) { //
-    if(n->key < k) {
+    if(k < n->key) {
       if(n->leftChild.get() == nullptr) {
         _size++;
         return n->createNode(k, t, true);
@@ -162,7 +163,26 @@ RBTree<K,T>::insertNode(const K& k, const T& t) {
 
 template <class K, class T>
 void RBTree<K,T>::assert_inorder() {
+  bool done = false;
   //user stack  
+  Stack<Node *> s;
+  s.reserve(size());
+  
+  Node *n = root.get();
+  while (!done) {
+    if(n!=nullptr) {
+      s.push(n);
+      n = n->leftChild.get();
+    }
+    else {
+      if(!s.isEmpty()) {
+        n = s.pop();
+        std::cout << n->value.toString() << std::endl;
+        n = n->rightChild.get();
+      }
+      else { done = true; }
+    }
+  }
 }
 
 }
