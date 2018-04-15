@@ -85,7 +85,7 @@ TEST(RBTree, insert) {
 
 }
 
-TEST(RBTree, insert_print) {
+TEST(RBTree, insert_random) {
    RBTree<int,DataTest> l;
    const int size = 9;
     
@@ -108,6 +108,41 @@ TEST(RBTree, insert_print) {
     }
 
    EXPECT_EQ(l.size(), 9);
-   //l.assert_inorder();
+   EXPECT_EQ(l.mostLeftNode->value, data[1]);
+}
+
+TEST(RBTree, next_node) {
+   RBTree<int,DataTest> l;
+   const int size = 9;
+    
+   EXPECT_EQ(l.size(), 0);
+
+   DataTest data[size] = {
+        { 10, true, "abc" },
+        { 0, true, "abc" },
+        { 9, true, "abc" },
+        { 3, true, "abc" },
+        { 1, true, "abc" },
+        { 23, true, "abc" },
+        { 27, true, "abc" },
+        { 13, true, "abc" },
+        { 6, false,"cca" },
+      };
+    
+  int seq[size] = {0, 1, 3, 6, 9, 10, 13, 23, 27};
+
+  for(int i=0; i<size; i++) {
+    l.insertData(data[i].integer, data[i]);
+  }
+
+  EXPECT_EQ(l.size(), 9);
   
+ const RBTree<int, DataTest>::Node *n = l.mostLeftNode;
+  
+  int i=0;
+  while(n!=nullptr) {
+    EXPECT_EQ(seq[i], n->value.integer);
+    n = n->nextNode();
+  }
+
 }
