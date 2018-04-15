@@ -34,3 +34,6 @@
 build/
 lib/
 .vscode/
+
+#vim
+.*.swp

@@ -137,12 +137,21 @@ TEST(RBTree, next_node) {
 
   EXPECT_EQ(l.size(), 9);
   
- const RBTree<int, DataTest>::Node *n = l.mostLeftNode;
+  const RBTree<int, DataTest>::Node *n = l.mostLeftNode;
   
   int i=0;
   while(n!=nullptr) {
-    EXPECT_EQ(seq[i], n->value.integer);
+    EXPECT_EQ(seq[i++], n->value.integer);
     n = n->nextNode();
+    if(i>=9) { break; }
+  }
+  
+  i = 9;
+  n = l.getRightMostNode();
+  while(n!=nullptr) {
+    EXPECT_EQ(seq[--i], n->value.integer);
+    n = n->previousNode();
+    if(i<0) { break; }
   }
 
 }

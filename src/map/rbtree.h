@@ -56,7 +56,7 @@ struct RBTree {
 
     const Node *previousNode() const; 
     const Node *nextNode() const; 
-    
+
  };
   
   
@@ -74,7 +74,7 @@ struct RBTree {
   
   void insertData(const K& k, const T& t);
   Node* insertNode(const K& k, const T& t);
-  
+  const Node* getRightMostNode() const;
   void cleanup();
   void assert_inorder();
 
@@ -197,15 +197,15 @@ const typename RBTree<K,T>::Node *
 RBTree<K,T>::Node::previousNode() const {
   
   const Node *n = this;
-  if(n->rightChild->get()) {
-    n = n->rightChild.get();
-    while(n->leftChild.get()) {
-      n = n->leftChild.get();
+  if(n->leftChild.get()) {
+    n = n->leftChild.get();
+    while(n->rightChild.get()) {
+      n = n->rightChild.get();
     }
   }
   else {
     const Node* y = n->parent;
-    while(n && n == y->rightChild.get()) {
+    while(y && n == y->leftChild.get()) {
       n = y;
       y = n->parent;
     }
@@ -217,9 +217,36 @@ RBTree<K,T>::Node::previousNode() const {
 template <class K, class T>
 const typename RBTree<K,T>::Node *
 RBTree<K,T>::Node::nextNode() const {
+  
+  const Node *n = this;
+  if(n->rightChild.get()) {
+    n = n->rightChild.get();
+    while(n->leftChild.get()) {
+      n = n->leftChild.get();
+    }
+  }
+  else {
+    const Node* y = n->parent;
+    while(y && n == y->rightChild.get()) {
+      n = y;
+      y = n->parent;
+    }
+    n = y;
+  }
+  return n;
+}
 
 
-  return nullptr;
+template <class K, class T>
+const typename RBTree<K,T>::Node *
+RBTree<K,T>::getRightMostNode() const {
+  if(_size == 0) { return nullptr; }
+ 
+  Node *n = root.get();
+  while(n->rightChild.get()) {
+    n = n->rightChild.get();
+  }
+  return n;
 }
 
 
