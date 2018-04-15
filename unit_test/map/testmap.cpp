@@ -109,5 +109,5 @@ TEST(RBTree, insert_print) {
 
    EXPECT_EQ(l.size(), 9);
    //l.assert_inorder();
-   EXPECT_EQ(l.mostLeftNode->value.integer, 0);
+  
 }
