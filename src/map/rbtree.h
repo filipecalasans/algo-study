@@ -44,16 +44,18 @@ struct RBTree {
     Node* createNode(const K& k, const T& t, bool onLeftChild) {
       if(onLeftChild) {
         leftChild = std::make_unique<Node>(k, t);
+        leftChild->parent = this;
         return leftChild.get();
       }
       else {
         rightChild = std::make_unique<Node>(k, t);
+        rightChild->parent = this;
         return rightChild.get();
       }
     }
 
-    const Node *previousNode(Node *n) const; //TODO
-    const Node *nextNode(Node *n) const; //TODO
+    const Node *previousNode() const; 
+    const Node *nextNode() const; 
     
  };
   
@@ -136,6 +138,7 @@ RBTree<K,T>::insertNode(const K& k, const T& t) {
     root->key = k;
     root->value = t;
     ++_size;
+    mostLeftNode = root.get();
     return root.get();
   }
   
@@ -144,7 +147,11 @@ RBTree<K,T>::insertNode(const K& k, const T& t) {
     if(k < n->key) {
       if(n->leftChild.get() == nullptr) {
         _size++;
-        return n->createNode(k, t, true);
+        Node *nn = n->createNode(k, t, true);
+        if(nn == mostLeftNode->leftChild.get()) {
+          mostLeftNode = nn;
+        }
+        return nn;
       }
       n = n->leftChild.get();
     }
@@ -184,6 +191,37 @@ void RBTree<K,T>::assert_inorder() {
     }
   }
 }
+
+template <class K, class T>
+const typename RBTree<K,T>::Node *
+RBTree<K,T>::Node::previousNode() const {
+  
+  const Node *n = this;
+  if(n->rightChild->get()) {
+    n = n->rightChild.get();
+    while(n->leftChild.get()) {
+      n = n->leftChild.get();
+    }
+  }
+  else {
+    const Node* y = n->parent;
+    while(n && n == y->rightChild.get()) {
+      n = y;
+      y = n->parent;
+    }
+    n = y;
+  }
+  return n;
+}
+
+template <class K, class T>
+const typename RBTree<K,T>::Node *
+RBTree<K,T>::Node::nextNode() const {
+
+
+  return nullptr;
+}
+
 
 }
 
