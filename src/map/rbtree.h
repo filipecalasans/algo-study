@@ -40,6 +40,22 @@ struct RBTree {
       if(parent == nullptr) { return nullptr; }
       return parent->parent;
     }
+
+    Node *grandParent() {
+      if(parent == nullptr) { return nullptr; }
+      if(parent->parent == nullptr) { return nullptr; }
+      return parent->parent;
+    }
+
+    Node *uncle() {
+      Node *p = parent;
+      Node *g = grandParent();
+      if(g == nullptr) { return nullptr; }
+      if(g->leftChild.get() == this) {
+        return g->rightChild.get();
+      }
+      return g->leftChild.get();
+    }
     
     Node* createNode(const K& k, const T& t, bool onLeftChild) {
       if(onLeftChild) {
@@ -74,8 +90,12 @@ struct RBTree {
   
   void insertData(const K& k, const T& t);
   Node* insertNode(const K& k, const T& t);
+ 
   const Node* getRightMostNode() const;
+  void verifyRepairTree(Node *n);
+
   void cleanup();
+  
   void assert_inorder();
 
 };
@@ -123,9 +143,7 @@ void RBTree<K,T>::insertData(const K& k, const T& t) {
   
   Node *n = insertNode(k, t);
 
-  if(size() == 1) { return; } 
-  
-  //do rbtree proprty check
+  verifyRepairTree(n);
 
 }
 
@@ -248,6 +266,25 @@ RBTree<K,T>::getRightMostNode() const {
   }
   return n;
 }
+
+
+template <class K, class T>
+void RBTree<K,T>::verifyRepairTree(Node *n) {
+  
+  if(n->parent == nullptr) {
+    n->red = false;
+  } else if(n->parent->red == false) {
+
+  } else if(n->uncle() && n->uncle()->red) {
+  
+  } else {
+
+  }
+
+
+}
+
+
 
 
 }
