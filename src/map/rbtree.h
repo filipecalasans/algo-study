@@ -51,7 +51,7 @@ struct RBTree {
       Node *p = parent;
       Node *g = grandParent();
       if(g == nullptr) { return nullptr; }
-      if(g->leftChild.get() == this) {
+      if(g->leftChild.get() == p) {
         return g->rightChild.get();
       }
       return g->leftChild.get();
@@ -99,43 +99,83 @@ struct RBTree {
   void assert_inorder();
 
 };
-
+//
+//                                      20
+//                                     /  \
+//          20                        10   40                 
+//       /     \                    /   \
+/n->  (8)    40                 (8)    11  
+//    /   \                      /  \        
+//   5    10 <-nnew =>          5   9                            
+//  / \  / \                    / \         
+// 2   6 9  11                 2   6          
+//
 template <class K, class T>
 void RBTree<K,T>::rotateLeft(Node *n) {
-  ALGO_ASSERT(n->right != nullptr, "Cannot rotateRight leaf nodes.");
+  ALGO_ASSERT(n->rightChild != nullptr, "Cannot rotateRight leaf nodes.");
   std::unique_ptr<Node> nnew = std::move(n->rightChild); //get the ownership
   n->rightChild = std::move(nnew->leftChild);
-  n->rightChild->parent = n;
+  if(n->rightChild != nullptr) {
+    n->rightChild->parent = n;
+  }
+
   nnew->parent = n->parent;
   n->parent = nnew.get();
   if(root.get() == n) {
+    nnew->leftChild = std::move(root);
     root = std::move(nnew);
+  } 
+  else {
+    //n is a left node of its parent (at this point parents are already switched)
+    if(nnew->parent->leftChild.get() == n) {
+        nnew->leftChild = std::move(nnew->parent->leftChild);
+        nnew->parent->leftChild = std::move(nnew);
+    }
+    else { //n is a right node of its parent
+      nnew->leftChild = std::move(nnew->parent->rightChild);
+      nnew->parent->rightChild = std::move(nnew);
+    }
   }
-  else if(nnew->parent->lefChild.get() == n) { //update the sub-tree ownership
-    nnew->parent->leftChild = std::move(nnew);
-  }
-  else { 
-    nnew->parent->rightChild = std::move(nnew);
-  }
+
 }
 
+
+//            20
+//           /  \                             
+//    n->   10   40        20                
+//         /   \         /   \                               
+//        /    11      (8)     40       
+// nnew (8)           /   \                       
+//     /  \           5    10                                         
+//     5   9         / \  / \                     
+//    / \           2   6 9  11                     
+//   2   6      
 template <class K, class T>
 void RBTree<K,T>::rotateRight(Node *n) {
-  ALGO_ASSERT(n->left != nullptr, "Cannot rotateLeft leaf nodes.");
+  ALGO_ASSERT(n->leftChild != nullptr, "Cannot rotateLeft leaf nodes.");
   std::unique_ptr<Node> nnew = std::move(n->leftChild);
   n->leftChild = std::move(nnew->rightChild);
-  n->leftChild->parent = n;
+  if(n->leftChild != nullptr) {
+    n->leftChild->parent = n;
+  }
+  
   nnew->parent = n->parent;
   n->parent = nnew.get();
   if(root.get() == n) {
+    nnew->leftChild = std::move(root);
     root = std::move(nnew);
   }
-  else if(nnew->parent->leftChild.get() == n) { //update the sub-tree ownership
-    nnew->parent->leftChild = std::move(nnew);
+  else {
+    if(nnew->parent->leftChild.get() == n) {//n is a left node of its parent
+        nnew->rightChild = std::move(nnew->parent->leftChild);
+        nnew->parent->leftChild = std::move(nnew);
+    }
+    else { //n is a right node of its parent
+      nnew->rightChild = std::move(nnew->parent->rightChild);
+      nnew->parent->rightChild = std::move(nnew);
+    }
   }
-  else { 
-    nnew->parent->rightChild = std::move(nnew);
-  }
+
 }
 
 template <class K, class T>
@@ -194,6 +234,9 @@ void RBTree<K,T>::assert_inorder() {
   s.reserve(size());
   
   Node *n = root.get();
+  
+  if(n == nullptr) { return; }
+
   while (!done) {
     if(n!=nullptr) {
       s.push(n);
@@ -271,21 +314,60 @@ RBTree<K,T>::getRightMostNode() const {
 template <class K, class T>
 void RBTree<K,T>::verifyRepairTree(Node *n) {
   
-  if(n->parent == nullptr) {
-    n->red = false;
-  } else if(n->parent->red == false) {
-
-  } else if(n->uncle() && n->uncle()->red) {
+  if(n->parent == nullptr) { //n is root. root is always black.
+    n->red = false; 
+  } 
+  else if(n->parent->red == false) { //n's parent is black
+    return; 
+  } 
+  else if(n->uncle() && n->uncle()->red) { //n's parent and uncle are red
+    n->parent->red = false;
+    n->uncle()->red = false;
+    n->parent->parent->red = true;
+    verifyRepairTree(n->parent->parent); //verify if n's grandparent violates any property (root is black and a red node has 2 black children).
+  } 
+  else {
+    //   g-> |B|
+    //      /   \
+    // p-> R     B
+    //      \   / \
+    //      (R)
+    //       n
+    // Rotate (R)->parent to the left, then |B| to the right.
   
-  } else {
 
+    Node *g = n->parent->parent;
+    Node *p = n->parent;
+    
+    if(g->leftChild && n == g->leftChild->rightChild.get()) {
+      rotateLeft(p);    
+      n->red = false; //two rotations. N will be at g's position after the 2 rotations (root always black)
+    }
+    //       |B| <-g
+    //      /   \
+    //     B     R <-p
+    //    / \   /
+    //        (R)
+    //         n
+    // Rotate (R)->parent to the right, then |B| to the left.
+    else if(g->rightChild &&  n == g->rightChild->leftChild.get()) {
+      rotateRight(p);    
+      n->red = false; //two rotations. N will be at g's position after the 2 rotations (root always black)
+    }
+    else {
+      n->parent->red = false; //only one rotation. N's parent will be at g's position after nxt rotation
+    }
+
+    if(n == n->parent->leftChild.get()) {
+      rotateRight(g);
+    }
+    else {
+      rotateLeft(g);
+    }
+    g->red = true;
   }
 
-
 }
-
-
-
 
 }
 
