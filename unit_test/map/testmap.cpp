@@ -38,7 +38,14 @@ struct DataTest {
    std::string toString() const {
       return std::to_string(integer);
    }
+
+  
 };
+
+std::ostream& operator<< (std::ostream& os, const DataTest& d) {
+  os << "{" << d.integer << "," << d.boolean << "," << d.txt << "}";
+  return os;
+}
 
 #define TEST_SIZE 10
 
@@ -105,6 +112,8 @@ TEST(RBTree, insert_random) {
     
     for(int i=0; i<size; i++) {
       l.insertData(data[i].integer, data[i]);
+      l.print_in_order();
+      std::cout << std::endl;
     }
 
    EXPECT_EQ(l.size(), 9);

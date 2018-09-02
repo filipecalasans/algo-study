@@ -51,7 +51,7 @@ struct LinkedListData{
 		if(n==nullptr) { return; }
 		while(n) {
 			#ifdef DEBUG_TXT 
-				if(n->next.get())
+				if(n->next)
 					std::cout << "Release {n->next()} [" << ++nodeCount  << 
 					"]: "<< n->next.get() << std::endl;
 			#endif

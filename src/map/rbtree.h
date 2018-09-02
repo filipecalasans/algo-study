@@ -19,8 +19,6 @@
  */
 namespace Algos { 
 
-//typedef typename RBTree<K,T>::Node Node;
-
 template <class K, class T>
 struct RBTree {
   
@@ -72,7 +70,8 @@ struct RBTree {
 
     const Node *previousNode() const; 
     const Node *nextNode() const; 
-
+    
+    inline bool isLeaf() { return leftChild == nullptr && rightChild == nullptr; } 
  };
   
   
@@ -90,7 +89,12 @@ struct RBTree {
   
   void insertData(const K& k, const T& t);
   Node* insertNode(const K& k, const T& t);
- 
+  
+  Node *find(const K& k);
+
+  void deleteNode(const K& k);
+  void deleteNode(Node *n);
+
   const Node* getRightMostNode() const;
   void verifyRepairTree(Node *n);
 
@@ -98,7 +102,21 @@ struct RBTree {
   
   void assert_inorder();
 
+  void print_in_order() { print_in_order_rec(root.get()); }
+
+  void print_in_order_rec(Node *n);
+
 };
+
+template <class K, class T>
+void RBTree<K,T>::print_in_order_rec(Node *n) {
+
+  if(n == nullptr) { return; }
+
+  print_in_order_rec(n->leftChild.get());
+  std::cout << n->value << ", ";
+  print_in_order_rec(n->rightChild.get());
+}
 //
 //                                      20
 //                                     /  \
@@ -155,17 +173,20 @@ void RBTree<K,T>::rotateRight(Node *n) {
   ALGO_ASSERT(n->leftChild != nullptr, "Cannot rotateLeft leaf nodes.");
   std::unique_ptr<Node> nnew = std::move(n->leftChild);
   n->leftChild = std::move(nnew->rightChild);
+  
   if(n->leftChild != nullptr) {
     n->leftChild->parent = n;
   }
   
   nnew->parent = n->parent;
   n->parent = nnew.get();
+   
   if(root.get() == n) {
-    nnew->leftChild = std::move(root);
-    root = std::move(nnew);
+    nnew->rightChild = std::move(root);
+    root = std::move(nnew); 
   }
   else {
+    //else/if pair to change ownership
     if(nnew->parent->leftChild.get() == n) {//n is a left node of its parent
         nnew->rightChild = std::move(nnew->parent->leftChild);
         nnew->parent->leftChild = std::move(nnew);
@@ -317,10 +338,10 @@ void RBTree<K,T>::verifyRepairTree(Node *n) {
   if(n->parent == nullptr) { //n is root. root is always black.
     n->red = false; 
   } 
-  else if(n->parent->red == false) { //n's parent is black
+  else if(isRed(n->parent) == false) { //n's parent is black
     return; 
   } 
-  else if(n->uncle() && n->uncle()->red) { //n's parent and uncle are red
+  else if(n->uncle() && isRed(n->uncle())) { //n's parent and uncle are red
     n->parent->red = false;
     n->uncle()->red = false;
     n->parent->parent->red = true;
@@ -331,8 +352,8 @@ void RBTree<K,T>::verifyRepairTree(Node *n) {
     //      /   \
     // p-> R     B
     //      \   / \
-    //      (R)
-    //       n
+    // n -> (R)
+    //       
     // Rotate (R)->parent to the left, then |B| to the right.
   
 
@@ -340,15 +361,15 @@ void RBTree<K,T>::verifyRepairTree(Node *n) {
     Node *p = n->parent;
     
     if(g->leftChild && n == g->leftChild->rightChild.get()) {
-      rotateLeft(p);    
+      rotateLeft(p);
       n->red = false; //two rotations. N will be at g's position after the 2 rotations (root always black)
     }
     //       |B| <-g
     //      /   \
     //     B     R <-p
     //    / \   /
-    //        (R)
-    //         n
+    //        (R) <- n
+    //         
     // Rotate (R)->parent to the right, then |B| to the left.
     else if(g->rightChild &&  n == g->rightChild->leftChild.get()) {
       rotateRight(p);    
@@ -365,6 +386,48 @@ void RBTree<K,T>::verifyRepairTree(Node *n) {
       rotateLeft(g);
     }
     g->red = true;
+  }
+}
+
+template <class K, class T>
+typename RBTree<K,T>::Node* 
+RBTree<K,T>::find(const K& k){ 
+  Node *n = root.get();
+  while(n != nullptr) {
+    if(n->key == k) { return n; }
+    if(n->key < k) {
+      n = n->rightChild.get();
+    }
+    else {
+      n = n->leftChild.get();
+    }
+  }
+  return n;
+}
+
+template <class K, class T>
+void RBTree<K,T>::deleteNode(const K& k){ 
+  deleteNode(find(k));
+}
+
+template <class K, class T>
+void RBTree<K,T>::deleteNode(Node *n){ 
+  if(n == nullptr) { return; } 
+  // update left most node if n is it.
+  if(n->isLeaf()) { 
+    if(root == n) {
+      root.reset();
+    }
+    else if(n->parent->rightChild == n ) {
+      n->parent->rightChild.reset();
+    }
+    else {
+      n->parent->leftChild.reset();
+    }
+  }
+  else {
+
+
   }
 
 }
