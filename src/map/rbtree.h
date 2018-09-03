@@ -72,6 +72,20 @@ struct RBTree {
     const Node *nextNode() const; 
     
     inline bool isLeaf() { return leftChild == nullptr && rightChild == nullptr; } 
+   
+    void print(){ print("", true); }
+    
+    protected:
+      //https://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram
+      void print(std::string prefix, bool isTail) {
+        std::cout << prefix + (isTail ? "└── " : "├── ") << key << "[" << (red ? "R" : "B") << "]" << std::endl;
+        if(leftChild) {
+          leftChild->print(prefix + (isTail ? "    " : "|   "), false);
+        }
+        if(rightChild) {
+          rightChild->print(prefix + (isTail ? "    " : "|   "), true);
+        }  
+      }
  };
   
   
@@ -83,7 +97,7 @@ struct RBTree {
   Node *mostLeftNode;
   
   inline size_t size() { return _size; }
-  inline bool isRed(Node *n) { return n!=nullptr ? false : n->red;  }
+  inline bool isRed(Node *n) { return n == nullptr ? false : n->red;  }
   void rotateLeft(Node *n);
   void rotateRight(Node *n);
   
@@ -96,6 +110,8 @@ struct RBTree {
   void deleteNode(Node *n);
 
   const Node* getRightMostNode() const;
+  Node* getLeftMostNode();
+  
   void verifyRepairTree(Node *n);
 
   void cleanup();
@@ -325,12 +341,23 @@ RBTree<K,T>::getRightMostNode() const {
   if(_size == 0) { return nullptr; }
  
   Node *n = root.get();
-  while(n->rightChild.get()) {
+  while(n->rightChild) {
     n = n->rightChild.get();
   }
   return n;
 }
 
+template <class K, class T>
+typename RBTree<K,T>::Node *
+RBTree<K,T>::getLeftMostNode() {
+  if(_size == 0) { return nullptr; }
+ 
+  Node *n = root.get();
+  while(n->leftChild) {
+    n = n->rightChild.get();
+  }
+  return n;
+}
 
 template <class K, class T>
 void RBTree<K,T>::verifyRepairTree(Node *n) {
@@ -408,28 +435,93 @@ RBTree<K,T>::find(const K& k){
 template <class K, class T>
 void RBTree<K,T>::deleteNode(const K& k){ 
   deleteNode(find(k));
+
 }
 
 template <class K, class T>
 void RBTree<K,T>::deleteNode(Node *n){ 
   if(n == nullptr) { return; } 
   // update left most node if n is it.
-  if(n->isLeaf()) { 
-    if(root == n) {
+  bool updateLeftMost = n->key == mostLeftNode->key;
+  --_size;
+
+  if(n->isLeaf()) { //properties persist
+    if(root.get() == n) {
       root.reset();
     }
-    else if(n->parent->rightChild == n ) {
+    else if(n->parent->rightChild.get() == n) {
       n->parent->rightChild.reset();
     }
     else {
       n->parent->leftChild.reset();
     }
   }
-  else {
-
-
+  else if(n->leftChild && n->rightChild) { //we have to verify if the properties persist.
+    const Node *successor = n->nextNode();
+    if(root.get() == n) {
+      std::unique_ptr<Node> ptrSuccessor;
+      if(successor->parent->rightChild.get() == successor) {
+        root = std::move(successor->parent->rightChild);
+      }
+      else {
+        root = std::move(successor->parent->leftChild);
+      }
+      root->parent = nullptr;
+    }
+    else {
+      bool isRight = n->parent->rightChild.get() == n;
+      std::unique_ptr<Node> ptrSuccessor;
+      if(successor->parent->rightChild.get() == successor) {
+        ptrSuccessor = std::move(successor->parent->rightChild);
+      }
+      else {
+        ptrSuccessor = std::move(successor->parent->leftChild);
+      }
+      ptrSuccessor->parent = n->parent;
+      if(isRight) {
+        n->parent->rightChild = std::move(ptrSuccessor);
+      }
+      else {
+        n->parent->leftChild = std::move(ptrSuccessor);
+      }
+    }
+  }
+  else if(n->leftChild) { //we have to verify if the properties persist
+    Node *newNode = n->leftChild.get();
+    if(root.get() == n) {
+      root = std::move(n->leftChild); 
+    }
+    else {
+      bool isRight = n->parent->rightChild.get() == n;
+      n->leftChild->parent = n->parent;
+      if(isRight) {
+        n->parent->rightChild = std::move(n->leftChild); 
+      }
+      else {
+        n->parent->leftChild = std::move(n->rightChild);
+      }
+    }
+  }
+  else if(n->parent->rightChild){ //we have to verify if the properties persist
+    Node *newNode = n->rightChild.get();
+    if(root.get() == n) {
+      root = std::move(n->rightChild); 
+    }
+    else {
+      bool isRight = n->parent->rightChild.get() == n;
+      n->rightChild->parent = n->parent;
+      if(isRight) {
+        n->parent->rightChild = std::move(n->rightChild);
+      }
+      else {
+        n->parent->rightChild = std::move(n->rightChild);
+      } 
+    }
   }
 
+  if(updateLeftMost) {
+    mostLeftNode = getLeftMostNode();    
+  }
 }
 
 }

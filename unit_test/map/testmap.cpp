@@ -112,8 +112,9 @@ TEST(RBTree, insert_random) {
     
     for(int i=0; i<size; i++) {
       l.insertData(data[i].integer, data[i]);
-      l.print_in_order();
-      std::cout << std::endl;
+      std::cout << "=============================" << std::endl;
+      l.root->print();
+      std::cout << "=============================" << std::endl;
     }
 
    EXPECT_EQ(l.size(), 9);
@@ -163,4 +164,38 @@ TEST(RBTree, next_node) {
     if(i<0) { break; }
   }
 
+}
+
+TEST(RBTree, remove_random) {
+   RBTree<int,DataTest> l;
+   const int size = 9;
+    
+   EXPECT_EQ(l.size(), 0);
+
+   DataTest data[size] = {
+        { 10, true, "abc" },
+        { 0, true, "abc" },
+        { 9, true, "abc" },
+        { 3, true, "abc" },
+        { 1, true, "abc" },
+        { 23, true, "abc" },
+        { 27, true, "abc" },
+        { 13, true, "abc" },
+        { 6, false,"cca" },
+      };
+    
+  for(int i=0; i<size; i++) {
+    l.insertData(data[i].integer, data[i]);
+    std::cout << "=============================" << std::endl;
+    l.root->print();
+    std::cout << "=============================" << std::endl;
+  }
+  
+  l.deleteNode(3);
+  std::cout << "=============================" << std::endl;
+  l.root->print();
+  std::cout << "=============================" << std::endl;
+
+  //EXPECT_EQ(l.mostLeftNode->value, data[1]);
+  EXPECT_EQ(l.size(), 8);
 }
