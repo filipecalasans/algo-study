@@ -147,7 +147,7 @@ TEST(RBTree, next_node) {
 
   EXPECT_EQ(l.size(), 9);
   
-  const RBTree<int, DataTest>::Node *n = l.mostLeftNode;
+  RBTree<int, DataTest>::Node *n = l.mostLeftNode;
   
   int i=0;
   while(n!=nullptr) {
@@ -186,16 +186,24 @@ TEST(RBTree, remove_random) {
     
   for(int i=0; i<size; i++) {
     l.insertData(data[i].integer, data[i]);
-    std::cout << "=============================" << std::endl;
-    l.root->print();
-    std::cout << "=============================" << std::endl;
   }
   
-  l.deleteNode(3);
+  std::cout << "============Before deleting=============" << std::endl;
+  l.root->print();
   std::cout << "=============================" << std::endl;
+
+  l.deleteNode(23);
+  l.root->print();
+  std::cout << "=============================" << std::endl;
+
+  l.deleteNode(6);
+  l.root->print();
+  std::cout << "=============================" << std::endl;
+
+  l.deleteNode(9);
   l.root->print();
   std::cout << "=============================" << std::endl;
 
   //EXPECT_EQ(l.mostLeftNode->value, data[1]);
-  EXPECT_EQ(l.size(), 8);
+//  EXPECT_EQ(l.size(), 8);
 }

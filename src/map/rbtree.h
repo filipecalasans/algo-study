@@ -68,9 +68,9 @@ struct RBTree {
       }
     }
 
-    const Node *previousNode() const; 
-    const Node *nextNode() const; 
-    
+    Node *previousNode(); 
+    Node *nextNode();
+
     inline bool isLeaf() { return leftChild == nullptr && rightChild == nullptr; } 
    
     void print(){ print("", true); }
@@ -109,7 +109,7 @@ struct RBTree {
   void deleteNode(const K& k);
   void deleteNode(Node *n);
 
-  const Node* getRightMostNode() const;
+  Node* getRightMostNode();
   Node* getLeftMostNode();
   
   void verifyRepairTree(Node *n);
@@ -291,10 +291,10 @@ void RBTree<K,T>::assert_inorder() {
 }
 
 template <class K, class T>
-const typename RBTree<K,T>::Node *
-RBTree<K,T>::Node::previousNode() const {
+typename RBTree<K,T>::Node *
+RBTree<K,T>::Node::previousNode() {
   
-  const Node *n = this;
+  Node *n = this;
   if(n->leftChild.get()) {
     n = n->leftChild.get();
     while(n->rightChild.get()) {
@@ -302,7 +302,7 @@ RBTree<K,T>::Node::previousNode() const {
     }
   }
   else {
-    const Node* y = n->parent;
+    Node* y = n->parent;
     while(y && n == y->leftChild.get()) {
       n = y;
       y = n->parent;
@@ -312,11 +312,11 @@ RBTree<K,T>::Node::previousNode() const {
   return n;
 }
 
+
 template <class K, class T>
-const typename RBTree<K,T>::Node *
-RBTree<K,T>::Node::nextNode() const {
-  
-  const Node *n = this;
+typename RBTree<K,T>::Node *
+RBTree<K,T>::Node::nextNode() {
+  Node *n = this;
   if(n->rightChild.get()) {
     n = n->rightChild.get();
     while(n->leftChild.get()) {
@@ -324,7 +324,7 @@ RBTree<K,T>::Node::nextNode() const {
     }
   }
   else {
-    const Node* y = n->parent;
+    Node* y = n->parent;
     while(y && n == y->rightChild.get()) {
       n = y;
       y = n->parent;
@@ -336,8 +336,8 @@ RBTree<K,T>::Node::nextNode() const {
 
 
 template <class K, class T>
-const typename RBTree<K,T>::Node *
-RBTree<K,T>::getRightMostNode() const {
+typename RBTree<K,T>::Node *
+RBTree<K,T>::getRightMostNode() {
   if(_size == 0) { return nullptr; }
  
   Node *n = root.get();
@@ -435,7 +435,6 @@ RBTree<K,T>::find(const K& k){
 template <class K, class T>
 void RBTree<K,T>::deleteNode(const K& k){ 
   deleteNode(find(k));
-
 }
 
 template <class K, class T>
@@ -443,7 +442,6 @@ void RBTree<K,T>::deleteNode(Node *n){
   if(n == nullptr) { return; } 
   // update left most node if n is it.
   bool updateLeftMost = n->key == mostLeftNode->key;
-  --_size;
 
   if(n->isLeaf()) { //properties persist
     if(root.get() == n) {
@@ -455,36 +453,13 @@ void RBTree<K,T>::deleteNode(Node *n){
     else {
       n->parent->leftChild.reset();
     }
+    --_size;
   }
   else if(n->leftChild && n->rightChild) { //we have to verify if the properties persist.
-    const Node *successor = n->nextNode();
-    if(root.get() == n) {
-      std::unique_ptr<Node> ptrSuccessor;
-      if(successor->parent->rightChild.get() == successor) {
-        root = std::move(successor->parent->rightChild);
-      }
-      else {
-        root = std::move(successor->parent->leftChild);
-      }
-      root->parent = nullptr;
-    }
-    else {
-      bool isRight = n->parent->rightChild.get() == n;
-      std::unique_ptr<Node> ptrSuccessor;
-      if(successor->parent->rightChild.get() == successor) {
-        ptrSuccessor = std::move(successor->parent->rightChild);
-      }
-      else {
-        ptrSuccessor = std::move(successor->parent->leftChild);
-      }
-      ptrSuccessor->parent = n->parent;
-      if(isRight) {
-        n->parent->rightChild = std::move(ptrSuccessor);
-      }
-      else {
-        n->parent->leftChild = std::move(ptrSuccessor);
-      }
-    }
+    Node *successor = n->nextNode();
+    n->key = successor->key;
+    n->value = successor->value;
+    deleteNode(successor);
   }
   else if(n->leftChild) { //we have to verify if the properties persist
     Node *newNode = n->leftChild.get();
@@ -492,31 +467,35 @@ void RBTree<K,T>::deleteNode(Node *n){
       root = std::move(n->leftChild); 
     }
     else {
-      bool isRight = n->parent->rightChild.get() == n;
-      n->leftChild->parent = n->parent;
+      Node *parent = n->parent;
+      bool isRight = parent->rightChild.get() == n;
+      n->leftChild->parent = parent;
       if(isRight) {
-        n->parent->rightChild = std::move(n->leftChild); 
+        parent->rightChild = std::move(n->leftChild); 
       }
       else {
-        n->parent->leftChild = std::move(n->rightChild);
+        parent->leftChild = std::move(n->leftChild);
       }
     }
+    --_size;
   }
-  else if(n->parent->rightChild){ //we have to verify if the properties persist
+  else if(n->rightChild){ //we have to verify if the properties persist
     Node *newNode = n->rightChild.get();
     if(root.get() == n) {
       root = std::move(n->rightChild); 
     }
     else {
-      bool isRight = n->parent->rightChild.get() == n;
-      n->rightChild->parent = n->parent;
+      Node *parent = n->parent;
+      bool isRight = parent->rightChild.get() == n;
+      n->rightChild->parent = parent;
       if(isRight) {
-        n->parent->rightChild = std::move(n->rightChild);
+        parent->rightChild = std::move(n->rightChild);
       }
       else {
-        n->parent->rightChild = std::move(n->rightChild);
+        parent->leftChild = std::move(n->rightChild);
       } 
     }
+    --_size;
   }
 
   if(updateLeftMost) {
