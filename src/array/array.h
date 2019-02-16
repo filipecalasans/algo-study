@@ -21,7 +21,7 @@ public:
 
   class iterator {
     public:
-    
+         
         typedef iterator self_type;
         typedef T value_type;
         typedef T& reference;

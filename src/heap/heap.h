@@ -75,7 +75,7 @@ class Heap : protected List<Pair<K,T>> {
     typename List<Pair<K,T>>::const_iterator cend() const { return List<Algos::Pair<K,T>>::cend(); }
     
     void insert(const K& k, const T& t);
-    void remove(const K& k);
+    void remove(const K& k); //Not implemented
     bool contains(const K& k);
     const T& top() const;
     T peak();
