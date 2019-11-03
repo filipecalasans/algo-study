@@ -1,5 +1,5 @@
-#ifndef __ITERATOR_HH__
-#define __ITERATOR_HH__
+#ifndef ALGOS_ITERATOR_HH
+#define ALGOS_ITERATOR_HH
 
 #include <iterator>
 #include <memory>

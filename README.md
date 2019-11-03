@@ -14,5 +14,5 @@ The containers implemented in this library use implicit-sharing. Containers have
   * Linked List
   * Queue
   * Stack
-  * Heap (binary-heap or priority queue)
-  * Map (red-black tree) (incomplete)
+  * Heap (min-heap or priority queue)
+  * Map (red-black tree) 

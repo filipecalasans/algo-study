@@ -1,5 +1,5 @@
-#ifndef __RBTREE_HH__   
-#define __RBTREE_HH__ 
+#ifndef ALGOS_RBTREE_HH
+#define ALGOS_RBTREE_HH
 
 #include <stdio.h>
 #include <string.h>
@@ -20,10 +20,11 @@
 namespace Algos { 
 
 template <class K, class T>
-struct RBTree {
+struct RBTree
+{
   
-  struct Node {  
-    
+  struct Node
+  {
     bool red;
     K key;
     T value;
@@ -34,18 +35,21 @@ struct RBTree {
     Node() : red(true), parent(nullptr), leftChild(nullptr), rightChild(nullptr) {} 
     Node(const K& k, const T& t) : Node() { key=k; value=t; }
 
-    Node *grandparent() {
+    Node *grandparent()
+    {
       if(parent == nullptr) { return nullptr; }
       return parent->parent;
     }
 
-    Node *grandParent() {
+    Node *grandParent()
+    {
       if(parent == nullptr) { return nullptr; }
       if(parent->parent == nullptr) { return nullptr; }
       return parent->parent;
     }
 
-    Node *uncle() {
+    Node *uncle()
+    {
       Node *p = parent;
       Node *g = grandParent();
       if(g == nullptr) { return nullptr; }
@@ -55,13 +59,16 @@ struct RBTree {
       return g->leftChild.get();
     }
     
-    Node* createNode(const K& k, const T& t, bool onLeftChild) {
-      if(onLeftChild) {
+    Node* createNode(const K& k, const T& t, bool onLeftChild)
+    {
+      if(onLeftChild)
+      {
         leftChild = std::make_unique<Node>(k, t);
         leftChild->parent = this;
         return leftChild.get();
       }
-      else {
+      else
+      {
         rightChild = std::make_unique<Node>(k, t);
         rightChild->parent = this;
         return rightChild.get();
@@ -76,6 +83,7 @@ struct RBTree {
     void print(){ print("", true); }
     
     protected:
+
       //https://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram
       void print(std::string prefix, bool isTail) {
         std::cout << prefix + (isTail ? "└── " : "├── ") << key << "[" << (red ? "R" : "B") << "]" << std::endl;
@@ -264,7 +272,8 @@ RBTree<K,T>::insertNode(const K& k, const T& t) {
 }
 
 template <class K, class T>
-void RBTree<K,T>::assert_inorder() {
+void RBTree<K,T>::assert_inorder()
+{
   bool done = false;
   //user stack  
   Stack<Node *> s;
@@ -292,7 +301,8 @@ void RBTree<K,T>::assert_inorder() {
 
 template <class K, class T>
 typename RBTree<K,T>::Node *
-RBTree<K,T>::Node::previousNode() {
+RBTree<K,T>::Node::previousNode()
+{
   
   Node *n = this;
   if(n->leftChild.get()) {
@@ -315,7 +325,8 @@ RBTree<K,T>::Node::previousNode() {
 
 template <class K, class T>
 typename RBTree<K,T>::Node *
-RBTree<K,T>::Node::nextNode() {
+RBTree<K,T>::Node::nextNode()
+{
   Node *n = this;
   if(n->rightChild.get()) {
     n = n->rightChild.get();
@@ -337,7 +348,8 @@ RBTree<K,T>::Node::nextNode() {
 
 template <class K, class T>
 typename RBTree<K,T>::Node *
-RBTree<K,T>::getRightMostNode() {
+RBTree<K,T>::getRightMostNode()
+{
   if(_size == 0) { return nullptr; }
  
   Node *n = root.get();
@@ -349,7 +361,8 @@ RBTree<K,T>::getRightMostNode() {
 
 template <class K, class T>
 typename RBTree<K,T>::Node *
-RBTree<K,T>::getLeftMostNode() {
+RBTree<K,T>::getLeftMostNode()
+{
   if(_size == 0) { return nullptr; }
  
   Node *n = root.get();
@@ -418,11 +431,14 @@ void RBTree<K,T>::verifyRepairTree(Node *n) {
 
 template <class K, class T>
 typename RBTree<K,T>::Node* 
-RBTree<K,T>::find(const K& k){ 
+RBTree<K,T>::find(const K& k)
+{
   Node *n = root.get();
-  while(n != nullptr) {
+  while(n != nullptr)
+  {
     if(n->key == k) { return n; }
-    if(n->key < k) {
+    if(n->key < k)
+    {
       n = n->rightChild.get();
     }
     else {

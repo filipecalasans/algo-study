@@ -1,5 +1,5 @@
-#ifndef __HEAP_HH__   
-#define __HEAP_HH__ 
+#ifndef ALGOS_HEAP_HH
+#define ALGOS_HEAP_HH
 
 #include <stdio.h>
 #include <string.h>
@@ -20,7 +20,8 @@
 namespace Algos { 
 
 template <class K, class T>
-class Heap : protected List<Pair<K,T>> {
+class Heap : protected List<Pair<K,T>>
+{
   
   private:
 
@@ -30,17 +31,21 @@ class Heap : protected List<Pair<K,T>> {
     
     Heap() { }
 
-    Heap(const Heap<K,T>& other) : List<T>(other) {
+    Heap(const Heap<K,T>& other)
+        : List<T>(other)
+    {
       heap_order = other.heap_order;
     }
 
-    void swap(Heap<K,T>& other) {
+    void swap(Heap<K,T>& other)
+    {
       std::swap(this->d, other.d);
       std::swap<int>(heap_order, other.heap_order);
     }
 
     
-    Heap<K,T> &operator=(const Heap<K,T>& other) { 
+    Heap<K,T> &operator=(const Heap<K,T>& other)
+    {
       List<Pair<K,T>>::operator=(other); 
       return (*this); 
     }
@@ -78,7 +83,7 @@ class Heap : protected List<Pair<K,T>> {
     void remove(const K& k); //Not implemented
     bool contains(const K& k);
     const T& top() const;
-    T peak();
+    T peek();
       
 protected:
 
@@ -117,7 +122,7 @@ const T& Heap<K,T>::top() const {
 }
 
 template <class K, class T>
-T Heap<K,T>::peak() {
+T Heap<K,T>::peek() {
   ALGO_ASSERT(size() > 0, "Heap is Empty"); 
   if(size() >= 2) {
     List<Pair<K,T>>::swap(0,size()-1);
@@ -131,8 +136,8 @@ template <class K, class T>
 void Heap<K,T>::heapup(int i) {
   
   i+=1;
-  while(i>1) {
-    int parent = i/2;
+  while(i > 1) {
+    int parent = i / 2;
     int parent_value = getKey(parent-1);
     int i_value = getKey(i-1);
     if(parent_value > i_value) {

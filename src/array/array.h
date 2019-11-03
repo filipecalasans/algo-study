@@ -1,5 +1,5 @@
-#ifndef __ARRAY_HH__
-#define __ARRAY_HH__
+#ifndef ALGOS_ARRAY_HH
+#define ALGOS_ARRAY_HH
 
 #include <iostream>
 #include <cstdint>
@@ -12,14 +12,17 @@
  * Algos Implementation is implicit-sharing.
  *
  */
-namespace Algos {
+namespace Algos
+{
 
 template <class T>
-class Array {  
+class Array
+{
 
 public:
 
-  class iterator {
+  class iterator
+  {
     public:
          
         typedef iterator self_type;
@@ -32,23 +35,28 @@ public:
         iterator(const typename DataArray<value_type>::iterator& ptr) : _ptr(ptr) {}
         iterator(const self_type& other) : _ptr(nullptr){ *this = other; }
 
-        self_type operator++() { _ptr++; return *this; } //PREFIX
+        self_type operator++() { _ptr++; return (*this); } //PREFIX
         self_type operator++(int junk) { self_type i = *this; _ptr++; return i; } //POSTFIX
         reference operator*() const { return *_ptr; }
         pointer  operator->() const { return _ptr.operator->(); }
         bool operator==(const self_type& rhs) const { return _ptr == rhs._ptr; }
         bool operator!=(const self_type& rhs) const { return _ptr != rhs._ptr; }
-        self_type& operator=(const self_type& other) {
-          if(this != &other) {
+        self_type& operator=(const self_type& other)
+        {
+          if(this != &other)
+          {
             _ptr = other._ptr;
           }
           return *this;
         }
+
     private:
+
         typename DataArray<value_type>::iterator _ptr;
   };
 
-  class const_iterator {
+  class const_iterator
+  {
     public:
     
         typedef const_iterator self_type;
@@ -67,80 +75,96 @@ public:
         const pointer  operator->() const { return _ptr.operator->(); }
         bool operator==(const self_type& rhs) const { return _ptr == rhs._ptr; }
         bool operator!=(const self_type& rhs) const { return _ptr != rhs._ptr; }
-        self_type& operator=(const self_type& other) {
-          if(this != &other) {
+        self_type& operator=(const self_type& other)
+        {
+          if(this != &other)
+          {
             _ptr = other._ptr;
           }
-          return *this;
+          return (*this);
         }
+
       private:
+
         typename DataArray<value_type>::const_iterator _ptr;
   };
   
 public:
 
-      Array() {
-          _data = std::shared_ptr<DataArray<T> >(new DataArray<T>());
+      Array()
+      {
+          _data = std::shared_ptr<DataArray<T>>(new DataArray<T>());
       }
+
       explicit Array(int _size);
       explicit Array(int size, const T &t);
-		  Array(Array& a) { _data = a.data();  }
+      Array(Array& a) { _data = a.data();  }
 
-		  const T& operator[](int i) const { 
-			  ALGO_ASSERT(i<size(), "Index out of bounds."); 
-			  return (*_data.get())[i]; 
-		  } 
-		
-		  T& operator[](int i) { 
-			  ALGO_ASSERT(i<size(), "Index out of bounds."); 
-			  return (*_data.get())[i];
-		  } 
+      const T& operator[](int i) const
+      {
+          ALGO_ASSERT(i < size(), "Index out of bounds.");
+          return (*_data.get())[i];
+      }
+
+      T& operator[](int i)
+      {
+          ALGO_ASSERT(i < size(), "Index out of bounds.");
+          return (*_data.get())[i];
+      }
       
       size_t size() const { return _data->size(); }
        
-      Array& operator=(const Array& other) { 
+      Array& operator=(const Array& other)
+      {
         _data = other.data();          
         return *this;
       }
 
-		  const std::shared_ptr<DataArray<T> >& data() const { return _data; }
+      const std::shared_ptr<DataArray<T>>& data() const { return _data; }
     
       int dataRefCount() const { return _data.use_count(); }
       
-      const T& first() {
+      const T& first()
+      {
         ALGO_ASSERT(_data->size()>0, "Index out of range: array empty."); 
         return (*this)[0];
       }
 
-      const T& last() {
+      const T& last()
+      {
         ALGO_ASSERT(_data->size()>0, "Index out of range: array empty."); 
         return (*this)[_data->size()-1];
       }
     
       bool empty() { return (_data->size() == 0); }
 
-      iterator begin() { 
+      iterator begin()
+      {
         iterator it = _data->begin();
         return it; 
       }
 
-      iterator end() { 
+      iterator end()
+      {
         iterator it = _data->end();
         return it; 
       }
 
-      const_iterator cbegin() { 
+      const_iterator cbegin()
+      {
         const_iterator it = _data->cbegin();
         return it; 
       }
 
-      const_iterator cend() { 
+      const_iterator cend()
+      {
         const_iterator it = _data->cend();
         return it; 
       }
 
    protected:
-      std::shared_ptr <DataArray<T> > _data;
+
+      std::shared_ptr <DataArray<T>> _data;
 
     };
     
@@ -148,12 +172,14 @@ public:
 
 // ######################### Template Implementation  ##############################
 template <class T>
-Algos::Array<T>::Array(int size) {
+Algos::Array<T>::Array(int size)
+{
 	_data = std::shared_ptr<DataArray<T> >(new DataArray<T>(size));
 }
 
 template <class T>
-Algos::Array<T>::Array(int size, const T &t) {
+Algos::Array<T>::Array(int size, const T &t)
+{
 	_data = std::shared_ptr<DataArray<T> >(new DataArray<T>(size, t));
 }
 

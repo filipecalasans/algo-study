@@ -1,5 +1,5 @@
-#ifndef __MAP_HH__   
-#define __MAP_HH__ 
+#ifndef ALGOS_MAP_HH
+#define ALGOS_MAP_HH
 
 #include <stdio.h>
 #include <string.h>
@@ -51,13 +51,15 @@ public:
 };
 
 template <class K, class T>
-List<T> Map<K,T>::values() const {
+List<T> Map<K,T>::values() const
+{
   List<T> v;
   return v; 
 }
 
 template <class K, class T>
-List<K> Map<K,T>::keys() const {
+List<K> Map<K,T>::keys() const
+{
   return List<K>();
 }
 

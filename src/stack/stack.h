@@ -1,5 +1,5 @@
-#ifndef __STACK_HH__
-#define __STACK_HH__
+#ifndef ALGOS_STACK_HH
+#define ALGOS_STACK_HH
 
 #include <stdio.h>
 #include <string.h>
@@ -16,40 +16,49 @@
  * Algos Implementation is implicit-sharing.
  *
  */
-namespace Algos { 
+namespace Algos
+{
 
 template <class T>
-class Stack : public List<T> {
+class Stack : public List<T>
+{
   
   public: 
     
     Stack() {}
-    Stack(const Stack& other) {
+    Stack(const Stack& other)
+    {
       this->d = other.d;
     }
     
-    Stack& operator=(const Stack& other) {
+    Stack& operator=(const Stack& other)
+    {
       this->d = other.d;
       return (*this);
     }
     
-    void push(const T& t) {
+    void push(const T& t)
+    {
       List<T>::append(t);
     }
 
-    T pop() {
+    T pop()
+    {
       return List<T>::takeLast();
     }
 
-    T& top() {
+    T& top()
+    {
       return (*this)[this->size()-1];
     }
 
-    const T& top() const {
+    const T& top() const
+    {
       return (*this)[this->size()-1];
     }
 
-    void swap(Stack<T>& other) {
+    void swap(Stack<T>& other)
+    {
       std::swap(this->d, other.d);
     }
 };

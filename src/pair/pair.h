@@ -1,5 +1,5 @@
-#ifndef __QUEUE_HH__
-#define __QUEUE_HH__
+#ifndef ALGOS_PAIR_HH
+#define ALGOS_PAIR_HH
 
 #include <stdio.h>
 #include <string.h>
@@ -28,25 +28,28 @@ struct Pair {
   Pair(const Pair& other) { first=other.first; second = other.second; }
   Pair(Pair&& other) { first=std::move(other.first); second=std::move(other.second); }
   
-  bool operator==(const Pair& o) { return (o.first==first)&&(o.second==second); }
+  bool operator==(const Pair& o){ return (o.first == first) && (o.second == second); }
 
-  Pair& operator=(const Pair& p) {
+  Pair& operator=(const Pair& p)
+  {
     first = p.first;
     second = p.second;
     return (*this);
   }
 
-  Pair& operator=(Pair&& p) {
+  Pair& operator=(Pair&& p)
+  {
     first = std::move(p.first);
     second = std::move(p.second);
     return (*this);
   }
   
-  void swap(Pair& other) {
+  void swap(Pair& other)
+  {
     std::swap<Pair>(other, *this);
   }
-};
 
+};
 
 }
 

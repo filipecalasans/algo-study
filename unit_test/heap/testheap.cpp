@@ -91,7 +91,7 @@ TEST(Heap, insert_contains) {
 }
 
 
-TEST(Heap, pull_peak) {
+TEST(Heap, pull_peek) {
   
   Heap<int,DataTest> l;
   DataTest d[8] = {
@@ -114,11 +114,11 @@ TEST(Heap, pull_peak) {
   for(int i=0; i<8; i++) {
     EXPECT_EQ(l[i].integer, heap[i]);
   }
-  int lastPeak = -1;
+  int lastPeek = -1;
   while(l.size()) {
-    int top = l.peak().integer;
-    EXPECT_LE(lastPeak, top);
-    lastPeak = top;
+    int top = l.peek().integer;
+    EXPECT_LE(lastPeek, top);
+    lastPeek = top;
   }
 
 }

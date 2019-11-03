@@ -1,12 +1,12 @@
-#ifndef __ALGO_ASSERT_HH_
-#define __ALGO_ASSERT_HH_
+#ifndef ALGOS_ASSERT_HH
+#define ALGOS_ASSERT_HH
 
 #include <iostream>
 
 #ifndef NDEBUG
 #   define ALGO_ASSERT(condition, message) \
     do { \
-        if (! (condition)) { \
+        if (! (condition) ) { \
             std::cerr << "Assertion `" #condition "` failed in " << __FILE__ \
                       << " line " << __LINE__ << ": " << message << std::endl; \
             std::terminate(); \

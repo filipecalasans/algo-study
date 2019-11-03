@@ -50,7 +50,8 @@ std::ostream& operator<< (std::ostream& os, const DataTest& d) {
 #define TEST_SIZE 10
 
 void initDataTest(DataTest *t, int n) {
-  for(int i=0; i<n; i++) {
+  for(int i=0; i<n; i++)
+  {
     t[i].integer = i;
     t[i].boolean = (i%2 == 0);
     t[i].txt = "abc";
@@ -166,7 +167,8 @@ TEST(RBTree, next_node) {
 
 }
 
-TEST(RBTree, remove_random) {
+TEST(RBTree, remove_random)
+{
    RBTree<int,DataTest> l;
    const int size = 9;
     
@@ -184,7 +186,8 @@ TEST(RBTree, remove_random) {
         { 6, false,"cca" },
       };
     
-  for(int i=0; i<size; i++) {
+  for(int i=0; i<size; i++)
+  {
     l.insertData(data[i].integer, data[i]);
   }
   
@@ -204,6 +207,6 @@ TEST(RBTree, remove_random) {
   l.root->print();
   std::cout << "=============================" << std::endl;
 
-  //EXPECT_EQ(l.mostLeftNode->value, data[1]);
-//  EXPECT_EQ(l.size(), 8);
+  EXPECT_EQ(l.mostLeftNode->value, data[1]);
+  EXPECT_EQ(l.size(), 6);
 }

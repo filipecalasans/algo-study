@@ -1,5 +1,5 @@
-#ifndef __LINKED_LIST_HH__
-#define __LINKED_LIST_HH__
+#ifndef ALGOS_LINKED_LIST_HH
+#define ALGOS_LINKED_LIST_HH
 
 #include <stdio.h>
 #include <string.h>
@@ -28,7 +28,8 @@ struct LinkedListData{
 	Node *last = nullptr;
 	size_t size = 0;
 
-	LinkedListData() {
+    LinkedListData()
+    {
 		root = std::make_unique<Node>();
 		root->prev = nullptr; //last virtual element
 		root->next = std::make_unique<Node>();
@@ -68,7 +69,8 @@ struct LinkedListData{
 };
 
 template <class T>
-class LinkedList {
+class LinkedList
+{
 
 	typedef typename LinkedListData<T>::Node node_type;
 	std::shared_ptr<LinkedListData<T> > d;
@@ -84,7 +86,8 @@ class LinkedList {
 			return (*this);
 		}
 
-	class iterator {
+    class iterator
+    {
 		public:
 			typedef iterator self_type;
 			typedef T value_type;
@@ -112,7 +115,8 @@ class LinkedList {
 			pointer _ptr;
 	};
 
-	class const_iterator {
+    class const_iterator
+    {
 		public:
 		
 			typedef const_iterator self_type;
@@ -195,12 +199,12 @@ class LinkedList {
 		inline const T& first() const { return *(cbegin()); }	
 
 		void append(const T &t);
-   	void prepend(const T &t);
-   	T takeFirst();
-   	T takeLast();
-   	int removeAll(const T &t);
-   	bool removeOne(const T &t);
-   	bool contains(const T &t) const;
+        void prepend(const T &t);
+        T takeFirst();
+        T takeLast();
+        int removeAll(const T &t);
+        bool removeOne(const T &t);
+        bool contains(const T &t) const;
 		int count(const T &t) const;
 		
 		inline void removeFirst() { ALGO_ASSERT(size(), "Empty List."); erase(begin()); }

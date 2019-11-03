@@ -1,5 +1,5 @@
-#ifndef __QUEUE_HH__
-#define __QUEUE_HH__
+#ifndef ALGOS_QUEUE_HH
+#define ALGOS_QUEUE_HH
 
 #include <stdio.h>
 #include <string.h>
@@ -24,32 +24,39 @@ class Queue : public List<T> {
   public: 
     
     Queue() {}
-    Queue(const Queue& other) {
+    Queue(const Queue& other)
+    {
       this->d = other.d;
     }
     
-    Queue& operator=(const Queue& other) {
+    Queue& operator=(const Queue& other)
+    {
       this->d = other.d;
       return (*this);
     }
 
-    void enqueue(const T& t) {
+    void enqueue(const T& t)
+    {
       List<T>::append(t);
     }
 
-    T dequeu() {
+    T dequeu()
+    {
       return List<T>::takeFirst();
     }
 
-    T& head() {
+    T& head()
+    {
       return (*this)[0];
     }
 
-    const T& head() const {
+    const T& head() const
+    {
       return (*this)[0];
     }
 
-    void swap(Queue<T>& other) {
+    void swap(Queue<T>& other)
+    {
       std::swap(this->d, other.d);
     }
     
