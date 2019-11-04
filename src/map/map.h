@@ -48,7 +48,7 @@ public:
     {
         return T();
     }
-    return node->value;
+    return node->key_value.second;
   }
 
   bool contains(const K& key) const
@@ -62,9 +62,9 @@ public:
     if(!node)
     {
         insert(key, T());
-        return d->find(key)->value;
+        return d->find(key)->key_value.second;
     }
-    return node->value;
+    return node->key_value.second;
   }
 
   const T& operator[](const K& key) const

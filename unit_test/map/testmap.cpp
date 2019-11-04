@@ -247,3 +247,38 @@ TEST(Map, iterator)
        it++;
     }
 }
+
+TEST(Map, map_methods)
+{
+    Map<int, DataTest> l;
+    const int size = 9;
+
+    EXPECT_EQ(l.size(), 0);
+
+    DataTest data[size] = {
+         { 10, true, "abc" },
+         { 0, true, "abc" },
+         { 9, true, "abc" },
+         { 3, true, "abc" },
+         { 1, true, "abc" },
+         { 23, true, "abc" },
+         { 27, true, "abc" },
+         { 13, true, "abc" },
+         { 6, false,"cca" },
+       };
+
+    for(int i=0; i<size; i++)
+    {
+      l.insert(data[i].integer, data[i]);
+    }
+
+    EXPECT_EQ(l.contains(10), true);
+    EXPECT_EQ(l.contains(3), true);
+    EXPECT_EQ(l.contains(27), true);
+    EXPECT_EQ(l.contains(56), false);
+    EXPECT_EQ(l.size(), size);
+    EXPECT_EQ(l.getValue(3).integer, 3);
+    EXPECT_EQ(l.getValue(10).integer, 10);
+    EXPECT_EQ(l.getValue(27).integer, 27);
+
+}
