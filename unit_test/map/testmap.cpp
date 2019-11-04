@@ -282,3 +282,55 @@ TEST(Map, map_methods)
     EXPECT_EQ(l.getValue(27).integer, 27);
 
 }
+
+TEST(Map, keys_and_values)
+{
+    Map<int, DataTest> l;
+    const int size = 9;
+
+    EXPECT_EQ(l.size(), 0);
+
+    DataTest data[size] = {
+         { 10, true, "abc" },
+         { 0, true, "abc" },
+         { 9, true, "abc" },
+         { 3, true, "abc" },
+         { 1, true, "abc" },
+         { 23, true, "abc" },
+         { 27, true, "abc" },
+         { 13, true, "abc" },
+         { 6, false,"cca" },
+       };
+
+    int expected_keys[size] = {0,1,3,6,9,10,13,23,27};
+    for(int i=0; i<size; i++)
+    {
+      l.insert(data[i].integer, data[i]);
+    }
+
+    auto keys = l.keys();
+    auto values = l.values();
+
+    EXPECT_EQ(keys.size(), size);
+
+    for(int i=0; i<keys.size(); i++)
+    {
+        EXPECT_EQ(keys[i], expected_keys[i]);
+    }
+
+    EXPECT_EQ(values.size(), size);
+
+    for(int i=0; i<values.size(); i++)
+    {
+        EXPECT_EQ(values[i].integer, expected_keys[i]);
+    }
+
+    EXPECT_EQ(l.contains(10), true);
+    EXPECT_EQ(l.contains(3), true);
+    EXPECT_EQ(l.contains(27), true);
+    EXPECT_EQ(l.contains(56), false);
+    EXPECT_EQ(l.size(), size);
+    EXPECT_EQ(l.getValue(3).integer, 3);
+    EXPECT_EQ(l.getValue(10).integer, 10);
+    EXPECT_EQ(l.getValue(27).integer, 27);
+}

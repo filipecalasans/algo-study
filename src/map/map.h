@@ -115,7 +115,7 @@ public:
     public:
 
         typedef typename RBTree<K,T>::Node TreeNode;
-        typedef iterator self_type;
+        typedef const_iterator self_type;
         typedef Pair<K,T> value_type;
         typedef Pair<K,T> const& reference;
         typedef Pair<K,T>* pointer_to_obj;
@@ -142,25 +142,39 @@ public:
 
   const_iterator cbegin() const { return const_iterator(size() ? d->mostLeftNode : nullptr); }
   const_iterator cend() const { return const_iterator(nullptr); }
-
-};
   
 };
 
 
-//template <class K, class T>
-//List<T> Map<K,T>::values() const
-//{
-//  List<T> v;
-//  return v;
-//}
+template <class K, class T>
+List<T> Map<K,T>::values() const
+{
+  List<T> v;
+  v.reserve(size());
 
-//template <class K, class T>
-//List<K> Map<K,T>::keys() const
-//{
-//  return List<K>();
-//}
+  auto it = cbegin();
+  while(it != cend())
+  {
+    v.append((*it).second);
+    ++it;
+  }
+  return v;
+}
 
-//}
+template <class K, class T>
+List<K> Map<K,T>::keys() const
+{
+  List<K> k;
+  k.reserve(size());
+  auto it = cbegin();
+  while(it != cend())
+  {
+      k.append((*it).first);
+      ++it;
+  }
+  return k;
+}
+
+}
 
 #endif
