@@ -100,6 +100,11 @@ namespace Algos { //TODO: implement using smart pointers.
       {
         d = other.d;
       }
+      List(List&& other)
+      {
+          d = other.d;
+          other.d = nullptr;
+      }
 
       ~List();
 

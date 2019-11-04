@@ -15,4 +15,5 @@ add_subdirectory(queue)
 add_subdirectory(stack)
 add_subdirectory(heap)
 add_subdirectory(map)
+add_subdirectory(hash_map)
 

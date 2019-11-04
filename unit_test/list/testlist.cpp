@@ -36,6 +36,32 @@ TEST(List, constructor) {
    EXPECT_EQ(l.isEmpty(), true);
 }
 
+// Tests move default c'tor.
+TEST(List, move_constructor) {
+   List<DataTest> l;
+   DataTest data[3] = {
+      {0, true, "abc"},
+      {1, false, "cba"},
+      {2, true, "bca"},
+   };
+
+   l.append(data[0]);
+   l.append(data[1]);
+   l.append(data[2]);
+
+   List<DataTest> l2 = std::move(l);
+
+   // Don't try, it will crash
+   // EXPECT_EQ(l.size(), 0);
+   // EXPECT_EQ(l.isEmpty(), true);
+
+   EXPECT_EQ(l2.size(), 3);
+   EXPECT_EQ(l2.isEmpty(), false);
+   EXPECT_EQ(l2[0].integer, 0);
+   EXPECT_EQ(l2[1].integer, 1);
+   EXPECT_EQ(l2[2].integer, 2);
+}
+
 TEST(List, appendAndAt) {
    List<DataTest> l;
    DataTest data[3] = {

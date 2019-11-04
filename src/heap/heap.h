@@ -101,12 +101,14 @@ void Heap<K,T>::insert(const K& k, const T& t) {
 }
 
 template <class K, class T>
-void Heap<K,T>::remove(const K& k) {
+void Heap<K,T>::remove(const K& k)
+{
 
 }
 
 template <class K, class T>
-bool Heap<K,T>::contains(const K& k) {
+bool Heap<K,T>::contains(const K& k)
+{
   for(const auto& d : *this) {
     if(d.first == k) {
       return true;
