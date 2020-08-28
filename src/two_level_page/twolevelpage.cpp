@@ -44,7 +44,7 @@ uint32_t TwoLevelPage::get(uint32_t key)
   return data | (key & mask); 
 }
 
-uint32_t TwoLevelPage::conains(uint32_t key)
+bool TwoLevelPage::conains(uint32_t key)
 {  
   uint32_t address = key / TwoLevelPage::PAGE_SIZE;
   uint32_t first_level = address / TwoLevelPage::FIRST_LEVEL;
@@ -52,7 +52,7 @@ uint32_t TwoLevelPage::conains(uint32_t key)
   
   if(this->page_tables[first_level].size() 
       < TwoLevelPage::SECOND_LEVEL) {
-    return ERROR;
+    return false;
   }
 
   return this->page_tables[first_level][second_level] == ERROR;
