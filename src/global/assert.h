@@ -13,7 +13,7 @@
         } \
     } while (false)
 #else
-#   define ASSERT(condition, message) do { } while (false)
+#   define ALGO_ASSERT(condition, message) do { } while (false)
 #endif
 
 
