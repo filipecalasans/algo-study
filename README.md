@@ -16,5 +16,6 @@ This library relies on STL smart pointers: shared\_pointer and unique\_pointer t
   * Queue
   * Stack
   * Heap (min-heap or priority queue)
-  * Map (red-black tree) 
+  * Map (red-black tree)
+  * Two Level Page Table (up to 2GB)
   * Hash Table (To be implemented)
